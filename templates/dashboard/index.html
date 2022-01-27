@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+{% load i18n %}
+
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    {% csrf_token %}
+    <!-- Header -->
+
+
+    <div style="overflow: hidden">
+        <div class="inner second" style="width: 105%; position: relative; top: 0; right: 5%">
+            {{ map | safe }}
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}
+    <script src="/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
+    <script src="/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "full_map",
+                async: true,
+                dataType: "json",
+                contentType: "application/javascript; charset=utf8",
+                complete: function (data) {
+                    let map = data.responseJSON['map'];
+                    {#$( "div.second" ).replaceWith( map );#}
+                },
+            });
+        });
+    </script>
+{% endblock javascripts %}

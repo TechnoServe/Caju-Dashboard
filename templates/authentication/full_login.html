@@ -1,0 +1,253 @@
+{% extends 'layouts/base-fullscreen.html' %}
+
+{% block title %} Register {% endblock title %}
+
+{% load i18n %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <!-- Table -->
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+        
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-5">
+              <div class="text-muted text-center mt-2 mb-4">
+                {% trans "Sign Up" %}
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center text-muted mb-4">
+
+                {% if msg %}
+                  <small>{{ msg | safe }}</small>
+                {% else %}
+                  {% trans "Add your credentials" %}
+                {% endif %}  
+              
+              </div>
+
+              {% if not success %}
+
+                <form method="POST" id="personForm" roles-url="{% url 'load_roles' %}">
+
+                  {% csrf_token %}
+            
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      {{ form.user_name }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.user_name.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      {{ form.first_name }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.first_name.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      {{ form.last_name }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.last_name.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">{% trans "Gender:" %}</i></span>
+                      </div>
+                      {{ form.gender }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.gender.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">{% trans "Date of Birth:" %}</i></span>
+                      </div>
+                        {{ form.date_of_birth }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.date_of_birth.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                      </div>
+                      {{ form.phone }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.phone.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      {{ form.email }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.email.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">{% trans "Organization Name:" %}</i></span>
+                      </div>
+                      {{ form.organization_name }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.organization_name.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">{% trans "Role:" %}</i></span>
+                      </div>
+                      {{ form.role }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.role.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      {{ form.address }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.address.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      {{ form.country }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.country.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                      </div>
+                      {{ form.city }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.city.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      </div>
+                      {{ form.password1 }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.password1.errors }}</span>
+
+                  <div class="form-group">
+                    <div class="input-group input-group-alternative">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                      </div>
+                      {{ form.password2 }}
+                    </div>
+                  </div>
+                  <span class="text-error">{{ form.password2.errors }}</span>
+
+                  <div class="row my-4">
+                    <div class="col-12">
+                      <div class="custom-control custom-control-alternative custom-checkbox">
+                        <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                        <label class="custom-control-label" for="customCheckRegister">
+                          <span class="text-muted">I agree with the <a href="#!">{% trans "Privacy Policy" %}</a></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary mt-4">{% trans "Create account" %}</button>
+                  </div>
+                </form>
+
+              {% endif %}  
+  
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-3"></div>
+        <div class="col-3">
+          <a href="{% url 'login' %}" class="text-light"><small>{% trans "Login" %}</small></a>
+        </div>
+        <div class="col-3 text-right">
+          <a href="https://www.technoserve.org/contact-us/" class="text-light"><small>{% trans "Contact Us" %}</small></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script>
+  $("#id_organization").change(function () {
+    var url = $("#personForm").attr("roles-url");
+    var orgId = $(this).val();
+
+    $.ajax({
+      url: url,
+      data: {
+        'organization_name': orgId
+      },
+      success: function (data) {
+        $("#id_role").html(data);
+      }
+    });
+
+  });
+</script>
+
+{% endblock javascripts %}
+

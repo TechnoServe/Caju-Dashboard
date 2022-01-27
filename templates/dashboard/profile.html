@@ -1,0 +1,199 @@
+{% extends 'layouts/base.html' %}
+{% load i18n %}
+
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+    <div class="form-group">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="header pb-6 d-flex align-items-center"
+                 style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+                <!-- Mask -->
+                <span class="mask bg-gradient-default opacity-8"></span>
+                <!-- Header container -->
+                <div class="container-fluid d-flex align-items-center">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-10">
+                            <h1 class="display-2 text-white">
+                                {% trans "Hello" %} {{ user.username }}
+                            </h1>
+                            <p class="text-white mt-0 mb-5">{% trans "This is your profile page. You can see the progress you have made with your work and manage your projects or assigned tasks" %}</p>
+                            <button class="btn btn-neutral">{% trans "Edit profile" %}</button>
+                            {#                            <a href="#!" class="btn btn-neutral">{% trans "Edit profile" %}</a>#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Page content -->
+            <div class="container-fluid mt--6">
+                <div class="row">
+                    <div class="col-xl-4 order-xl-2">
+                        <div class="card card-profile">
+                            <img src="/static/assets/img/theme/img-1-1000x600.jpg"
+                                 alt="Image placeholder" class="card-img-top">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-3 order-lg-2">
+                                    <div class="card-profile-image">
+                                        <a href="#">
+                                            <img src="/static/assets/img/theme/avatar.jpg"
+                                                 class="rounded-circle" style="border-color: #DFF4F4">
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+                                <div class="d-flex justify-content-between">
+{#                                    <a href="#" class="btn btn-sm btn-info  mr-4 ">{% trans "Connect" %}</a>#}
+{#                                    <a href="#" class="btn btn-sm btn-default float-right">{% trans "Message" %}</a>#}
+                                </div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <!-- <div class="row">
+                                  <div class="col">
+                                    <div class="card-profile-stats d-flex justify-content-center">
+                                      <div>
+                                        <span class="heading">22</span>
+                                        <span class="description">Friends</span>
+                                      </div>
+                                      <div>
+                                        <span class="heading">10</span>
+                                        <span class="description">Photos</span>
+                                      </div>
+                                      <div>
+                                        <span class="heading">89</span>
+                                        <span class="description">Comments</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div> -->
+                                &nbsp;&nbsp;
+                                <div class="text-center">
+                                    <h5 class="h3">
+                                        {{ user.username }}
+                                    </h5>
+                                    <div class="h5 font-weight-300">
+                                        {{ user.email }}
+                                    </div>
+                                    <!-- <div class="h5 mt-4">
+                                      <i class="ni business_briefcase-24 mr-2"></i>Solution Manager - Creative Tim Officer
+                                    </div>
+                                    <div>
+                                      <i class="ni education_hat mr-2"></i>University of Computer Science
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8 order-xl-1">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <h3 class="mb-0">{% trans "Edit profile" %} </h3>
+                                    </div>
+                                    <!-- <div class="col-4 text-right">
+                                      <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h6 class="heading-small text-muted mb-4">{% trans "User information" %}</h6>
+                                <div class="pl-lg-4">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label"
+                                                       for="input-first-name">{% trans "First Name" %}</label>
+                                                {{ form.first_name }}
+                                                <span class="text-error">{{ form.first_name.errors }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label"
+                                                       for="input-last-name">{% trans "Last Name" %}</label>
+                                                {{ form.last_name }}
+                                                <span class="text-error">{{ form.last_name.errors }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-username">Username</label>
+                                                <input type="text" id="input-username" class="form-control"
+                                                       placeholder="Username" value="{{ request.user.username }}" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="input-email">Email
+                                                    address</label>
+                                                <input type="email" id="input-email" class="form-control"
+                                                       placeholder="{{ request.user.email }}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4"/>
+                                <!-- Address -->
+                                <h6 class="heading-small text-muted mb-4">{% trans "Contact information" %}</h6>
+                                <div class="pl-lg-4">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-control-label"
+                                                       for="input-email">{% trans "Email address" %}</label>
+                                                {{ profile_form.email }}
+                                                <span class="text-error">{{ profile_form.email.errors }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label"
+                                                       for="input-phone">{% trans "Phone Number" %}</label>
+                                                {{ profile_form.phone }}
+                                                <span class="text-error">{{ profile_form.phone.errors }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-control-label"
+                                                       for="input-country">{% trans "Organization" %}</label>
+                                                {#                                                <input type="text" id="input-organization" class="form-control"#}
+                                                {#                                                       placeholder="Organization" value="{{ organization_name }}">#}
+                                                {{ profile_form.organization }}
+                                                <span class="text-error">{{ profile_form.organization.errors }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#                                <hr class="my-4"/>#}
+                                {#                                <!-- Description -->#}
+                                {#                                <h6 class="heading-small text-muted mb-4">{% trans "About Me" %}</h6>#}
+                                {#                                <div class="pl-lg-4">#}
+                                {#                                    <div class="form-group">#}
+                                {#                                        <label class="form-control-label">{% trans "About Me" %}</label>#}
+                                {#                                        <textarea rows="4" class="form-control"#}
+                                {#                                                  placeholder="A few words about you ...">{% trans "Something about me, does not update for now." %}</textarea>#}
+                                {#                                        {{ form.about_me }}#}
+                                {#                                    </div>#}
+                                {#                                </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

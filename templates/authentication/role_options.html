@@ -1,0 +1,5 @@
+{% load i18n %}
+<option value="">{% trans "Not Listed" %}</option>
+{% for role in roles %}
+<option value="{{ role.id }}">{{ role.role_name }}</option>
+{% endfor %}
