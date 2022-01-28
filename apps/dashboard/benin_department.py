@@ -10,7 +10,6 @@ from django.utils.translation import gettext
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.models import Qar
 
 heroku = False
 
@@ -23,20 +22,20 @@ def highlight_function(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_average_kor(department):
-    _all = Qar.objects.all().filter(department=department)
+def get_average_kor(Qars, department):
+    _all = list(filter(lambda c: c.department == department, Qars))
     total = 0
-    count = _all.count()
-    # print(department, ': ', count)
+    count = len(_all)
     if count == 0:
         count = 1
     for i, x in enumerate(_all):
         total += x.kor
-    return total / count
+    result = total / count
+    return "{:.2f}".format(result) if result != 0 else "NA"
 
 
 @shared_task(bind=True)
-def add_benin_department(self):
+def add_benin_department(self, Qars):
     benin_dept_layer = folium.FeatureGroup(name=gettext('Benin Departments'), show=False, overlay=False)
     temp_geojson = folium.GeoJson(data=benin_adm1_json,
                                   name='Benin-Adm1 Department',
@@ -343,7 +342,7 @@ def add_benin_department(self):
                         <tr>
                             <td>{Qar_average}</td>
                             <td>NA</td>
-                            <td>{get_average_kor(name):n}</td>                        
+                            <td>{get_average_kor(Qars, name)}</td>                        
                         </tr>
                         </table>
                         

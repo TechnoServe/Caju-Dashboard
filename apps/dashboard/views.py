@@ -4,6 +4,7 @@ import time
 
 import ee
 import folium
+import geojson
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -18,6 +19,7 @@ from django.views import generic
 from folium import plugins
 from folium.plugins import MarkerCluster
 
+import apps.dashboard.scripts.get_qar_information as qar
 from apps.authentication import utils
 from apps.authentication.models import RemOrganization, RemRole, RemUser
 from apps.dashboard import models
@@ -29,7 +31,6 @@ from apps.dashboard.models import Plantation
 from apps.dashboard.nursery_information import NurseryLayer
 from apps.dashboard.qar_informations import QarLayer
 from .forms import UserCustomProfileForm, UserBaseProfileForm
-import geojson
 
 # Google service account for the GEE geotiff
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
@@ -46,10 +47,15 @@ def home(request):
 class MyHome:
 
     def __init__(self):
+        print('')
+        print('...Getting database QAR...')
+        start_time = time.time()
+        self.Qars = qar.get_qar_data_from_db()
+        print("--- %s seconds ---" % (time.time() - start_time))
         self.figure = folium.Figure()
 
     def get_base_map(self):
-        map = None
+        cashew_map = None
         try:
             # Basemap dictionary
             basemaps = {
@@ -85,29 +91,29 @@ class MyHome:
 
             # Initialize map object
 
-            map = folium.Map(
+            cashew_map = folium.Map(
                 location=[9.0, 2.4],
                 zoom_start=8,
                 prefer_canvas=True,
                 tiles=None
             )
 
-            map.add_child(basemaps['Google Maps'])
-            map.add_child(basemaps['Google Satellite'])
-            map.add_child(basemaps['Mapbox Satellite'])
+            cashew_map.add_child(basemaps['Google Maps'])
+            cashew_map.add_child(basemaps['Google Satellite'])
+            cashew_map.add_child(basemaps['Mapbox Satellite'])
 
             plugins.Fullscreen(position='topright', title='Full Screen', title_cancel='Exit Full Screen',
-                               force_separate_button=False).add_to(map)
+                               force_separate_button=False).add_to(cashew_map)
 
             # Adding the nursery layer from the class Nursery_LAYER
             marker_cluster = MarkerCluster(name=gettext("Nursery Information"))
             Nursery_layer = NurseryLayer(marker_cluster).add_nursery()
-            Nursery_layer.add_to(map)
+            Nursery_layer.add_to(cashew_map)
 
             # Adding the qar layer from the class QarLayer
             marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-            qarLayer = QarLayer(marker_cluster).add_qar()
-            qarLayer.add_to(map)
+            qarLayer = QarLayer(marker_cluster, self.Qars).add_qar()
+            qarLayer.add_to(cashew_map)
 
             print('')
             print('Define a method for displaying Earth Engine image tiles on a folium map.')
@@ -127,69 +133,70 @@ class MyHome:
             folium.map.FeatureGroup.add_ee_layer = add_ee_layer
             zones = alldept.eq(1)
             zones = zones.updateMask(zones.neq(0))
-            map.add_ee_layer(zones, {'palette': "red"}, gettext('Satellite Prediction'))
+            cashew_map.add_ee_layer(zones, {'palette': "red"}, gettext('Satellite Prediction'))
             print("--- %s seconds ---" % (time.time() - start_time))
 
             print('')
             print('The no boundary layer to remove shapefiles on the Benin region')
             start_time = time.time()
             No_Boundary_layer = folium.FeatureGroup(name=gettext('No Boundary'), show=False, overlay=False)
-            No_Boundary_layer.add_to(map)
+            No_Boundary_layer.add_to(cashew_map)
             print("--- %s seconds ---" % (time.time() - start_time))
 
         except Exception as e:
             pass
 
-        return map
+        return cashew_map
 
-    def get_context_data(self, path_link, map, **kwargs):
+    def get_context_data(self, path_link, cashew_map, **kwargs):
         try:
             print('')
             print('Adding the shapefiles with popups for the Benin Republic region')
             start_time = time.time()
-            Benin_layer = add_benin_republic()
-            Benin_layer.add_to(map)
+            Benin_layer = add_benin_republic(self.Qars)
+            Benin_layer.add_to(cashew_map)
             print("--- %s seconds ---" % (time.time() - start_time))
 
             print('')
             print('Adding the shapefiles with popups for the Benin departments region')
             start_time = time.time()
-            Benin_dept_layer, dept_yieldHa = add_benin_department()
-            Benin_dept_layer.add_to(map)
+            Benin_dept_layer, dept_yieldHa = add_benin_department(self.Qars)
+            Benin_dept_layer.add_to(cashew_map)
             print("--- %s seconds ---" % (time.time() - start_time))
 
             print('')
             print('Adding the shapefiles with popups for the Benin commune region')
             start_time = time.time()
-            Benin_commune_layer = add_benin_commune()
-            Benin_commune_layer.add_to(map)
+            Benin_commune_layer = add_benin_commune(self.Qars)
+            Benin_commune_layer.add_to(cashew_map)
             print("--- %s seconds ---" % (time.time() - start_time))
 
             print('')
             print('Adding the shapefiles with popups for the Benin plantations')
             start_time = time.time()
             Benin_plantation_layer = add_benin_plantation(path_link, dept_yieldHa)
-            Benin_plantation_layer.add_to(map)
+            Benin_plantation_layer.add_to(cashew_map)
             print("--- %s seconds ---" % (time.time() - start_time))
 
         except Exception as e:
+            print(e)
             pass
 
-        return map
+        return cashew_map
 
 
 @login_required(login_url="/")
 def index(request):
     path_link = request.path
     home_obj = MyHome()
-    map = home_obj.get_base_map()
-    map = home_obj.get_context_data(path_link, map)
+    cashew_map = home_obj.get_base_map()
+    cashew_map = home_obj.get_context_data(path_link, cashew_map)
 
     # adding folium layer control for the previously added shapefiles
-    map.add_child(folium.LayerControl())
-    map = map._repr_html_()
+    cashew_map.add_child(folium.LayerControl())
+    cashew_map = cashew_map._repr_html_()
 
-    context = {'map': map, 'segment': 'map'}
+    context = {'map': cashew_map, 'segment': 'map'}
     html_template = loader.get_template('dashboard/index.html')
     return HttpResponse(html_template.render(context, request))
 
@@ -198,13 +205,13 @@ def index(request):
 def full_map(request):
     path_link = request.path
     home_obj = MyHome()
-    map = home_obj.get_base_map()
-    map = home_obj.get_context_data(path_link, map)
+    cashew_map = home_obj.get_base_map()
+    cashew_map = home_obj.get_context_data(path_link, cashew_map)
 
     # adding folium layer control for the previously added shapefiles
-    map.add_child(folium.LayerControl())
-    map = map._repr_html_()
-    data = {'map': map, 'segment': 'map'}
+    cashew_map.add_child(folium.LayerControl())
+    cashew_map = cashew_map._repr_html_()
+    data = {'map': cashew_map, 'segment': 'map'}
     # return JsonResponse(data)
     return HttpResponse(
         json.dumps(data),

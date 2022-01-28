@@ -1,11 +1,12 @@
 import folium
 from django.utils.translation import gettext
 
-from apps.dashboard.models import Qar
+import apps.dashboard.scripts.get_qar_information as qar
 
 
 class QarLayer:
-    def __init__(self, marker_cluster):
+    def __init__(self, marker_cluster, Qars):
+        self.qars = Qars
         self.marker_cluster = marker_cluster
 
     def add_qar(self):
@@ -15,9 +16,8 @@ class QarLayer:
         Qar_KOR = gettext("KOR")
 
         # Loop through every nursery owner and add to the nursery marker popups
-        qars = Qar.objects.all()
-        for i in range(len(qars)):
-            current_object = qars[i]
+        for i in range(len(self.qars)):
+            current_object = self.qars[i]
             folium.Marker(location=[current_object.latitude, current_object.longitude],
                           rise_on_hover=True,
                           rise_offset=250,
