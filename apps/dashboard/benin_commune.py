@@ -9,7 +9,6 @@ from django.utils.translation import gettext
 
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
-from apps.dashboard.models import Qar
 
 heroku = False
 
@@ -22,20 +21,20 @@ def highlight_function(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_average_kor(commune):
-    _all = Qar.objects.all().filter(commune=commune)
+def get_average_kor(Qars, commune):
+    _all = list(filter(lambda c: c.commune == commune, Qars))
     total = 0
-    count = _all.count()
-    # print(commune, ': ', count)
+    count = len(_all)
     if count == 0:
         count = 1
     for i, x in enumerate(_all):
         total += x.kor
-    return total / count
+    result = total / count
+    return "{:.2f}".format(result) if result != 0 else "NA"
 
 
 @shared_task(bind=True)
-def add_benin_commune(self):
+def add_benin_commune(self, Qars):
     benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=False)
     temp_geojson2 = folium.GeoJson(data=benin_adm2_json,
                                    name='Benin-Adm2 Communes',
@@ -183,7 +182,7 @@ def add_benin_commune(self):
 
         try:
             r_tree_ha_pred_comm = round(tree_ha_pred_comm, 1 - int(
-                floor(log10(abs(tree_ha_pred_comm)))))\
+                floor(log10(abs(tree_ha_pred_comm))))) \
                 if tree_ha_pred_comm < 90000 \
                 else round(tree_ha_pred_comm, 2 - int(floor(log10(abs(tree_ha_pred_comm)))))
         except Exception as e:
@@ -339,7 +338,7 @@ def add_benin_commune(self):
                         <tr>
                             <td>{Qar_average}</td>
                             <td>NA</td>
-                            <td>{get_average_kor(name):n}</td>                        
+                            <td>{get_average_kor(Qars, name)}</td>                        
                         </tr>
                         </table>
                         

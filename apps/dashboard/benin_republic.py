@@ -10,7 +10,6 @@ from django.utils.translation import gettext
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.models import Qar
 
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
@@ -20,18 +19,19 @@ def highlight_function(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_average_kor():
+def get_average_kor(Qars):
     total = 0
-    count = Qar.objects.all().count()
+    count = len(Qars)
     if count == 0:
         count = 1
-    for i, x in enumerate(Qar.objects.all()):
+    for i, x in enumerate(Qars):
         total += x.kor
-    return total / count
+    result = total / count
+    return "{:.2f}".format(result) if result != 0 else "NA"
 
 
 @shared_task(bind=True)
-def add_benin_republic(self):
+def add_benin_republic(self, Qars):
     benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=False)
     temp_geojson0 = folium.GeoJson(data=benin_adm0_json,
                                    name='Benin-Adm0 Department',
@@ -246,7 +246,7 @@ def add_benin_republic(self):
                         <tr>
                             <td>{Qar_average}</td>
                             <td>NA</td>
-                            <td>{get_average_kor():n}</td>                        
+                            <td>{get_average_kor(Qars)}</td>                        
                         </tr>
                         </table>
                         
