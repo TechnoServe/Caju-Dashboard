@@ -57,7 +57,7 @@ def get_qar_data_from_db():
         for item in items
     ]
 
-    def get_department_from_coord(longitude, latitude, altitude):
+    def get_department_from_coord(longitude, latitude):
         with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
             departments_geojson = geojson.load(f)
         point = Point(longitude, latitude)
@@ -69,7 +69,7 @@ def get_qar_data_from_db():
         return name
 
     for i in range(len(qars)):
-        qars[i].department = get_department_from_coord(qars[i].longitude, qars[i].latitude, qars[i].altitude)
+        qars[i].department = get_department_from_coord(qars[i].longitude, qars[i].latitude)
     conn.close()
 
     return qars
