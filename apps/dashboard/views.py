@@ -47,11 +47,8 @@ def home(request):
 class MyHome:
 
     def __init__(self):
+        self.Qars = None
         print('')
-        print('...Getting database QAR...')
-        start_time = time.time()
-        self.Qars = qar.get_qar_data_from_db()
-        print("--- %s seconds ---" % (time.time() - start_time))
         self.figure = folium.Figure()
 
     def get_base_map(self):
@@ -102,18 +99,17 @@ class MyHome:
             cashew_map.add_child(basemaps['Google Satellite'])
             cashew_map.add_child(basemaps['Mapbox Satellite'])
 
-            plugins.Fullscreen(position='topright', title='Full Screen', title_cancel='Exit Full Screen',
-                               force_separate_button=False).add_to(cashew_map)
+            plugins.Fullscreen(
+                position='topright',
+                title='Full Screen',
+                title_cancel='Exit Full Screen',
+                force_separate_button=False
+            ).add_to(cashew_map)
 
             # Adding the nursery layer from the class Nursery_LAYER
             marker_cluster = MarkerCluster(name=gettext("Nursery Information"))
             Nursery_layer = NurseryLayer(marker_cluster).add_nursery()
             Nursery_layer.add_to(cashew_map)
-
-            # Adding the qar layer from the class QarLayer
-            marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-            qarLayer = QarLayer(marker_cluster, self.Qars).add_qar()
-            qarLayer.add_to(cashew_map)
 
             print('')
             print('Define a method for displaying Earth Engine image tiles on a folium map.')
@@ -150,6 +146,16 @@ class MyHome:
 
     def get_context_data(self, path_link, cashew_map, **kwargs):
         try:
+
+            print('...Getting database QAR...')
+            start_time = time.time()
+            self.Qars = qar.get_qar_data_from_db()
+            # Adding the qar layer from the class QarLayer
+            marker_cluster = MarkerCluster(name=gettext("QAR Information"))
+            qarLayer = QarLayer(marker_cluster, self.Qars).add_qar()
+            qarLayer.add_to(cashew_map)
+            print("--- %s seconds ---" % (time.time() - start_time))
+
             print('')
             print('Adding the shapefiles with popups for the Benin Republic region')
             start_time = time.time()
@@ -190,7 +196,7 @@ def index(request):
     path_link = request.path
     home_obj = MyHome()
     cashew_map = home_obj.get_base_map()
-    cashew_map = home_obj.get_context_data(path_link, cashew_map)
+    # cashew_map = home_obj.get_context_data(path_link, cashew_map)
 
     # adding folium layer control for the previously added shapefiles
     cashew_map.add_child(folium.LayerControl())
@@ -212,7 +218,7 @@ def full_map(request):
     cashew_map.add_child(folium.LayerControl())
     cashew_map = cashew_map._repr_html_()
     data = {'map': cashew_map, 'segment': 'map'}
-    # return JsonResponse(data)
+
     return HttpResponse(
         json.dumps(data),
         content_type='application/javascript; charset=utf8'

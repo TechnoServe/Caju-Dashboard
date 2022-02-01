@@ -5,7 +5,39 @@
 {% block title %} Dashboard {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <style>
+        .parent {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100vh;
+        {#margin: 10px;#}
+        }
+
+        .child1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            background: transparent;
+        }
+
+        .child2 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            background: transparent;
+        {#z-index: 1;#}{#margin: 30px;#}
+        }
+    </style>
+
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -13,12 +45,21 @@
     <!-- Header -->
 
 
-    <div style="overflow: hidden">
-        <div class="inner second" style="width: 105%; position: relative; top: 0; right: 5%">
+    {#    <div style="overflow: hidden">#}
+    {#        <div class="inner first" style="width: 105%; position: relative; top: 0; right: 5%">#}
+    {#            {{ segment }}#}
+    {#        </div>#}
+    {#        <div class="inner second" style="width: 105%; position: relative; top: -0vh; right: 5%">#}
+    {#            {{ map | safe }}#}
+    {#        </div>#}
+    {#    </div>#}
+    <div class="parent">
+        <div class="child1">
+        </div>
+        <div class="child2">
             {{ map | safe }}
         </div>
     </div>
-
 {% endblock content %}
 
 <!-- Specific JS goes HERE -->
@@ -36,8 +77,14 @@
                 dataType: "json",
                 contentType: "application/javascript; charset=utf8",
                 complete: function (data) {
-                    let map = data.responseJSON['map'];
-                    {#$( "div.second" ).replaceWith( map );#}
+                    let full_map = data.responseJSON['map'];
+                    $("div.child1").replaceWith(full_map);
+                    setTimeout(
+                        function () {
+                            $('div.child2').fadeOut('', function () {
+                                $('div.child2').replaceWith();
+                            });
+                        }, 250);
                 },
             });
         });
