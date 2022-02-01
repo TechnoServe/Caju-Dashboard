@@ -2,3 +2,5 @@ __pycache__
 apps/dashboard/__pycache__
 apps/dashboard/scripts/__pycache__
 apps/authentication/__pycache__
+.idea
+cnqa.sql
