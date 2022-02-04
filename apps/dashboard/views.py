@@ -40,11 +40,8 @@ service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com
 credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
 ee.Initialize(credentials)
 locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
-alldept = ee.Image('users/ashamba/allDepartments_v0')
-
-
-def home(request):
-    return HttpResponse("Hello, world. You're at the dashboard index.")
+# alldept = ee.Image('users/ashamba/allDepartments_v0')
+alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
 
 class MyHome:
@@ -199,7 +196,6 @@ def index(request):
     path_link = request.path
     home_obj = MyHome()
     cashew_map = home_obj.get_base_map()
-    # cashew_map = home_obj.get_context_data(path_link, cashew_map)
 
     # adding folium layer control for the previously added shapefiles
     cashew_map.add_child(folium.LayerControl())
