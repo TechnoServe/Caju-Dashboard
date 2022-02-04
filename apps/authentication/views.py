@@ -8,10 +8,12 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
+from .forms import *
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.template import loader
@@ -105,6 +107,39 @@ def signup(request):
     else:
         form = SignUpForm()
     return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": success})
+
+@login_required(login_url="/")
+def register_org(request):
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        form = RegisterOrganization(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            try:
+                current_user = request.user
+                if current_user.is_authenticated:
+                    # Do something for authenticated users.
+                    obj.created_by = current_user.id
+                    obj.created_date = datetime.datetime.now()
+                    obj.updated_by = current_user.id
+                    obj.updated_date = datetime.datetime.now()
+
+                    # return redirect("/login/")
+            except:
+                print("")
+
+            obj.save()
+            msg = gettext('Organization created - please <a href="/register">register user</a>.')
+            success = True
+
+        else:
+            msg = gettext('Form is not valid')
+    else:
+        form = RegisterOrganization()
+
+    return render(request, "authentication/register_org.html", {"form": form, "msg": msg, "success": success})
 
 
 def register_user_full(request):

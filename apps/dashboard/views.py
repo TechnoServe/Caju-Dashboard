@@ -23,6 +23,7 @@ from folium.plugins import MarkerCluster
 import apps.dashboard.scripts.get_qar_information as qar
 from apps.authentication import utils
 from apps.authentication.models import RemOrganization, RemRole, RemUser
+from apps.authentication.forms import RegisterOrganization
 from apps.dashboard import models
 from apps.dashboard.benin_commune import add_benin_commune
 from apps.dashboard.benin_department import add_benin_department
