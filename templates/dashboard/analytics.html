@@ -53,10 +53,17 @@
                 <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
                         <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                        <br>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <label for="departments">{% trans "Select Department: " %}</label>
+                                {{ Department_choice.department }}
+                            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                        </form>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
-                            <canvas id=""></canvas>
+                            <canvas id="dep_commune_Chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -196,6 +203,32 @@
             const kor_Chart = new Chart(
                 document.getElementById('kor_Chart'),
                 config
+            );
+          
+            var labels_dep_commune = {{ dep_commune_names|safe }}
+            var datas_dep_commune = {{ dep_commune_sum_list|safe }}
+            var dataset_dep_commune = []
+            for (let i in datas_dep_commune) {
+               var dep_commune_color = generateRandomColor();
+               dataset_dep_commune.push(dep_commune_color)
+            }
+            const dep_commune_data = {
+            labels: labels_dep_commune,
+            datasets: [{
+                    label: 'KOR average per Departement communes',
+                data: datas_dep_commune,
+                backgroundColor: dataset_dep_commune,
+                hoverBorderWidth: "30px",
+                }]
+            };
+            const dep_commune_config = {
+                type: 'polarArea',
+                data: dep_commune_data,
+                options: {}
+            };
+            const dep_commune_Chart = new Chart(
+                document.getElementById('dep_commune_Chart'),
+                dep_commune_config
             );
         </script>
 {% endblock javascripts %}
