@@ -53,6 +53,13 @@
                 <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
                         <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                        <br>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <label for="departments">{% trans "Select Department: " %}</label>
+                                {{ Department_choice.department }}
+                            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                        </form>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
