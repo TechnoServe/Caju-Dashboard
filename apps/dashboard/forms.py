@@ -9,6 +9,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 
 from apps.authentication.models import RemUser, RemOrganization
+from apps.dashboard.db_conn_string import cur
 
 ACTIVE = 1
 INACTIVE = 0
@@ -120,3 +121,46 @@ class UserCustomProfileForm(ModelForm):
             ),
         }
         fields = ['email', 'phone', 'organization']
+
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class KorDateForm(forms.Form):
+    my_date_field = forms.DateField(widget=DateInput)
+    my_date_field1 = forms.DateField(widget=DateInput)
+
+
+country = "Benin"
+query = ("SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s")
+cur.execute(query, (country,))
+
+infos = []
+for kor in cur:
+    for location_region in cur:
+        infos.append(location_region)
+
+infos1 = sorted(infos, key=lambda name: name[1])
+
+names_with_duplicate = []
+for x in infos1:
+    names_with_duplicate.append(x[1])
+
+y = 0
+while len(names_with_duplicate) > y:
+    if "Department" in names_with_duplicate[y]:
+        names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+    else:
+        pass
+    y += 1
+
+names_sorted = list(set(names_with_duplicate))
+names_sorted = sorted(names_sorted)
+
+
+DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in names_sorted]
+
+
+class Department_choice(forms.Form):
+    department = forms.ChoiceField(choices=DEPARTMENT_CHOICES)

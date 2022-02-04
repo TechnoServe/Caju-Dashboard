@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .views import analytics
 
 urlpatterns = [
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path("register_role/", views.register_role, name="register_role"),
     path('load_roles/', views.load_roles, name='load_roles'),
     path('profile/', views.profile, name='profile'),
+    path('analytics/', analytics, name='analytics'),
 ]
