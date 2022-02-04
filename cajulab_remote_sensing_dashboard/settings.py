@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from dotenv import load_dotenv, find_dotenv
-# import django_heroku
-# import dj_database_url
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 

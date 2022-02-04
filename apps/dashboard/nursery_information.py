@@ -24,7 +24,7 @@ class NurseryLayer:
                           rise_offset=250,
                           icon=folium.Icon(color="red", icon="leaf"),
                           popup=f'''
-                                <div style="border: 3px solid #808080">
+                                <div style="">
                                 <h4 style="font-family: 'Trebuchet MS', sans-serif">{Commune_Name}: <b>{current_object.commune}</b></h4>
                                 <h5 style="font-family: 'Trebuchet MS', sans-serif">{Nursery_Owner}: <i>{current_object.nursery_name}</i></h5>
                                 <h5 style="font-family: 'Trebuchet MS', sans-serif">{Nursery_Area}: <b>{current_object.current_area}</b></h5>

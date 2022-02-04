@@ -124,7 +124,14 @@
                         <span class="nav-link-text">{% trans "Nurseries" %}</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link {% if 'analytics' in segment %} active {% endif %}"
+                       style="{% if 'analytics' in segment %} background-color: #DFF4F4 {% endif %}"
+                       href="{% url 'analytics' %}">
+                        <i class="ni ni-chart-pie-35 text-default"></i>
+                        <span class="nav-link-text">{% trans "Analytics" %}</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">
                         <i class="ni ni-user-run text-red"></i>

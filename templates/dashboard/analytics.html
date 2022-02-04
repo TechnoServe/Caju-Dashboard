@@ -1,0 +1,201 @@
+
+
+{% extends 'layouts/base.html' %}
+{% load i18n %}
+
+
+{% block title %} Tables {% endblock title %}
+
+{% block content %}
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <h6 class="h2 text-white d-inline-block mb-0">{% trans "Analytics" %}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                        <h3 class="mb-0">{% trans "KOR average per Departement" %}</h3>
+                    </div>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="department_Chart" width="40" height="10"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                <!-- Card header -->
+                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                        <h3 class="mb-0">{% trans "KOR average per Commune" %}</h3>
+                    </div>
+                    <div class="card-body border-0">
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id="commune_Chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                <!-- Card header -->
+                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                        <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                    </div>
+                    <div class="card-body border-0">
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id=""></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                        <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
+                        <br>
+                        <form method="POST">
+                            {% csrf_token %}
+                          <label for="date">From:</label>
+                            {{ form.my_date_field }}
+                          <label for="date1">To:</label>
+                            {{ form.my_date_field1 }}
+                          <input type="submit">
+                        </form>
+                    </div>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="kor_Chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+        <script type="text/javascript">
+            function generateRandomColor(){
+                let maxVal = 0xFFFFFF; // 16777215
+                let randomNumber = Math.random() * maxVal;
+                randomNumber = Math.floor(randomNumber);
+                randomNumber = randomNumber.toString(16);
+                let randColor = randomNumber.padStart(6, 0);
+                return `#${randColor.toUpperCase()}`
+            }
+            var department_labels = {{ department_name|safe }}
+            var department_datas = {{ department_sum_list|safe }}
+            var department_dataset = []
+            for (let i in department_datas) {
+               var color = generateRandomColor();
+               department_dataset.push(color)
+            }
+            const department_data = {
+            labels: department_labels,
+            datasets: [{
+                    label: 'KOR average per Departement',
+                data: department_datas,
+                backgroundColor: department_dataset,
+                }]
+            };
+            const department_config = {
+                type: 'polarArea',
+                data: department_data,
+                options: {
+                    gridLines: {
+                       display: false
+                    }
+                }
+            };
+
+            const department_Chart = new Chart(
+                document.getElementById('department_Chart'),
+                department_config,
+            );
+
+            var labels_commune = {{ commune_name|safe }}
+            var datas_commune = {{ commune_sum_list|safe }}
+            var dataset_commune = []
+            for (let i in datas_commune) {
+               var commune_color = generateRandomColor();
+               dataset_commune.push(commune_color)
+            }
+            const commune_data = {
+            labels: labels_commune,
+            datasets: [{
+                    label: 'KOR average per Commune',
+                data: datas_commune,
+                backgroundColor: dataset_commune,
+                hoverBorderWidth: "30px",
+                }]
+            };
+            const commune_config = {
+                type: 'polarArea',
+                data: commune_data,
+                options: {
+                    scale: {
+                        scaleShowLine : false,
+                        display: false,
+                    }
+                }
+            };
+            const commune_Chart = new Chart(
+                document.getElementById('commune_Chart'),
+                commune_config
+            );
+
+            var kor_labels = {{ kor_time|safe }}
+            var kor_datas = {{ per_kor|safe }}
+            var kor_color = []
+            for (let i in kor_datas) {
+               var color1 = generateRandomColor();
+               kor_color.push(color1)
+            }
+            const data = {
+              labels: kor_labels,
+              datasets: [
+                {
+                  label: 'KOR Graph against date period',
+                  data: kor_datas,
+                  borderColor: generateRandomColor(),
+                  backgroundColor: 'white',
+                  fill: false,
+                    tension: 0.4
+                }
+              ]
+            };
+            const config = {
+              type: 'line',
+              data: data,
+              options: {
+                plugins: {
+                  filler: {
+                    propagate: false,
+                  },
+                },
+                interaction: {
+                  intersect: false,
+                }
+              },
+            };
+            const kor_Chart = new Chart(
+                document.getElementById('kor_Chart'),
+                config
+            );
+        </script>
+{% endblock javascripts %}
