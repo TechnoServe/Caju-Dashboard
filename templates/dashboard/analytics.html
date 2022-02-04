@@ -63,7 +63,7 @@
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
-                            <canvas id=""></canvas>
+                            <canvas id="dep_commune_Chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -203,6 +203,32 @@
             const kor_Chart = new Chart(
                 document.getElementById('kor_Chart'),
                 config
+            );
+          
+            var labels_dep_commune = {{ dep_commune_names|safe }}
+            var datas_dep_commune = {{ dep_commune_sum_list|safe }}
+            var dataset_dep_commune = []
+            for (let i in datas_dep_commune) {
+               var dep_commune_color = generateRandomColor();
+               dataset_dep_commune.push(dep_commune_color)
+            }
+            const dep_commune_data = {
+            labels: labels_dep_commune,
+            datasets: [{
+                    label: 'KOR average per Departement communes',
+                data: datas_dep_commune,
+                backgroundColor: dataset_dep_commune,
+                hoverBorderWidth: "30px",
+                }]
+            };
+            const dep_commune_config = {
+                type: 'polarArea',
+                data: dep_commune_data,
+                options: {}
+            };
+            const dep_commune_Chart = new Chart(
+                document.getElementById('dep_commune_Chart'),
+                dep_commune_config
             );
         </script>
 {% endblock javascripts %}
