@@ -124,14 +124,40 @@
                         <span class="nav-link-text">{% trans "Nurseries" %}</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if 'analytics' in segment %} active {% endif %}"
-                       style="{% if 'analytics' in segment %} background-color: #DFF4F4 {% endif %}"
-                       href="{% url 'analytics' %}">
-                        <i class="ni ni-chart-pie-35 text-default"></i>
-                        <span class="nav-link-text">{% trans "Analytics" %}</span>
-                    </a>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            <i class="ni ni-chart-pie-35"></i>
+                            <span class="nav-link-text">{% trans "Analytics" %}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-sm  dropdown-menu-left  py-0 overflow-hidden">
+                            <!-- List group -->
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'analytics' %}" class="list-group-item list-group-item-action">
+                                    <div class="row align-items-center">
+                                        <div class="col ml--2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h4 class="mb-0 text-sm">{% trans "Cashew quality" %}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="{% url 'analytics' %}" class="list-group-item list-group-item-action">
+                                    <div class="row align-items-center">
+                                        <div class="col ml--2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <h4 class="mb-0 text-sm">{% trans "Other page" %}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">
                         <i class="ni ni-user-run text-red"></i>

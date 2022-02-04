@@ -347,10 +347,10 @@ def add_benin_department(self, Qars):
                         </table>
                         
                         <table>
-                            <td><div id="piechart_div" style="width: 400; height: 350;border: 3px solid #00a5a7"></div></td>
+                            <td><div id="piechart_div" style="width: 400; height: 350;"></div></td>
                         </table>                           
                         <table>
-                            <td><div id="donutchart" style="width: 400; height: 350;border: 3px solid #00a5a7"></div></td>
+                            <td><div id="donutchart" style="width: 400; height: 350;"></div></td>
                         </table>
                         <table>
                             <td><div style= "text-align: center"><h5>{Source_TNS}</h5></div>

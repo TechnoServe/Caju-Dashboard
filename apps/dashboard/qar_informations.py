@@ -23,7 +23,7 @@ class QarLayer:
                           rise_offset=250,
                           icon=folium.Icon(color="blue", icon="leaf"),
                           popup=f'''
-                                <div style="border: 3px solid #808080">
+                                <div style="">
                                 <h4 style="font-family: 'Trebuchet MS', sans-serif">
                                     {Qar_Region}: <b>{current_object.department}</b>
                                 </h4> 
