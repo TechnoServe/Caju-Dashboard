@@ -7,7 +7,7 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
     <style>
-        .parent {
+        .parent1 {
             position: relative;
             overflow: hidden;
             right: 5%;
@@ -17,7 +17,7 @@
         }
 
         .child1 {
-            position: absolute;
+            position: relative;
             width: 100%;
             height: 100%;
             top: 0;
@@ -27,14 +27,23 @@
         }
 
         .child2 {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: relative;
+            width: inherit;
+            height: inherit;
+            padding-bottom: 200%;
             top: 0;
             left: 0;
             opacity: 1;
             background: transparent;
         {#z-index: 1;#}{#margin: 30px;#}
+        }
+
+        .parent1 div {
+            height: 100% !important;
+        }
+
+        .parent1 div div {
+            padding-bottom: inherit !important;
         }
     </style>
 
@@ -54,7 +63,7 @@
     {#            {{ map | safe }}#}
     {#        </div>#}
     {#    </div>#}
-    <div class="parent">
+    <div class="parent1">
         <div class="child1">
         </div>
         <div class="child2">

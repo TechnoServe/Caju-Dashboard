@@ -104,6 +104,9 @@ class LoginForm(forms.Form):
                 "class": "form-control"
             }
         ))
+    remember_me = forms.BooleanField(
+        required=False,
+        )
 
     class Meta:
         model = User

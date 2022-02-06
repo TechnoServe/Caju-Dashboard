@@ -1,4 +1,5 @@
 import collections
+import datetime
 import json
 import locale
 import time
@@ -23,7 +24,7 @@ from folium.plugins import MarkerCluster
 import apps.dashboard.scripts.get_qar_information as qar
 from apps.authentication import utils
 from apps.authentication.models import RemOrganization, RemRole, RemUser
-from apps.authentication.forms import RegisterOrganization
+from apps.authentication.forms import RegisterOrganization, RegisterRole
 from apps.dashboard import models
 from apps.dashboard.benin_commune import add_benin_commune
 from apps.dashboard.benin_department import add_benin_department
@@ -498,6 +499,7 @@ def shipment(request):
     context['page_range'] = page_range
     return render(request, 'dashboard/shipment.html', context)
 
+
 @login_required(login_url="/")
 def analytics(request):
     context = {}
@@ -609,14 +611,17 @@ def analytics(request):
         kor_time = []
         if form1.is_valid():
             department_names_ = form1.cleaned_data.get("department")
-            department_with_department = department_names_.capitalize()+" Department"
+            department_with_department = department_names_.capitalize() + " Department"
 
-            query = ("SELECT kor, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
+            query = (
+                "SELECT kor, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
             cur.execute(query, (country, department_names_, department_with_department))
 
             dep_commune = []
             for kor in cur:
+                print(kor)
                 for location_sub_region in cur:
+                    print(location_sub_region)
                     dep_commune.append(location_sub_region)
 
             dep_commune = sorted(dep_commune, key=lambda name: name[1])
@@ -665,12 +670,13 @@ def analytics(request):
             date2 = form.cleaned_data.get("my_date_field1")
             date2 = str(date2)
             date2 = date2.replace("-", "/")
-            time_duration = int(str(date1[5])+str(date1[6]))
+            time_duration = int(str(date1[5]) + str(date1[6]))
 
             date1 = date1 + " 00:00:00"
             date2 = date2 + " 23:59:59"
 
-            query = ("SELECT kor, location_country, created_at FROM free_qar_result WHERE location_country=%s AND created_at BETWEEN %s AND %s")
+            query = (
+                "SELECT kor, location_country, created_at FROM free_qar_result WHERE location_country=%s AND created_at BETWEEN %s AND %s")
             cur.execute(query, (country, date1, date2))
             lite = []
             for kor in cur:
@@ -802,3 +808,7 @@ def drone(request, plant_id, coordinate_xy):
 
     html_template = loader.get_template('dashboard/index.html')
     return HttpResponse(html_template.render(context, request))
+
+
+def other_page(request):
+    return render(request, "dashboard/other_page.html")

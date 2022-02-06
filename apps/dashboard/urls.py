@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import analytics
+from .views import analytics, other_page
 
 urlpatterns = [
 
@@ -21,4 +21,5 @@ urlpatterns = [
     path('load_roles/', views.load_roles, name='load_roles'),
     path('profile/', views.profile, name='profile'),
     path('analytics/', analytics, name='analytics'),
+    path('other_page/', other_page, name='other_page')
 ]

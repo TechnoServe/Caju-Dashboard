@@ -41,9 +41,13 @@ def signin(request):
         if form.is_valid():
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
+            remember_me = form.cleaned_data.get("remember_me")
+            print(remember_me)
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
+                if not remember_me:
+                    request.session.set_expiry(0)
                 return redirect("/dashboard/")
             else:
                 msg = gettext('Invalid credentials')
