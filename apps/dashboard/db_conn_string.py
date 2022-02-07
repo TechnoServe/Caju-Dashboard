@@ -1,13 +1,12 @@
 import logging
 import os
-import pymysql
+
 import paramiko
+import pymysql
 import sshtunnel
 from sshtunnel import SSHTunnelForwarder
 
-from cajulab_remote_sensing_dashboard.settings import BASE_DIR
-
-mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(BASE_DIR, 'apps/dashboard/tns-wiredin-cqna.pem'))
+mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
 sql_hostname = '127.0.0.1'
 sql_username = 'dbuser'

@@ -1,8 +1,3 @@
-# -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
-
 from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -10,24 +5,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
-class Qar(models.Model):
-    document_id = models.CharField(max_length=255)
-
-    country = models.CharField(max_length=200)
-    department = models.CharField(max_length=200)
-    commune = models.CharField(max_length=200)
-
-    site = models.CharField(max_length=200)
-
-    latitude = models.FloatField(null=True, blank=False)
-    longitude = models.FloatField(null=True, blank=False)
-    altitude = models.FloatField(null=True)
-
-    kor = models.FloatField(null=True)
-
-    def __str__(self):
-        return self.document_id
-
+# Create your models here.
 
 class Nursery(models.Model):
     class Status:
@@ -300,5 +278,3 @@ class SpecialTuple(models.Model):
 
     def __str__(self):
         return str(self.alteia_id)
-
-# Create your models here.

@@ -19,113 +19,47 @@ def highlight_function(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_average_kor(Qars):
+def get_average_kor(qars):
     total = 0
-    count = len(Qars)
+    count = len(qars)
     if count == 0:
         count = 1
-    for i, x in enumerate(Qars):
+    for i, x in enumerate(qars):
         total += x.kor
     result = total / count
     return "{:.2f}".format(result) if result != 0 else "NA"
 
 
-@shared_task(bind=True)
-def add_benin_republic(self, Qars):
-    benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=False)
-    temp_geojson0 = folium.GeoJson(data=benin_adm0_json,
-                                   name='Benin-Adm0 Department',
-                                   highlight_function=highlight_function)
-
+def build_html_view(data: object) -> any:
+    """
+    Return the HTML view of the Benin Republic Layer
+    """
     # Variables for translation
-    Departments_Cashew_Tree = gettext('Departments Cashew Tree Cover Statistics In')
-    Active_Trees = gettext("Active Trees")
-    Sick_Trees = gettext("Sick Trees")
-    Dead_Trees = gettext("Dead Trees")
-    Out_of_Production = gettext("Out of Production Trees")
-    Cashew_Trees_Status = gettext("Cashew Trees Status in")
+    departments_cashew_tree = gettext('Departments Cashew Tree Cover Statistics In')
+    active_trees = gettext("Active Trees")
+    sick_trees = gettext("Sick Trees")
+    dead_trees = gettext("Dead Trees")
+    out_of_production = gettext("Out of Production Trees")
+    cashew_trees_status = gettext("Cashew Trees Status in")
     is_ranked = gettext("is ranked")
     globally_in_terms = gettext("globally in terms of total cashew yield")
-    Satellite_Est = gettext("Satellite Est")
-    TNS_Survey = gettext("TNS Survey")
+    satellite_est = gettext("Satellite Est")
+    tns_survey = gettext("TNS Survey")
 
     # All 3 shapefiles share these variables
-    Total_Cashew_Yield = gettext("Total Cashew Yield (kg)")
-    Total_Area = gettext("Total Area (ha)")
-    Cashew_Tree_Cover = gettext("Cashew Tree Cover (ha)")
-    Yield_Hectare = gettext("Yield/Hectare (kg/ha)")
-    Yield_per_Tree = gettext("Yield per Tree (kg/tree)")
-    Number_of_Trees = gettext("Number of Trees")
-    Qar_average = gettext("KOR Average")
+    total_cashew_yield = gettext("Total Cashew Yield (kg)")
+    total_area = gettext("Total Area (ha)")
+    cashew_tree_cover = gettext("Cashew Tree Cover (ha)")
+    yield_hectare = gettext("Yield/Hectare (kg/ha)")
+    yield_per_tree = gettext("Yield per Tree (kg/tree)")
+    number_of_trees = gettext("Number of Trees")
+    qar_average = gettext("KOR Average")
     nine_9 = gettext('9th')
-    Source_TNS = gettext("Source: TNS/BeninCaju Yield Surveys 2020")
+    source_tns = gettext("Source: TNS/BeninCaju Yield Surveys 2020")
 
-    for feature in temp_geojson0.data['features']:
+    name = gettext('Benin Republic')
 
-        pred_ben_data = []
-        pred_ground_ben_data = [['Departments', 'Satellite Prediction', 'Ground Data Estimate']]
-        for d in range(len(DeptSatellite.objects.all())):
-            y = DeptSatellite.objects.all()[d].department
-            x = CommuneSatellite.objects.filter(department=y).aggregate(Sum('cashew_tree_cover'))
-            x = round(x['cashew_tree_cover__sum'] / 10000, 2)
-            pred_ben_data.append([y, x])
-            pred_ground_ben_data.append([y, x, x])
-
-        temp_layer0 = folium.GeoJson(feature, zoom_on_click=True, highlight_function=highlight_function)
-
-        name = gettext('Benin Republic')
-        surface_area = BeninYield.objects.all().aggregate(Sum('surface_area'))
-        surface_area = int(round(surface_area['surface_area__sum'], 2))
-
-        total_yield = BeninYield.objects.all().aggregate(Sum('total_yield_kg'))
-        total_yield = int(round(total_yield['total_yield_kg__sum'], 2))
-
-        yield_ha = BeninYield.objects.all().aggregate(Avg('total_yield_per_ha_kg'))
-        yield_ha = int(round(yield_ha['total_yield_per_ha_kg__avg'], 2))
-
-        num_tree = BeninYield.objects.all().aggregate(Sum('total_number_trees'))
-        num_tree = int(num_tree['total_number_trees__sum'])
-
-        sick_tree = BeninYield.objects.all().aggregate(Sum('total_sick_trees'))
-        sick_tree = int(sick_tree['total_sick_trees__sum'])
-
-        out_prod_tree = BeninYield.objects.all().aggregate(Sum('total_trees_out_of_prod'))
-        out_prod_tree = int(out_prod_tree['total_trees_out_of_prod__sum'])
-
-        dead_tree = BeninYield.objects.all().aggregate(Sum('total_dead_trees'))
-        dead_tree = int(round(dead_tree['total_dead_trees__sum'], 2))
-
-        tree_ha_pred = CommuneSatellite.objects.all().aggregate(Sum('cashew_tree_cover'))
-        tree_ha_pred = int(round(tree_ha_pred['cashew_tree_cover__sum'] / 10000, 2))
-
-        yield_pred = 390 * tree_ha_pred
-
-        region_size = area(feature['geometry']) / 10000
-        active_trees = num_tree - sick_tree - out_prod_tree - dead_tree
-
-        r_surface_area = round(surface_area,
-                               1 - int(floor(log10(abs(surface_area))))) if surface_area < 90000 else round(
-            surface_area, 2 - int(floor(log10(abs(surface_area)))))
-        r_total_yield = round(total_yield, 1 - int(floor(log10(abs(total_yield))))) if total_yield < 90000 else round(
-            total_yield, 2 - int(floor(log10(abs(total_yield)))))
-        r_yield_ha = round(yield_ha, 1 - int(floor(log10(abs(yield_ha))))) if yield_ha < 90000 else round(yield_ha,
-                                                                                                          2 - int(floor(
-                                                                                                              log10(
-                                                                                                                  abs(yield_ha)))))
-        r_tree_ha_pred = round(tree_ha_pred,
-                               1 - int(floor(log10(abs(tree_ha_pred))))) if tree_ha_pred < 90000 else round(
-            tree_ha_pred, 2 - int(floor(log10(abs(tree_ha_pred)))))
-        r_yield_pred = round(yield_pred, 1 - int(floor(log10(abs(yield_pred))))) if yield_pred < 90000 else round(
-            yield_pred, 2 - int(floor(log10(abs(yield_pred)))))
-        r_num_tree = round(num_tree, 1 - int(floor(log10(abs(num_tree))))) if num_tree < 90000 else round(num_tree,
-                                                                                                          2 - int(floor(
-                                                                                                              log10(
-                                                                                                                  abs(num_tree)))))
-        r_region_size = round(region_size, 1 - int(floor(log10(abs(region_size))))) if region_size < 90000 else round(
-            region_size, 2 - int(floor(log10(abs(region_size)))))
-        r_yield_tree = round(r_total_yield / active_trees)
-
-        html4 = f'''
+    return f'''
                 <html>
                     <head>
                         <style>
@@ -167,9 +101,9 @@ def add_benin_republic(self, Qars):
                             var pie_data = new google.visualization.DataTable();
                             pie_data.addColumn('string', 'Commune');
                             pie_data.addColumn('number', 'Cashew Tree Cover (ha)');
-                            pie_data.addRows({pred_ben_data});
+                            pie_data.addRows({data.pred_ben_data});
 
-                            var piechart_options = {{title:'{Departments_Cashew_Tree} {name}',
+                            var piechart_options = {{title:'{departments_cashew_tree} {name}',
                                                         is3D: true,
                                                     }};
                             var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
@@ -180,15 +114,15 @@ def add_benin_republic(self, Qars):
 
                             var data_donut = google.visualization.arrayToDataTable([
                             ['Tree Type', 'Number of Trees'],
-                            ["Active Trees",      {active_trees}],
-                            ["Sick Trees",      {sick_tree}],
-                            ["Dead Trees",     {dead_tree}],
-                            ["Out of Production Trees",      {out_prod_tree}],
+                            ['{active_trees}',      {data.active_trees}],
+                            ['{sick_trees}',      {data.sick_trees}],
+                            ['{dead_trees}',     {data.dead_trees}],
+                            ['{out_of_production}',      {data.out_prod_trees}],
                             ]);
 
                             var options_donut = {{
                             
-                            title: '{Cashew_Trees_Status} {name}',
+                            title: '{cashew_trees_status} {name}',
                             pieHole: 0.5,
                             colors: ['007f00', '#02a8b1', '9e1a1a', '#242526'],
                             }};
@@ -205,48 +139,48 @@ def add_benin_republic(self, Qars):
                         <table>
                         <tr>
                             <th></th>
-                            <th>{Satellite_Est}</th>
-                            <th>{TNS_Survey}</th>
+                            <th>{satellite_est}</th>
+                            <th>{tns_survey}</th>
                         </tr>
                         <tr>
-                            <td>{Total_Cashew_Yield}</td>
-                            <td>{r_yield_pred / 1000000:n}M</td>
-                            <td>{r_total_yield / 1000000:n}M</td>
+                            <td>{total_cashew_yield}</td>
+                            <td>{data.r_yield_pred / 1000000:n}M</td>
+                            <td>{data.r_total_yield / 1000000:n}M</td>
                             
                         </tr>
                         <tr>
-                            <td>{Total_Area}</td>
-                            <td>{r_region_size / 1000000:n}M</td>
-                            <td>{r_surface_area / 1000:n}K</td>
+                            <td>{total_area}</td>
+                            <td>{data.r_region_size / 1000000:n}M</td>
+                            <td>{data.r_surface_area / 1000:n}K</td>
                         </tr>
                         <tr>
-                            <td>{Cashew_Tree_Cover}</td>
-                            <td>{r_tree_ha_pred / 1000:n}K</td>
+                            <td>{cashew_tree_cover}</td>
+                            <td>{data.r_tree_ha_pred / 1000:n}K</td>
                             <td>NA</td>
                             
                         </tr>
                         <tr>
-                            <td>{Yield_Hectare}</td>
+                            <td>{yield_hectare}</td>
                             <td>390</td>
-                            <td>{r_yield_ha}</td>
+                            <td>{data.r_yield_ha}</td>
                             
                         </tr>
                         <tr>
-                            <td>{Yield_per_Tree}</td>
+                            <td>{yield_per_tree}</td>
                             <td>NA</td>
-                            <td>{r_yield_tree}</td>
+                            <td>{data.r_yield_tree}</td>
                             
                         </tr>
                         <tr>
-                            <td>{Number_of_Trees}</td>
+                            <td>{number_of_trees}</td>
                             <td>NA</td>
-                            <td>{r_num_tree / 1000:n}K</td>
+                            <td>{data.r_num_tree / 1000:n}K</td>
                             
                         </tr>
                         <tr>
-                            <td>{Qar_average}</td>
+                            <td>{qar_average}</td>
                             <td>NA</td>
-                            <td>{get_average_kor(Qars)}</td>                        
+                            <td>{get_average_kor(data.qars)}</td>                        
                         </tr>
                         </table>
                         
@@ -257,11 +191,134 @@ def add_benin_republic(self, Qars):
                             <td><div id="donutchart" style="width: 400; height: 350;"></div></td>
                         </table>
                         <table>
-                            <td><div style= "text-align: center"><h5>{Source_TNS}</h5></div>
+                            <td><div style= "text-align: center"><h5>{source_tns}</h5></div>
                         </table>    
 
                     </body>
                     </html>'''
+
+
+def build_data(feature, qars):
+    """
+    Return all the data needed to build the Benin republic Layer
+    """
+
+    data = {'qars': qars}
+
+    pred_ben_data = []
+    pred_ground_ben_data = [['Departments', 'Satellite Prediction', 'Ground Data Estimate']]
+    for d in range(len(DeptSatellite.objects.all())):
+        y = DeptSatellite.objects.all()[d].department
+        x = CommuneSatellite.objects.filter(department=y).aggregate(Sum('cashew_tree_cover'))
+        x = round(x['cashew_tree_cover__sum'] / 10000, 2)
+        pred_ben_data.append([y, x])
+        pred_ground_ben_data.append([y, x, x])
+    data["pred_ben_data"] = pred_ben_data
+
+    surface_area = BeninYield.objects.all().aggregate(Sum('surface_area'))
+    surface_area = int(round(surface_area['surface_area__sum'], 2))
+    data["surface_area"] = surface_area
+
+    total_yield = BeninYield.objects.all().aggregate(Sum('total_yield_kg'))
+    total_yield = int(round(total_yield['total_yield_kg__sum'], 2))
+    data["total_yield"] = total_yield
+
+    yield_ha = BeninYield.objects.all().aggregate(Avg('total_yield_per_ha_kg'))
+    yield_ha = int(round(yield_ha['total_yield_per_ha_kg__avg'], 2))
+    data["yield_ha"] = yield_ha
+
+    num_trees = BeninYield.objects.all().aggregate(Sum('total_number_trees'))
+    num_trees = int(num_trees['total_number_trees__sum'])
+    data["num_trees"] = num_trees
+
+    sick_trees = BeninYield.objects.all().aggregate(Sum('total_sick_trees'))
+    sick_trees = int(sick_trees['total_sick_trees__sum'])
+    data["sick_trees"] = sick_trees
+
+    out_prod_trees = BeninYield.objects.all().aggregate(Sum('total_trees_out_of_prod'))
+    out_prod_trees = int(out_prod_trees['total_trees_out_of_prod__sum'])
+    data["out_prod_trees"] = out_prod_trees
+
+    dead_trees = BeninYield.objects.all().aggregate(Sum('total_dead_trees'))
+    dead_trees = int(round(dead_trees['total_dead_trees__sum'], 2))
+    data["dead_trees"] = dead_trees
+
+    tree_ha_pred = CommuneSatellite.objects.all().aggregate(Sum('cashew_tree_cover'))
+    tree_ha_pred = int(round(tree_ha_pred['cashew_tree_cover__sum'] / 10000, 2))
+    data["tree_ha_pred"] = tree_ha_pred
+
+    yield_pred = 390 * tree_ha_pred
+    data["yield_pred"] = yield_pred
+
+    region_size = area(feature['geometry']) / 10000
+    data["region_size"] = region_size
+
+    active_trees = num_trees - sick_trees - out_prod_trees - dead_trees
+    data["active_trees"] = active_trees
+
+    r_surface_area = round(surface_area, 1 - int(floor(log10(abs(surface_area))))) \
+        if surface_area < 90000 \
+        else round(surface_area, 2 - int(floor(log10(abs(surface_area)))))
+    data["r_surface_area"] = r_surface_area
+
+    r_total_yield = round(total_yield, 1 - int(floor(log10(abs(total_yield))))) \
+        if total_yield < 90000 \
+        else round(total_yield, 2 - int(floor(log10(abs(total_yield)))))
+    data["r_total_yield"] = r_total_yield
+
+    r_yield_ha = round(yield_ha, 1 - int(floor(log10(abs(yield_ha))))) \
+        if yield_ha < 90000 \
+        else round(yield_ha, 2 - int(floor(log10(abs(yield_ha)))))
+    data["r_yield_ha"] = r_yield_ha
+
+    r_tree_ha_pred = round(tree_ha_pred, 1 - int(floor(log10(abs(tree_ha_pred))))) \
+        if tree_ha_pred < 90000 \
+        else round(tree_ha_pred, 2 - int(floor(log10(abs(tree_ha_pred)))))
+    data["r_tree_ha_pred"] = r_tree_ha_pred
+
+    r_yield_pred = round(yield_pred, 1 - int(floor(log10(abs(yield_pred))))) \
+        if yield_pred < 90000 \
+        else round(yield_pred, 2 - int(floor(log10(abs(yield_pred)))))
+    data["r_yield_pred"] = r_yield_pred
+
+    r_num_tree = round(num_trees, 1 - int(floor(log10(abs(num_trees))))) \
+        if num_trees < 90000 \
+        else round(num_trees, 2 - int(floor(log10(abs(num_trees)))))
+    data["r_num_tree"] = r_num_tree
+
+    r_region_size = round(region_size, 1 - int(floor(log10(abs(region_size))))) \
+        if region_size < 90000 \
+        else round(region_size, 2 - int(floor(log10(abs(region_size)))))
+    data["r_region_size"] = r_region_size
+
+    r_yield_tree = round(r_total_yield / active_trees)
+    data["r_yield_tree"] = r_yield_tree
+
+    return data
+
+
+@shared_task(bind=True)
+def add_benin_republic(self, qars):
+    """
+    Adding the shapefiles with popups for the Benin Republic region
+    Add benin republic data to the parent layer
+    """
+
+    class DataObject:
+        def __init__(self, **entries):
+            self.__dict__.update(entries)
+
+    benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=False)
+    temp_geojson0 = folium.GeoJson(data=benin_adm0_json,
+                                   name='Benin-Adm0 Department',
+                                   highlight_function=highlight_function)
+
+    for feature in temp_geojson0.data['features']:
+        temp_layer0 = folium.GeoJson(feature, zoom_on_click=True, highlight_function=highlight_function)
+
+        data = build_data(feature, qars)
+
+        html4 = build_html_view(DataObject(**data))
 
         iframe = folium.IFrame(html=html4, width=450, height=380)
 
