@@ -24,7 +24,7 @@ def __highlight_function__(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def __get_average_nut_count__(qars: list[QarObject]):
+def __get_average_nut_count__(qars: list):
     """
     Get the average of nut count in the benin republic area
     """
@@ -39,7 +39,7 @@ def __get_average_nut_count__(qars: list[QarObject]):
     return "{:.2f}".format(result) if result != 0 else "NA"
 
 
-def __get_average_defective_rate__(qars: list[QarObject]):
+def __get_average_defective_rate__(qars: list):
     """
     Get the average of defective rate in the benin republic area
     """

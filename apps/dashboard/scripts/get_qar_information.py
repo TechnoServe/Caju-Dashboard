@@ -7,6 +7,7 @@ import pymysql
 import sshtunnel
 from shapely.geometry import shape, Point
 from sshtunnel import SSHTunnelForwarder
+from apps.dashboard.db_conn_string import cur
 
 """
 Add your path to your pkey perm file
@@ -159,15 +160,10 @@ def get_qar_data_from_db():
     Return a list of Qar objects
     """
     try:
-        tunnel = open_ssh_tunnel()
-        connection = mysql_connect(tunnel)
-
-        qars = get_items(connection.cursor())
+        qars = get_items(cur)
 
         for i in range(len(qars)):
             qars[i].department = get_department_from_coord(qars[i].longitude, qars[i].latitude)
-        mysql_disconnect(connection)
-        close_ssh_tunnel(tunnel)
     except Exception as e:
         print({e})
         qars = []

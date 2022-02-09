@@ -6,7 +6,7 @@ from .scripts.get_qar_information import QarObject
 logger = get_task_logger(__name__)
 
 
-def make_hashable(qars: list[QarObject]):
+def make_hashable(qars: list):
     return {
         item.document_id: item.dump()
         for item in qars

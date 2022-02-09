@@ -158,15 +158,15 @@ LOCALE_PATHS = (
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
-
-STATIC_URL = 'static/'
+# https://docs.djangoproject.com/en/4.0/howto/²-files/
 
 # django_heroku.settings(locals())
 
 # Extra places for collectstatic to find static files.
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '/')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'cajulab_remote_sensing_dashboard/static'),
+    os.path.join(BASE_DIR, "static"),
 )
 
 EMAIL_USE_TLS = True
