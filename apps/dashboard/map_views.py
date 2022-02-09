@@ -7,6 +7,7 @@ import folium
 import geojson
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import render
 from django.template import loader
 from django.utils.translation import gettext
 from folium import plugins
@@ -22,6 +23,8 @@ from apps.dashboard.qar_informations import QarLayer
 # Google service account for the GEE geotiff
 from apps.dashboard.scripts.get_qar_information import get_qar_data_from_db
 from apps.dashboard.tasks import get_qar_data_from_db_task
+import asyncio
+import aiohttp
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
 credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
@@ -31,32 +34,41 @@ locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.
 alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
 
-def get_context_data(path_link, cashew_map, **kwargs):
+def __task1_func__(cashew_map, qars):
+    print('')
+    print('Adding the shapefiles with popups for the Benin commune region')
+    start_time = time.time()
+    benin_commune_layer = add_benin_commune(qars)
+    benin_commune_layer.add_to(cashew_map)
+    print("--- %s seconds ---" % (time.time() - start_time))
+    return cashew_map
+
+
+async def get_context_data(path_link, cashew_map, **kwargs):
     try:
 
         print('...Getting database QAR...')
         start_time = time.time()
-        task1 = get_qar_data_from_db_task.delay()
+        qars = get_qar_data_from_db()
+        # Adding the qar layer from the class QarLayer
+        marker_cluster = MarkerCluster(name=gettext("QAR Information"))
+        qar_layer = QarLayer(marker_cluster, qars).add_qar()
+        qar_layer.add_to(cashew_map)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
+        task1 = asyncio.create_task(__task1_func__(cashew_map, qars))
         # print('')
         # print('Adding the shapefiles with popups for the Benin Republic region')
         # start_time = time.time()
-        # benin_layer = add_benin_republic(self.Qars)
+        # benin_layer = add_benin_republic(qars=qars)
         # benin_layer.add_to(cashew_map)
         # print("--- %s seconds ---" % (time.time() - start_time))
         #
         # print('')
         # print('Adding the shapefiles with popups for the Benin departments region')
         # start_time = time.time()
-        # benin_dept_layer, dept_yield_ha = add_benin_department(self.Qars)
+        # benin_dept_layer, dept_yield_ha = add_benin_department(qars)
         # benin_dept_layer.add_to(cashew_map)
-        # print("--- %s seconds ---" % (time.time() - start_time))
-        #
-        # print('')
-        # print('Adding the shapefiles with popups for the Benin commune region')
-        # start_time = time.time()
-        # benin_commune_layer = add_benin_commune(self.Qars)
-        # benin_commune_layer.add_to(cashew_map)
         # print("--- %s seconds ---" % (time.time() - start_time))
 
         # print('')
@@ -65,15 +77,9 @@ def get_context_data(path_link, cashew_map, **kwargs):
         # benin_plantation_layer = add_benin_plantation(path_link, dept_yield_ha)
         # benin_plantation_layer.add_to(cashew_map)
         # print("--- %s seconds ---" % (time.time() - start_time))
+        cashew_map = await task1
 
-        # # Adding the qar layer from the class QarLayer
-        result = task1.get()
-
-        # qars = qar.get_qar_data_from_db()
-        marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-        qar_layer = QarLayer(marker_cluster, result["qars"]).add_qar()
-        qar_layer.add_to(cashew_map)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        # result = task1.get()
 
     except Exception as e:
         print(e)
@@ -189,30 +195,36 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 
+async def get_pokemon(session, url):
+    async with session.get(url) as res:
+        pokemon_data = await res.json()
+        return
+
+
 @login_required(login_url="/")
-def full_map(request):
-    # request.is_ajax() is deprecated since django 3.1
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+async def full_map(request):
+    starting_time = time.time()
 
-    if is_ajax is False or request.method != 'GET':
-        return HttpResponseBadRequest('Invalid request')
+    actions = []
+    pokemon_data = []
 
-    try:
-        path_link = request.path
-        cashew_map = get_base_map()
-        cashew_map = get_context_data(path_link, cashew_map)
+    async with aiohttp.ClientSession() as session:
+        for num in range(1, 101):
+            url = f"https://pokeapi.co/api/v2/pokemon/{num}"
+            actions.append(asyncio.ensure_future(get_pokemon(session, url)))
 
-        # adding folium layer control for the previously added shapefiles
-        cashew_map.add_child(folium.LayerControl())
-        cashew_map = cashew_map._repr_html_()
-        data = {'map': cashew_map, 'segment': 'map'}
+        pokemon_res = await asyncio.gather(*actions)
+        for data in pokemon_res:
+            pokemon_data.append(data)
 
-        return HttpResponse(
-            json.dumps(data),
-            content_type='application/javascript; charset=utf8'
-        )
-    except Exception:
-        return JsonResponse({'status': 'Invalid request'}, status=400)
+    count = len(pokemon_data)
+    total_time = time.time() - starting_time
+
+    return render(
+        request,
+        "dashboard/index.html",
+        {"data": pokemon_data, "count": count, "time": total_time},
+    )
 
 
 @login_required(login_url="/")

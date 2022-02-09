@@ -10,16 +10,53 @@ from django.utils.translation import gettext
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
+from apps.dashboard.scripts.get_qar_information import QarObject
 
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
 
 
-def highlight_function(feature):
+def __highlight_function__(feature):
+    """
+    Function to define the layer highlight style
+    """
+
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_average_kor(qars):
+def __get_average_nut_count__(qars: list[QarObject]):
+    """
+    Get the average of nut count in the benin republic area
+    """
+
+    total = 0
+    count = len(qars)
+    if count == 0:
+        count = 1
+    for i, x in enumerate(qars):
+        total += x.nut_count
+    result = total / count
+    return "{:.2f}".format(result) if result != 0 else "NA"
+
+
+def __get_average_defective_rate__(qars: list[QarObject]):
+    """
+    Get the average of defective rate in the benin republic area
+    """
+    total = 0
+    count = len(qars)
+    if count == 0:
+        count = 1
+    for i, x in enumerate(qars):
+        total += x.defective_rate
+    result = total / count
+    return "{:.2f}".format(result) if result != 0 else "NA"
+
+
+def __get_average_kor__(qars):
+    """
+    Get the average of kor in the benin republic area
+    """
     total = 0
     count = len(qars)
     if count == 0:
@@ -30,9 +67,9 @@ def get_average_kor(qars):
     return "{:.2f}".format(result) if result != 0 else "NA"
 
 
-def build_html_view(data: object) -> any:
+def __build_html_view__(data: object) -> any:
     """
-    Return the HTML view of the Benin Republic Layer
+    Return the HTML view of the Benin Republic Layer popup
     """
     # Variables for translation
     departments_cashew_tree = gettext('Departments Cashew Tree Cover Statistics In')
@@ -177,12 +214,11 @@ def build_html_view(data: object) -> any:
                             <td>{data.r_num_tree / 1000:n}K</td>
                             
                         </tr>
-                        <tr>
-                            <td>{qar_average}</td>
-                            <td>NA</td>
-                            <td>{get_average_kor(data.qars)}</td>                        
-                        </tr>
                         </table>
+
+                        &nbsp;&nbsp; 
+                        {__build_caj_q_html_view__(data)}
+                        &nbsp;&nbsp; 
                         
                         <table>
                             <td><div id="piechart_div" style="width: 400; height: 350;"></div></td>
@@ -198,7 +234,41 @@ def build_html_view(data: object) -> any:
                     </html>'''
 
 
-def build_data(feature, qars):
+def __build_caj_q_html_view__(data: object) -> any:
+    """
+    popup's table for Caju Quality Information
+    """
+
+    satellite_est = gettext("Satellite Est")
+    tns_survey = gettext("TNS Survey")
+    nut_count_average = gettext("Nut Count Average")
+    defective_rate_average = gettext("Defective Rate Average")
+    kor_average = gettext("KOR Average")
+
+    return f'''
+                <h4>Caju Quality Informations</h4>
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>{tns_survey}</th>
+                    </tr>
+                    <tr>
+                        <td>{nut_count_average}</td>
+                        <td>{__get_average_nut_count__(data.qars)}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{defective_rate_average}</td>
+                        <td>{__get_average_defective_rate__(data.qars)}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{kor_average}</td>
+                        <td>{__get_average_kor__(data.qars)}</td>                        
+                    </tr>
+                </table>
+            '''
+
+
+def __build_data__(feature, qars):
     """
     Return all the data needed to build the Benin republic Layer
     """
@@ -311,14 +381,14 @@ def add_benin_republic(self, qars):
     benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=False)
     temp_geojson0 = folium.GeoJson(data=benin_adm0_json,
                                    name='Benin-Adm0 Department',
-                                   highlight_function=highlight_function)
+                                   highlight_function=__highlight_function__)
 
     for feature in temp_geojson0.data['features']:
-        temp_layer0 = folium.GeoJson(feature, zoom_on_click=True, highlight_function=highlight_function)
+        temp_layer0 = folium.GeoJson(feature, zoom_on_click=False, highlight_function=__highlight_function__)
 
-        data = build_data(feature, qars)
+        data = __build_data__(feature, qars)
 
-        html4 = build_html_view(DataObject(**data))
+        html4 = __build_html_view__(DataObject(**data))
 
         iframe = folium.IFrame(html=html4, width=450, height=380)
 

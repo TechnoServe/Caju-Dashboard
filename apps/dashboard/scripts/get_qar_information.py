@@ -34,6 +34,8 @@ class QarObject:
         self.commune = None
         self.site = None
         self.kor = None
+        self.nut_count = None
+        self.defective_rate = None
         self.__dict__.update(entries)
 
     def dump(self):
@@ -47,6 +49,8 @@ class QarObject:
             'commune': self.commune,
             'site': self.site,
             'kor': self.kor,
+            'nut_count': self.nut_count,
+            'defective_rate': self.defective_rate,
         }
 
 
@@ -113,7 +117,7 @@ def get_items(cur):
                 ' document_id, qar, kor,'
                 ' location_altitude, location_lat,'
                 ' location_lon, location_country, location_city,'
-                ' location_region, location_sub_region'
+                ' location_region, location_sub_region, defective_rate, nut_count'
                 ' FROM cnqa.free_qar_result;')
 
     # Get all the rows for that query
@@ -121,7 +125,8 @@ def get_items(cur):
     # Convert the result into a list of dictionaries (useful later)
     items = [
         {'document_id': item[0], 'country': item[6], 'department': item[8], 'commune': item[9], 'site': item[7],
-         'latitude': item[4], 'longitude': item[5], 'altitude': item[3], 'kor': item[2]}
+         'latitude': item[4], 'longitude': item[5], 'altitude': item[3],
+         'kor': item[2], 'defective_rate': item[10], 'nut_count': item[11]}
         for item in qart_items
     ]
     return [

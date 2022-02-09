@@ -17,7 +17,7 @@ with open("staticfiles/Data/CajuLab_Plantations.geojson", errors="ignore") as f:
     alteia_json = geojson.load(f)
 
 
-def highlight_function(feature):
+def __highlight_function__(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
@@ -54,7 +54,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
     plantation_cluster = MarkerCluster(name=gettext("Benin Plantations"))
     temp_geojson_a = folium.GeoJson(data=alteia_json,
                                     name='Alteia Plantation Data 2',
-                                    highlight_function=highlight_function)
+                                    highlight_function=__highlight_function__)
 
     # Computing the total statistics of all 171 plantations
     grand_pred_surface = 0
