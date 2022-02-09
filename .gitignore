@@ -4,3 +4,5 @@ apps/dashboard/scripts/__pycache__
 apps/authentication/__pycache__
 .idea
 cnqa.sql
+my_db.db
+venv

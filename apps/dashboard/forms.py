@@ -2,6 +2,8 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
+import datetime
+from datetime import date
 
 from django import forms
 from django.contrib.auth.models import User
@@ -127,9 +129,14 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
+current_time = datetime.datetime.now()
+dates0 = str(date(year=current_time.year-1, month=current_time.month, day=current_time.day))
+dates = str(date.today())
+
+
 class KorDateForm(forms.Form):
-    my_date_field = forms.DateField(widget=DateInput)
-    my_date_field1 = forms.DateField(widget=DateInput)
+    my_date_field = forms.DateField(label="From", initial=dates0, widget=DateInput)
+    my_date_field1 = forms.DateField(label="To", initial=dates, widget=DateInput)
 
 
 country = "Benin"
@@ -163,4 +170,4 @@ DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in nam
 
 
 class Department_choice(forms.Form):
-    department = forms.ChoiceField(choices=DEPARTMENT_CHOICES)
+    department = forms.ChoiceField(label="Select Department", choices=DEPARTMENT_CHOICES)

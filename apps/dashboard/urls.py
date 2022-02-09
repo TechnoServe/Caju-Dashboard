@@ -1,7 +1,7 @@
 from django.urls import path
 
 from . import views
-from .views import analytics, other_page
+from .views import analytics, nut_count, defective_rate
 
 urlpatterns = [
 
@@ -21,5 +21,6 @@ urlpatterns = [
     path('load_roles/', views.load_roles, name='load_roles'),
     path('profile/', views.profile, name='profile'),
     path('analytics/', analytics, name='analytics'),
-    path('other_page/', other_page, name='other_page')
+    path('nut_count/', nut_count, name='nut_count'),
+    path('defective_rate/', defective_rate, name='defective_rate'),
 ]

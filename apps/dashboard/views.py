@@ -509,9 +509,8 @@ def analytics(request):
     cur.execute(query, (country,))
 
     infos = []
-    for kor in cur:
-        for location_region in cur:
-            infos.append(location_region)
+    for location_region in cur:
+        infos.append(location_region)
 
     infos1 = sorted(infos, key=lambda name: name[1])
 
@@ -564,9 +563,8 @@ def analytics(request):
     cur.execute(query, (country,))
 
     infos_commune = []
-    for kor in cur:
-        for location_sub_region in cur:
-            infos_commune.append(location_sub_region)
+    for location_sub_region in cur:
+        infos_commune.append(location_sub_region)
 
     infos_commune_1 = sorted(infos_commune, key=lambda name: name[1])
 
@@ -618,11 +616,8 @@ def analytics(request):
             cur.execute(query, (country, department_names_, department_with_department))
 
             dep_commune = []
-            for kor in cur:
-                print(kor)
-                for location_sub_region in cur:
-                    print(location_sub_region)
-                    dep_commune.append(location_sub_region)
+            for location_sub_region in cur:
+                dep_commune.append(location_sub_region)
 
             dep_commune = sorted(dep_commune, key=lambda name: name[1])
 
@@ -670,7 +665,6 @@ def analytics(request):
             date2 = form.cleaned_data.get("my_date_field1")
             date2 = str(date2)
             date2 = date2.replace("-", "/")
-            time_duration = int(str(date1[5]) + str(date1[6]))
 
             date1 = date1 + " 00:00:00"
             date2 = date2 + " 23:59:59"
@@ -683,11 +677,45 @@ def analytics(request):
                 lite.append(kor)
             lite = sorted(lite, key=lambda kor_: kor_[2])
 
+            date_month_with_duplicate = []
             for x in lite:
-                per_kor.append(x[0])
+                date_month_with_duplicate.append(x[2])
+            i = 0
+            month_with_duplicate = []
+            while len(date_month_with_duplicate) > i:
+                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                i += 1
 
-            for x in lite:
-                kor_time.append(x[2].strftime("%m/%d/%Y"))
+            month_sorted = list(set(month_with_duplicate))
+            month_sorted = sorted(month_sorted)
+
+            month_occurence = collections.Counter(month_with_duplicate)
+            month_occurence = month_occurence.items()
+            month_occurence = list(month_occurence)
+
+            month_init = {}
+            for x in month_sorted:
+                month_init[x] = 0
+
+            for dates in lite:
+                for month in month_init:
+                    if month == dates[2].strftime("%m/%Y"):
+                        month_init[month] += round(dates[0])
+
+            for occur in month_occurence:
+                for month in month_init:
+                    if month == occur[0]:
+                        month_init[month] /= occur[1]
+
+            month_kor_list = month_init.items()
+            month_kor_list = list(month_kor_list)
+            month_kor_list = sorted(month_kor_list, key=lambda kor_: kor_[0])
+
+            for x in month_kor_list:
+                per_kor.append(x[1])
+
+            for x in month_kor_list:
+                kor_time.append(x[0])
 
     else:
         form = KorDateForm()
@@ -709,6 +737,486 @@ def analytics(request):
     context['dep_commune_names'] = dep_commune_names
     context['dep_commune_sum_list'] = dep_commune_sum_list
     return render(request, 'dashboard/analytics.html', context)
+
+
+@login_required(login_url="/")
+def nut_count(request):
+    context1 = {}
+
+    # Query to fetch nut_count from remote database
+    country = "Benin"
+    query = ("SELECT nut_count,location_region,location_country FROM free_qar_result WHERE location_country=%s")
+    cur.execute(query, (country,))
+
+    infos = []
+    for x in cur:
+        infos.append(x)
+
+    infos1 = sorted(infos, key=lambda name: name[1])
+
+    names_with_duplicate = []
+    for x in infos1:
+        names_with_duplicate.append(x[1])
+
+    y = 0
+    while len(names_with_duplicate) > y:
+        if "Department" in names_with_duplicate[y]:
+            names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+        else:
+            pass
+        y += 1
+
+    names_sorted = list(set(names_with_duplicate))
+    names_sorted = sorted(names_sorted)
+
+    occurence1 = collections.Counter(names_with_duplicate)
+    occurence2 = occurence1.items()
+    occurence2 = list(occurence2)
+
+    names_init = {}
+    for x in names_sorted:
+        names_init[x] = 0
+
+    for info in infos:
+        for name in names_init:
+            if name == info[1] or name + " Department" == info[1]:
+                names_init[name] += round(info[0])
+
+    for occur in occurence2:
+        for name in names_init:
+            if name == occur[0]:
+                names_init[name] /= occur[1]
+
+    department_sum_list0 = names_init.items()
+    department_sum_list0 = list(department_sum_list0)
+    department_sum_list0 = sorted(department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
+
+    department_sum_list = []
+    for x in department_sum_list0:
+        department_sum_list.append(x[1])
+
+    department_names = []
+    for x in department_sum_list0:
+        department_names.append(x[0])
+
+    query = ("SELECT nut_count, location_sub_region, location_country FROM free_qar_result WHERE location_country=%s")
+    cur.execute(query, (country,))
+
+    infos_commune = []
+    for location_sub_region in cur:
+        infos_commune.append(location_sub_region)
+
+    infos_commune_1 = sorted(infos_commune, key=lambda name: name[1])
+
+    commune_names_with_duplicate = []
+    for x in infos_commune_1:
+        commune_names_with_duplicate.append(x[1])
+
+    occurence0 = collections.Counter(commune_names_with_duplicate)
+    occurence = occurence0.items()
+    occurence = list(occurence)
+
+    commune_names = list(set(commune_names_with_duplicate))
+    commune_names_sorted = sorted(commune_names)
+
+    commune_names_init = {}
+    for x in commune_names_sorted:
+        commune_names_init[x] = 0
+
+    for info in infos_commune:
+        for name in commune_names_init:
+            if name == info[1]:
+                commune_names_init[name] += round(info[0])
+
+    for occur in occurence:
+        for name in commune_names_init:
+            if name == occur[0]:
+                commune_names_init[name] /= occur[1]
+
+    commune_sum_list = commune_names_init.items()
+    commune_sum_list = list(commune_sum_list)
+
+    commune_names = []
+    for x in commune_sum_list:
+        commune_names.append(x[0])
+
+    if request.method == "POST":
+        form = KorDateForm(data=request.POST or None)
+        form1 = Department_choice(data=request.POST or None)
+        dep_commune_sum_list = []
+        dep_commune_names = []
+        per_Nut_count = []
+        Nut_count_time = []
+        if form1.is_valid():
+            department_names_ = form1.cleaned_data.get("department")
+            department_with_department = department_names_.capitalize() + " Department"
+
+            query = (
+                "SELECT nut_count, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
+            cur.execute(query, (country, department_names_, department_with_department))
+
+            dep_commune = []
+            for location_sub_region in cur:
+                dep_commune.append(location_sub_region)
+
+            dep_commune = sorted(dep_commune, key=lambda name: name[1])
+
+            dep_commune_with_duplicate = []
+            for x in dep_commune:
+                dep_commune_with_duplicate.append(x[1])
+
+            dep_comm_occurence = collections.Counter(dep_commune_with_duplicate)
+            dep_comm_occurence0 = dep_comm_occurence.items()
+            dep_comm_occurence0 = list(dep_comm_occurence0)
+
+            dep_commune_names = list(set(dep_commune_with_duplicate))
+            dep_commune_sorted = sorted(dep_commune_names)
+
+            dep_commune_init = {}
+            for x in dep_commune_sorted:
+                dep_commune_init[x] = 0
+
+            for info in dep_commune:
+                for name in dep_commune_init:
+                    if name == info[1]:
+                        dep_commune_init[name] += round(info[0])
+
+            for occur in dep_comm_occurence0:
+                for name in dep_commune_init:
+                    if name == occur[0]:
+                        dep_commune_init[name] /= occur[1]
+
+            dep_commune_sum_list0 = dep_commune_init.items()
+            dep_commune_sum_list0 = list(dep_commune_sum_list0)
+
+            dep_commune_sum_list = []
+            for x in dep_commune_sum_list0:
+                dep_commune_sum_list.append(x[1])
+
+            for comm_name in dep_commune_sum_list0:
+                dep_commune_names.append(comm_name[0])
+            dep_commune_names = list(set(dep_commune_names))
+            dep_commune_names = sorted(dep_commune_names)
+
+        if form.is_valid():
+            date1 = form.cleaned_data.get("my_date_field")
+            date1 = str(date1)
+            date1 = date1.replace("-", "/")
+            date2 = form.cleaned_data.get("my_date_field1")
+            date2 = str(date2)
+            date2 = date2.replace("-", "/")
+
+            date1 = date1 + " 00:00:00"
+            date2 = date2 + " 23:59:59"
+
+            query = (
+                "SELECT nut_count, location_country, created_at FROM free_qar_result WHERE location_country=%s AND created_at BETWEEN %s AND %s")
+            cur.execute(query, (country, date1, date2))
+            lite = []
+            for kor in cur:
+                lite.append(kor)
+            lite = sorted(lite, key=lambda kor_: kor_[2])
+
+            date_month_with_duplicate = []
+            for x in lite:
+                date_month_with_duplicate.append(x[2])
+            i = 0
+            month_with_duplicate = []
+            while len(date_month_with_duplicate) > i:
+                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                i += 1
+
+            month_sorted = list(set(month_with_duplicate))
+            month_sorted = sorted(month_sorted)
+
+            month_occurence = collections.Counter(month_with_duplicate)
+            month_occurence = month_occurence.items()
+            month_occurence = list(month_occurence)
+
+            month_init = {}
+            for x in month_sorted:
+                month_init[x] = 0
+
+            for dates in lite:
+                for month in month_init:
+                    if month == dates[2].strftime("%m/%Y"):
+                        month_init[month] += round(dates[0])
+
+            for occur in month_occurence:
+                for month in month_init:
+                    if month == occur[0]:
+                        month_init[month] /= occur[1]
+
+            month_kor_list = month_init.items()
+            month_kor_list = list(month_kor_list)
+            month_kor_list = sorted(month_kor_list, key=lambda kor_: kor_[0])
+
+            for x in month_kor_list:
+                per_Nut_count.append(x[1])
+
+            for x in month_kor_list:
+                Nut_count_time.append(x[0])
+
+    else:
+        form = KorDateForm()
+        form1 = Department_choice()
+        dep_commune_sum_list = []
+        dep_commune_names = []
+        Nut_count_time = []
+        per_Nut_count = []
+
+    context1['commune_name'] = commune_names
+    context1['commune_sum_list'] = commune_sum_list
+    context1['department_name'] = department_names
+    context1['department_sum_list'] = department_sum_list
+    context1['per_Nut_count'] = per_Nut_count
+    context1['Nut_count_time'] = Nut_count_time
+    context1['form'] = form
+    context1['segment'] = 'analytics'
+    context1['Department_choice'] = form1
+    context1['dep_commune_names'] = dep_commune_names
+    context1['dep_commune_sum_list'] = dep_commune_sum_list
+    return render(request, 'dashboard/nut_count.html', context1)
+
+
+@login_required(login_url="/")
+def defective_rate(request):
+    context2 = {}
+
+    # Query to fetch nut_count from remote database
+    country = "Benin"
+    query = ("SELECT defective_rate,location_region,location_country FROM free_qar_result WHERE location_country=%s")
+    cur.execute(query, (country,))
+
+    infos = []
+    for x in cur:
+        infos.append(x)
+
+    infos1 = sorted(infos, key=lambda name: name[1])
+
+    names_with_duplicate = []
+    for x in infos1:
+        names_with_duplicate.append(x[1])
+
+    y = 0
+    while len(names_with_duplicate) > y:
+        if "Department" in names_with_duplicate[y]:
+            names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+        else:
+            pass
+        y += 1
+
+    names_sorted = list(set(names_with_duplicate))
+    names_sorted = sorted(names_sorted)
+
+    occurence1 = collections.Counter(names_with_duplicate)
+    occurence2 = occurence1.items()
+    occurence2 = list(occurence2)
+
+    names_init = {}
+    for x in names_sorted:
+        names_init[x] = 0
+
+    for info in infos:
+        for name in names_init:
+            if name == info[1] or name + " Department" == info[1]:
+                names_init[name] += round(info[0])
+
+    for occur in occurence2:
+        for name in names_init:
+            if name == occur[0]:
+                names_init[name] /= occur[1]
+
+    department_sum_list0 = names_init.items()
+    department_sum_list0 = list(department_sum_list0)
+    department_sum_list0 = sorted(department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
+
+    department_sum_list = []
+    for x in department_sum_list0:
+        department_sum_list.append(x[1])
+
+    department_names = []
+    for x in department_sum_list0:
+        department_names.append(x[0])
+
+    query = ("SELECT defective_rate, location_sub_region, location_country FROM free_qar_result WHERE location_country=%s")
+    cur.execute(query, (country,))
+
+    infos_commune = []
+    for location_sub_region in cur:
+        infos_commune.append(location_sub_region)
+
+    infos_commune_1 = sorted(infos_commune, key=lambda name: name[1])
+
+    commune_names_with_duplicate = []
+    for x in infos_commune_1:
+        commune_names_with_duplicate.append(x[1])
+
+    occurence0 = collections.Counter(commune_names_with_duplicate)
+    occurence = occurence0.items()
+    occurence = list(occurence)
+
+    commune_names = list(set(commune_names_with_duplicate))
+    commune_names_sorted = sorted(commune_names)
+
+    commune_names_init = {}
+    for x in commune_names_sorted:
+        commune_names_init[x] = 0
+
+    for info in infos_commune:
+        for name in commune_names_init:
+            if name == info[1]:
+                commune_names_init[name] += round(info[0])
+
+    for occur in occurence:
+        for name in commune_names_init:
+            if name == occur[0]:
+                commune_names_init[name] /= occur[1]
+
+    commune_sum_list = commune_names_init.items()
+    commune_sum_list = list(commune_sum_list)
+
+    commune_names = []
+    for x in commune_sum_list:
+        commune_names.append(x[0])
+
+    if request.method == "POST":
+        form = KorDateForm(data=request.POST or None)
+        form1 = Department_choice(data=request.POST or None)
+        dep_commune_sum_list = []
+        dep_commune_names = []
+        per_defective_rate = []
+        defective_rate_time = []
+        if form1.is_valid():
+            department_names_ = form1.cleaned_data.get("department")
+            department_with_department = department_names_.capitalize() + " Department"
+
+            query = (
+                "SELECT defective_rate, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
+            cur.execute(query, (country, department_names_, department_with_department))
+
+            dep_commune = []
+            for location_sub_region in cur:
+                dep_commune.append(location_sub_region)
+
+            dep_commune = sorted(dep_commune, key=lambda name: name[1])
+
+            dep_commune_with_duplicate = []
+            for x in dep_commune:
+                dep_commune_with_duplicate.append(x[1])
+
+            dep_comm_occurence = collections.Counter(dep_commune_with_duplicate)
+            dep_comm_occurence0 = dep_comm_occurence.items()
+            dep_comm_occurence0 = list(dep_comm_occurence0)
+
+            dep_commune_names = list(set(dep_commune_with_duplicate))
+            dep_commune_sorted = sorted(dep_commune_names)
+
+            dep_commune_init = {}
+            for x in dep_commune_sorted:
+                dep_commune_init[x] = 0
+
+            for info in dep_commune:
+                for name in dep_commune_init:
+                    if name == info[1]:
+                        dep_commune_init[name] += round(info[0])
+
+            for occur in dep_comm_occurence0:
+                for name in dep_commune_init:
+                    if name == occur[0]:
+                        dep_commune_init[name] /= occur[1]
+
+            dep_commune_sum_list0 = dep_commune_init.items()
+            dep_commune_sum_list0 = list(dep_commune_sum_list0)
+
+            dep_commune_sum_list = []
+            for x in dep_commune_sum_list0:
+                dep_commune_sum_list.append(x[1])
+
+            for comm_name in dep_commune_sum_list0:
+                dep_commune_names.append(comm_name[0])
+            dep_commune_names = list(set(dep_commune_names))
+            dep_commune_names = sorted(dep_commune_names)
+
+        if form.is_valid():
+            date1 = form.cleaned_data.get("my_date_field")
+            date1 = str(date1)
+            date1 = date1.replace("-", "/")
+            date2 = form.cleaned_data.get("my_date_field1")
+            date2 = str(date2)
+            date2 = date2.replace("-", "/")
+
+            date1 = date1 + " 00:00:00"
+            date2 = date2 + " 23:59:59"
+
+            query = (
+                "SELECT defective_rate, location_country, created_at FROM free_qar_result WHERE location_country=%s AND created_at BETWEEN %s AND %s")
+            cur.execute(query, (country, date1, date2))
+            lite = []
+            for kor in cur:
+                lite.append(kor)
+            lite = sorted(lite, key=lambda kor_: kor_[2])
+
+            date_month_with_duplicate = []
+            for x in lite:
+                date_month_with_duplicate.append(x[2])
+            i = 0
+            month_with_duplicate = []
+            while len(date_month_with_duplicate) > i:
+                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                i += 1
+
+            month_sorted = list(set(month_with_duplicate))
+            month_sorted = sorted(month_sorted)
+
+            month_occurence = collections.Counter(month_with_duplicate)
+            month_occurence = month_occurence.items()
+            month_occurence = list(month_occurence)
+
+            month_init = {}
+            for x in month_sorted:
+                month_init[x] = 0
+
+            for dates in lite:
+                for month in month_init:
+                    if month == dates[2].strftime("%m/%Y"):
+                        month_init[month] += round(dates[0])
+
+            for occur in month_occurence:
+                for month in month_init:
+                    if month == occur[0]:
+                        month_init[month] /= occur[1]
+
+            month_kor_list = month_init.items()
+            month_kor_list = list(month_kor_list)
+            month_kor_list = sorted(month_kor_list, key=lambda kor_: kor_[0])
+
+            for x in month_kor_list:
+                per_defective_rate.append(x[1])
+
+            for x in month_kor_list:
+                defective_rate_time.append(x[0])
+
+    else:
+        form = KorDateForm()
+        form1 = Department_choice()
+        dep_commune_sum_list = []
+        dep_commune_names = []
+        defective_rate_time = []
+        per_defective_rate = []
+
+    context2['commune_name'] = commune_names
+    context2['commune_sum_list'] = commune_sum_list
+    context2['department_name'] = department_names
+    context2['department_sum_list'] = department_sum_list
+    context2['per_defective_rate'] = per_defective_rate
+    context2['defective_rate_time'] = defective_rate_time
+    context2['form'] = form
+    context2['segment'] = 'analytics'
+    context2['Department_choice'] = form1
+    context2['dep_commune_names'] = dep_commune_names
+    context2['dep_commune_sum_list'] = dep_commune_sum_list
+    return render(request, 'dashboard/defective_rate.html', context2)
 
 
 @login_required(login_url="/")
@@ -809,6 +1317,3 @@ def drone(request, plant_id, coordinate_xy):
     html_template = loader.get_template('dashboard/index.html')
     return HttpResponse(html_template.render(context, request))
 
-
-def other_page(request):
-    return render(request, "dashboard/other_page.html")

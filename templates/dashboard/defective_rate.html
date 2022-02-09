@@ -12,7 +12,7 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">{% trans "Cashew quality" %}</h6>
+            <h6 class="h2 text-white d-inline-block mb-0">{% trans "Defective rate" %}</h6>
           </div>
         </div>
       </div>
@@ -26,7 +26,7 @@
                 <div class="card">
                     <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR average per Departement" %}</h3>
+                        <h3 class="mb-0">{% trans "Defective rate average per Departement" %}</h3>
                     </div>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="department_Chart" width="40" height="10"></canvas>
@@ -37,7 +37,7 @@
                 <div class="card">
                 <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR average per Commune" %}</h3>
+                        <h3 class="mb-0">{% trans "Defective rate average per Commune" %}</h3>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
@@ -54,7 +54,7 @@
                     <div class="card">
                     <!-- Card header -->
                         <div class="card-header border-0" style="background-color: #f7f7f7">
-                            <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                            <h3 class="mb-0">{% trans "Defective rate average per Departement communes" %}</h3>
                             <br>
                                 <label for="departments">{% trans "Select Department: " %}</label>
                                     {{ Department_choice.department }}
@@ -70,13 +70,13 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header border-0" style="background-color: #f7f7f7">
-                            <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
+                            <h3 class="mb-0">{% trans "Defective rate Graph against date period" %}</h3>
                             <br>
                                 {{ form.as_table }}
                               <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                         </div>
                         <div class="chart-container" style="position: relative;">
-                            <canvas id="kor_Chart"></canvas>
+                            <canvas id="defective_rate_Chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
             const department_data = {
             labels: department_labels,
             datasets: [{
-                    label: 'KOR average per Departement',
+                    label: 'Defective rate average per Departement',
                 data: department_datas,
                 backgroundColor: department_dataset,
                 }]
@@ -153,7 +153,7 @@
             const commune_data = {
             labels: labels_commune,
             datasets: [{
-                    label: 'KOR average per Commune',
+                    label: 'Defective rate average per Commune',
                 data: datas_commune,
                 backgroundColor: dataset_commune,
                 hoverBorderWidth: "30px",
@@ -183,19 +183,19 @@
                 commune_config
             );
 
-            var kor_labels = {{ kor_time|safe }}
-            var kor_datas = {{ per_kor|safe }}
-            var kor_color = []
-            for (let i in kor_datas) {
+            var defective_rate_labels = {{ defective_rate_time|safe }}
+            var defective_rate_datas = {{ per_defective_rate|safe }}
+            var defective_rate_color = []
+            for (let i in defective_rate_datas) {
                var color1 = generateRandomColor();
-               kor_color.push(color1)
+               defective_rate_color.push(color1)
             }
             const data = {
-              labels: kor_labels,
+              labels: defective_rate_labels,
               datasets: [
                 {
-                  label: 'KOR Graph against date period',
-                  data: kor_datas,
+                  label: 'Defective rate Graph against date period',
+                  data: defective_rate_datas,
                   borderColor: generateRandomColor(),
                   backgroundColor: 'white',
                   fill: false,
@@ -224,8 +224,8 @@
                 }
               },
             };
-            const kor_Chart = new Chart(
-                document.getElementById('kor_Chart'),
+            const defective_rate_Chart = new Chart(
+                document.getElementById('defective_rate_Chart'),
                 config
             );
           
@@ -241,7 +241,7 @@
             const dep_commune_data = {
             labels: labels_dep_commune,
             datasets: [{
-                    label: 'KOR average per Departement communes',
+                    label: 'Defective rate average per Departement communes',
                 data: datas_dep_commune,
                 backgroundColor: dataset_dep_commune,
                 hoverBorderWidth: "30px",
