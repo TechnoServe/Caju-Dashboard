@@ -1,3 +1,4 @@
+import asyncio
 import json
 import locale
 import time
@@ -8,24 +9,19 @@ import folium
 import geojson
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render
 from django.template import loader
 from django.utils.translation import gettext
 from folium import plugins
 from folium.plugins import MarkerCluster
 
-from apps.dashboard.benin_commune import add_benin_commune
-from apps.dashboard.benin_department import add_benin_department
+from apps.dashboard.benin_commune import add_benin_commune, current_benin_commune_layer
+from apps.dashboard.benin_department import add_benin_department, current_benin_department_layer
 from apps.dashboard.benin_plantations import add_benin_plantation
-from apps.dashboard.benin_republic import add_benin_republic
+from apps.dashboard.benin_republic import add_benin_republic, current_benin_republic_layer
 from apps.dashboard.nursery_information import NurseryLayer
 from apps.dashboard.qar_informations import QarLayer
-
 # Google service account for the GEE geotiff
-from apps.dashboard.scripts.get_qar_information import get_qar_data_from_db, current_qars
-from apps.dashboard.tasks import get_qar_data_from_db_task
-import asyncio
-from asgiref.sync import sync_to_async
+from apps.dashboard.scripts.get_qar_information import current_qars
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
 credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
@@ -35,22 +31,22 @@ locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.
 alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
 
-def __task1_func__(cashew_map, qars):
-    benin_layer = add_benin_republic(qars=qars)
+def __task1_func__(cashew_map):
+    benin_layer = current_benin_republic_layer
     benin_layer.add_to(cashew_map)
     return cashew_map
 
 
-def __task2_func__(cashew_map, qars, path_link):
-    benin_dept_layer, dept_yield_ha = add_benin_department(qars)
+def __task2_func__(cashew_map, path_link):
+    benin_dept_layer, dept_yield_ha = current_benin_department_layer
     benin_dept_layer.add_to(cashew_map)
     benin_plantation_layer = add_benin_plantation(path_link, dept_yield_ha)
     benin_plantation_layer.add_to(cashew_map)
     return cashew_map
 
 
-def __task3_func__(cashew_map, qars):
-    benin_commune_layer = add_benin_commune(qars)
+def __task3_func__(cashew_map):
+    benin_commune_layer = current_benin_commune_layer
     benin_commune_layer.add_to(cashew_map)
     return cashew_map
 
@@ -144,6 +140,7 @@ def get_base_map():
         # print("--- %s seconds ---" % (time.time() - start_time))
 
     except Exception as e:
+        print({e})
         pass
 
     return cashew_map
@@ -164,7 +161,6 @@ def index(request):
 
 @login_required(login_url="/")
 def full_map(request):
-    # request.is_ajax() is deprecated since django 3.1
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
     if is_ajax is False or request.method != 'GET':
@@ -175,27 +171,24 @@ def full_map(request):
         path_link = request.path
         cashew_map = get_base_map()
 
-        async def __get_context_data__(**kwargs):
+        async def __get_context_data__():
             try:
                 __loop = asyncio.get_event_loop()
 
-                print('...Getting database QAR...')
-                __start_time = time.time()
                 qars = current_qars
                 # Adding the qar layer from the class QarLayer
                 marker_cluster = MarkerCluster(name=gettext("QAR Information"))
                 qar_layer = QarLayer(marker_cluster, qars).add_qar()
                 qar_layer.add_to(cashew_map)
-                print("--- %s seconds ---" % (time.time() - __start_time))
 
                 executor = ThreadPoolExecutor(max_workers=3)
-                future2 = __loop.run_in_executor(executor, __task2_func__, cashew_map, qars, path_link)
-                future3 = __loop.run_in_executor(executor, __task3_func__, cashew_map, qars)
-                future1 = __loop.run_in_executor(executor, __task1_func__, cashew_map, qars)
+                future1 = __loop.run_in_executor(executor, __task1_func__, cashew_map)
+                future2 = __loop.run_in_executor(executor, __task2_func__, cashew_map, path_link)
+                future3 = __loop.run_in_executor(executor, __task3_func__, cashew_map)
 
+                await future1
                 await future2
                 await future3
-                await future1
 
             except Exception as e:
                 print(e)
@@ -242,7 +235,9 @@ def drone(request, plant_id, coordinate_xy):
             control=False
         ),
         'Mapbox Satellite': folium.TileLayer(
-            tiles='https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2hha2F6IiwiYSI6ImNrczMzNTl3ejB6eTYydnBlNzR0dHUwcnUifQ.vHqPio3Pe0PehWpIuf5QUg',
+            tiles='https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{'
+                  'y}.png?access_token=pk.eyJ1Ijoic2hha2F6IiwiYSI6ImNrczMzNTl3ejB6eTYydnBlNzR0dHUwcnUifQ'
+                  '.vHqPio3Pe0PehWpIuf5QUg',
             attr='Mapbox',
             name=gettext('Satellite View'),
             max_zoom=30,
@@ -252,9 +247,9 @@ def drone(request, plant_id, coordinate_xy):
         )
     }
 
-    alldept = ee.Image('users/ashamba/allDepartments_v0')
+    # alldept = ee.Image('users/ashamba/allDepartments_v0')
 
-    coordinate_xy = (coordinate_xy).replace('[', "").replace(']', "").replace(' ', "").split(',')
+    coordinate_xy = coordinate_xy.replace('[', "").replace(']', "").replace(' ', "").split(',')
     coordinate_xy = [float(coordinate_xy[0]), float(coordinate_xy[1])]
 
     # coordinate_xy = [9.45720800, 2.64348809]

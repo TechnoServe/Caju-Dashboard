@@ -1,15 +1,16 @@
 import asyncio
+import logging
 import os
 
 import geojson
 import paramiko
+import pymysql
+import sshtunnel
 from apscheduler.schedulers.background import BackgroundScheduler
 from shapely.geometry import shape, Point
 
-from apps.dashboard.db_conn_string import cur
-from datetime import datetime
-
 from apscheduler.triggers.interval import IntervalTrigger
+from sshtunnel import SSHTunnelForwarder
 
 """
 Add your path to your pkey perm file
@@ -57,7 +58,53 @@ class QarObject:
         }
 
 
-def __get_items__():
+def open_ssh_tunnel(verbose=False):
+    """
+    Open an SSH tunnel and connect using a username and ssh private key.
+    Pass True to display the Verbose.
+    Return the tunnel created.
+    """
+
+    if verbose:
+        sshtunnel.DEFAULT_LOGLEVEL = logging.DEBUG
+
+    tunnel = SSHTunnelForwarder(
+        (ssh_host, ssh_port),
+        ssh_username=ssh_user,
+        ssh_pkey=mypkey,
+        remote_bind_address=(sql_hostname, sql_port))
+
+    tunnel.start()
+    return tunnel
+
+
+def close_ssh_tunnel(tunnel):
+    """
+    Close the SSH tunnel passed as parameter.
+    """
+    tunnel.close()
+
+
+def mysql_connect(tunnel):
+    """
+    Connect to a MySQL server using the SSH tunnel connection.
+    Return the connection object.
+    """
+
+    conn = pymysql.connect(host='127.0.0.1', user=sql_username,
+                           passwd=sql_password, db=sql_main_database,
+                           port=tunnel.local_bind_port)
+    return conn
+
+
+def mysql_disconnect(conn):
+    """
+    Close the connection, passed in parameter, to the database
+    """
+    conn.close()
+
+
+def __get_items__(cur):
     """
     Execute an SQL query to get:
             ' document_id, qar, kor,'
@@ -105,7 +152,6 @@ def __get_department_from_coord__(qars):
         for feature in departments_geojson['features']:
             polygon = shape(feature['geometry'])
             if polygon.contains(point):
-                print(feature["properties"]["NAME_1"])
                 qars[index].department = feature["properties"]["NAME_1"]
 
     for i in range(len(qars)):
@@ -120,10 +166,15 @@ def get_qar_data_from_db():
     Return a list of Qar objects
     """
     try:
-        qars = __get_items__()
 
+        tunnel = open_ssh_tunnel()
+        connection = mysql_connect(tunnel)
+
+        qars = __get_items__(connection.cursor())
         __get_department_from_coord__(qars)
 
+        mysql_disconnect(connection)
+        close_ssh_tunnel(tunnel)
     except Exception as e:
         print({e})
         qars = []
@@ -131,7 +182,7 @@ def get_qar_data_from_db():
     return qars
 
 
-current_qars = None
+current_qars = get_qar_data_from_db()
 
 scheduler = BackgroundScheduler()
 

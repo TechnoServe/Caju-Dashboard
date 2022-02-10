@@ -1,7 +1,10 @@
+import asyncio
 from math import log10, floor
 
 import folium
 import geojson
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
@@ -10,7 +13,8 @@ from django.utils.translation import gettext
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.scripts.get_qar_information import QarObject
+from apps.dashboard.scripts.get_qar_information import QarObject, current_qars
+import time
 
 heroku = False
 
@@ -466,6 +470,8 @@ def add_benin_department(self, qars):
     Adding the shapefiles with popups for the Benin Republic departments
     Add benin republic departments data to the parent layer
     """
+    __start_time = time.time()
+
     class DataObject:
         def __init__(self, **entries):
             self.__dict__.update(entries)
@@ -501,4 +507,19 @@ def add_benin_department(self, qars):
 
         temp_layer1.add_to(benin_dept_layer)
 
+    print("add_benin_department --- %s seconds ---" % (time.time() - __start_time))
     return benin_dept_layer, dept_yield_ha
+
+
+current_benin_department_layer = add_benin_department(current_qars)
+
+scheduler = BackgroundScheduler()
+
+
+@scheduler.scheduled_job(IntervalTrigger(days=1))
+def update_benin_department_layer():
+    global current_benin_department_layer
+    current_benin_department_layer = add_benin_department(current_qars)
+
+
+scheduler.start()

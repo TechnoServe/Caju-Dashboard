@@ -2,6 +2,8 @@ from math import log10, floor
 
 import folium
 import geojson
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
@@ -10,7 +12,8 @@ from django.utils.translation import gettext
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.scripts.get_qar_information import QarObject
+from apps.dashboard.scripts.get_qar_information import QarObject, current_qars
+import time
 
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
@@ -374,6 +377,8 @@ def add_benin_republic(self, qars):
     Add benin republic data to the parent layer
     """
 
+    __start_time = time.time()
+
     class DataObject:
         def __init__(self, **entries):
             self.__dict__.update(entries)
@@ -395,4 +400,19 @@ def add_benin_republic(self, qars):
         folium.Popup(iframe, max_width=2000).add_to(temp_layer0)
         temp_layer0.add_to(benin_layer)
 
+    print("add_benin_republic --- %s seconds ---" % (time.time() - __start_time))
     return benin_layer
+
+
+current_benin_republic_layer = add_benin_republic(current_qars)
+
+scheduler = BackgroundScheduler()
+
+
+@scheduler.scheduled_job(IntervalTrigger(days=1))
+def update_benin_republic_layer():
+    global current_benin_republic_layer
+    current_benin_republic_layer = add_benin_republic(current_qars)
+
+
+scheduler.start()

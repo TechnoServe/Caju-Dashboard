@@ -1,7 +1,11 @@
+import asyncio
+import time
 from math import log10, floor
 
 import folium
 import geojson
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
 from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
@@ -9,13 +13,18 @@ from django.utils.translation import gettext
 
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
-from apps.dashboard.scripts.get_qar_information import QarObject
+from apps.dashboard.scripts.get_qar_information import current_qars
 
 heroku = False
 
 # Load the Benin Communes shapefile
 with open("staticfiles/json/ben_adm2.json", errors="ignore") as f:
     benin_adm2_json = geojson.load(f)
+
+
+class DataObject:
+    def __init__(self, **entries):
+        self.__dict__.update(entries)
 
 
 def __highlight_function__(feature):
@@ -78,7 +87,6 @@ def __build_caj_q_html_view__(data: object) -> any:
     popup's table for Caju Quality Information
     """
 
-    satellite_est = gettext("Satellite Est")
     tns_survey = gettext("TNS Survey")
     nut_count_average = gettext("Nut Count Average")
     defective_rate_average = gettext("Defective Rate Average")
@@ -306,34 +314,34 @@ def __build_data__(feature, qars):
     tree_ha_pred_comm = CommuneSatellite.objects.filter(commune=commune).aggregate(Sum('cashew_tree_cover'))
     try:
         tree_ha_pred_comm = int(round(tree_ha_pred_comm['cashew_tree_cover__sum'] / 10000, 2))
-    except Exception as e:
+    except Exception:
         tree_ha_pred_comm = 0
     data["tree_ha_pred_comm"] = tree_ha_pred_comm
 
     try:
         yield_pred_comm = int(390 * tree_ha_pred_comm)
-    except Exception as e:
+    except Exception:
         yield_pred_comm = 0
     data["yield_pred_comm"] = yield_pred_comm
 
     surface_areaC = BeninYield.objects.filter(commune=commune).aggregate(Sum('surface_area'))
     try:
         surface_areaC = int(round(surface_areaC['surface_area__sum'], 2))
-    except Exception as e:
+    except Exception:
         surface_areaC = 0
     data["surface_areaC"] = surface_areaC
 
     total_yieldC = BeninYield.objects.filter(commune=commune).aggregate(Sum('total_yield_kg'))
     try:
         total_yieldC = int(round(total_yieldC['total_yield_kg__sum'], 2))
-    except Exception as e:
+    except Exception:
         total_yieldC = 0
     data["total_yieldC"] = total_yieldC
 
     yield_haC = BeninYield.objects.filter(commune=commune).aggregate(Avg('total_yield_per_ha_kg'))
     try:
         yield_haC = int(round(yield_haC['total_yield_per_ha_kg__avg'], 2))
-    except Exception as e:
+    except Exception:
         yield_haC = 0
     data["yield_haC"] = yield_haC
 
@@ -341,42 +349,42 @@ def __build_data__(feature, qars):
     yield_treeC = BeninYield.objects.filter(commune=commune).aggregate(Avg('total_yield_per_tree_kg'))
     try:
         yield_treeC = int(round(yield_treeC['total_yield_per_tree_kg__avg'], 2))
-    except Exception as e:
+    except Exception:
         yield_treeC = 0
     data["yield_treeC"] = yield_treeC
 
     num_treeC = BeninYield.objects.filter(commune=commune).aggregate(Sum('total_number_trees'))
     try:
         num_treeC = int(num_treeC['total_number_trees__sum'])
-    except Exception as e:
+    except Exception:
         num_treeC = 0
     data["num_treeC"] = num_treeC
 
     sick_treeC = BeninYield.objects.filter(commune=commune).aggregate(Sum('total_sick_trees'))
     try:
         sick_treeC = int(sick_treeC['total_sick_trees__sum'])
-    except Exception as e:
+    except Exception:
         sick_treeC = 0
     data["sick_treeC"] = sick_treeC
 
     out_prod_treeC = BeninYield.objects.filter(commune=commune).aggregate(Sum('total_trees_out_of_prod'))
     try:
         out_prod_treeC = int(out_prod_treeC['total_trees_out_of_prod__sum'])
-    except Exception as e:
+    except Exception:
         out_prod_treeC = 0
     data["out_prod_treeC"] = out_prod_treeC
 
     dead_treeC = BeninYield.objects.filter(commune=commune).aggregate(Sum('total_dead_trees'))
     try:
         dead_treeC = int(round(dead_treeC['total_dead_trees__sum'], 2))
-    except Exception as e:
+    except Exception:
         dead_treeC = 0
     data["dead_treeC"] = dead_treeC
 
     region_sizeC = area(feature['geometry']) / 10000
     try:
         active_treesC = num_treeC - sick_treeC - out_prod_treeC - dead_treeC
-    except Exception as e:
+    except Exception:
         active_treesC = 0
     data["active_treesC"] = active_treesC
 
@@ -385,7 +393,7 @@ def __build_data__(feature, qars):
         r_region_sizeC = round(region_sizeC, 1 - int(floor(log10(abs(region_sizeC))))) \
             if region_sizeC < 90000 \
             else round(region_sizeC, 2 - int(floor(log10(abs(region_sizeC)))))
-    except Exception as e:
+    except Exception:
         r_region_sizeC = region_sizeC
     data["r_region_sizeC"] = r_region_sizeC
 
@@ -394,7 +402,7 @@ def __build_data__(feature, qars):
             floor(log10(abs(tree_ha_pred_comm))))) \
             if tree_ha_pred_comm < 90000 \
             else round(tree_ha_pred_comm, 2 - int(floor(log10(abs(tree_ha_pred_comm)))))
-    except Exception as e:
+    except Exception:
         r_tree_ha_pred_comm = tree_ha_pred_comm
     data["r_tree_ha_pred_comm"] = r_tree_ha_pred_comm
 
@@ -403,7 +411,7 @@ def __build_data__(feature, qars):
             floor(log10(abs(yield_pred_comm))))) \
             if yield_pred_comm < 90000 \
             else round(yield_pred_comm, 2 - int(floor(log10(abs(yield_pred_comm)))))
-    except Exception as e:
+    except Exception:
         r_yield_pred_comm = yield_pred_comm
     data["r_yield_pred_comm"] = r_yield_pred_comm
 
@@ -411,7 +419,7 @@ def __build_data__(feature, qars):
         r_surface_areaC = round(surface_areaC, 1 - int(floor(log10(abs(surface_areaC))))) \
             if surface_areaC < 90000 \
             else round(surface_areaC, 2 - int(floor(log10(abs(surface_areaC)))))
-    except Exception as e:
+    except Exception:
         r_surface_areaC = surface_areaC
     data["r_surface_areaC"] = r_surface_areaC
 
@@ -419,7 +427,7 @@ def __build_data__(feature, qars):
         r_total_yieldC = round(total_yieldC, 1 - int(floor(log10(abs(total_yieldC))))) \
             if total_yieldC < 90000 \
             else round(total_yieldC, 2 - int(floor(log10(abs(total_yieldC)))))
-    except Exception as e:
+    except Exception:
         r_total_yieldC = total_yieldC
     data["r_total_yieldC"] = r_total_yieldC
 
@@ -427,16 +435,16 @@ def __build_data__(feature, qars):
         r_yield_haC = round(yield_haC, 1 - int(floor(log10(abs(yield_haC))))) \
             if yield_haC < 90000 \
             else round(yield_haC, 2 - int(floor(log10(abs(yield_haC)))))
-    except Exception as e:
+    except Exception:
         r_yield_haC = yield_haC
     data["r_yield_haC"] = r_yield_haC
 
     # try: r_yield_treeC = round(yield_treeC, 1-int(floor(log10(abs(yield_treeC))))) if yield_treeC < 90000 else
-    # round(yield_treeC, 2-int(floor(log10(abs(yield_treeC))))) except Exception as e: r_yield_treeC = yield_treeC
+    # round(yield_treeC, 2-int(floor(log10(abs(yield_treeC))))) except Exception: r_yield_treeC = yield_treeC
 
     try:
         r_yield_treeC = round(r_total_yieldC / active_treesC)
-    except Exception as e:
+    except Exception:
         r_yield_treeC = yield_treeC
     data["r_yield_treeC"] = r_yield_treeC
 
@@ -444,11 +452,36 @@ def __build_data__(feature, qars):
         r_num_treeC = round(num_treeC, 1 - int(floor(log10(abs(num_treeC))))) \
             if num_treeC < 90000 \
             else round(num_treeC, 2 - int(floor(log10(abs(num_treeC)))))
-    except Exception as e:
+    except Exception:
         r_num_treeC = num_treeC
     data["r_num_treeC"] = r_num_treeC
 
     return data
+
+
+def __task__(feature, benin_commune_layer, qars):
+    temp_layer2 = folium.GeoJson(feature, zoom_on_click=False, highlight_function=__highlight_function__)
+
+    data = __build_data__(feature, qars)
+
+    # html template for the popups
+    html3 = __build_html_view__(DataObject(**data))
+
+    iframe = folium.IFrame(html=html3, width=450, height=380)
+
+    folium.Popup(iframe, max_width=2000).add_to(temp_layer2)
+
+    # consolidate individual features back into the main layer
+    folium.GeoJsonTooltip(fields=["NAME_2"],
+                          aliases=["Commune:"],
+                          labels=True,
+                          sticky=False,
+                          style=(
+                              "background-color: white; color: black;"
+                              " font-family: sans-serif; font-size: 12px; padding: 4px;")
+                          ).add_to(temp_layer2)
+
+    temp_layer2.add_to(benin_commune_layer)
 
 
 @shared_task(bind=True)
@@ -457,37 +490,41 @@ def add_benin_commune(self, qars):
     Adding the shapefiles with popups for the Benin Republic communes
     Add benin republic communes data to the parent layer
     """
-    class DataObject:
-        def __init__(self, **entries):
-            self.__dict__.update(entries)
+    __start_time = time.time()
 
     benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=False)
     temp_geojson2 = folium.GeoJson(data=benin_adm2_json,
                                    name='Benin-Adm2 Communes',
                                    highlight_function=__highlight_function__)
 
-    for feature in temp_geojson2.data['features']:
-        temp_layer2 = folium.GeoJson(feature, zoom_on_click=False, highlight_function=__highlight_function__)
+    async def __get_data__():
+        __loop = asyncio.get_event_loop()
+        futures = []
+        for feature in temp_geojson2.data['features']:
+            __start_time__ = time.time()
+            _future = __loop.run_in_executor(None, __task__, feature, benin_commune_layer, qars)
+            futures.append(_future)
+        await asyncio.gather(*futures)
 
-        data = __build_data__(feature, qars)
-
-        # html template for the popups
-        html3 = __build_html_view__(DataObject(**data))
-
-        iframe = folium.IFrame(html=html3, width=450, height=380)
-
-        folium.Popup(iframe, max_width=2000).add_to(temp_layer2)
-
-        # consolidate individual features back into the main layer
-        folium.GeoJsonTooltip(fields=["NAME_2"],
-                              aliases=["Commune:"],
-                              labels=True,
-                              sticky=False,
-                              style=(
-                                  "background-color: white; color: black;"
-                                  " font-family: sans-serif; font-size: 12px; padding: 4px;")
-                              ).add_to(temp_layer2)
-
-        temp_layer2.add_to(benin_commune_layer)
-
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(__get_data__())
+    loop.close()
+    # __get_data__()
+    print("add_benin_commune --- %s seconds ---" % (time.time() - __start_time))
     return benin_commune_layer
+
+
+current_benin_commune_layer = add_benin_commune(current_qars)
+
+scheduler = BackgroundScheduler()
+
+
+@scheduler.scheduled_job(IntervalTrigger(days=1))
+def update_benin_commune_layer():
+    global current_benin_commune_layer
+    current_benin_commune_layer = add_benin_commune(current_qars)
+
+
+scheduler.start()
