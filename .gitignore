@@ -6,4 +6,4 @@ apps/dashboard/tns-wiredin-cqna.pem
 .idea
 cnqa.sql
 venv
-my_db.db
+*.db
