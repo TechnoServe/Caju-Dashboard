@@ -2,7 +2,8 @@ __pycache__
 apps/dashboard/__pycache__
 apps/dashboard/scripts/__pycache__
 apps/authentication/__pycache__
+apps/dashboard/tns-wiredin-cqna.pem
 .idea
 cnqa.sql
-my_db.db
 venv
+my_db.db

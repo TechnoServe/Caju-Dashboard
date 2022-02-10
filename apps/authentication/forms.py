@@ -104,13 +104,11 @@ class LoginForm(forms.Form):
                 "class": "form-control"
             }
         ))
-    remember_me = forms.BooleanField(
-        required=False,
-        )
+    remember_me = forms.BooleanField(required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('username', 'password', 'remember_me')
 
 
 class SignUpForm(UserCreationForm):
