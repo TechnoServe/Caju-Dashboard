@@ -37,6 +37,8 @@ from apps.dashboard.qar_informations import QarLayer
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, Department_choice
 
 # Google service account for the GEE geotiff
+from .map_legend import macro
+
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
 credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
 ee.Initialize(credentials)
@@ -95,6 +97,7 @@ class MyHome:
                 prefer_canvas=True,
                 tiles=None
             )
+            cashew_map.get_root().add_child(macro)
 
             cashew_map.add_child(basemaps['Google Maps'])
             cashew_map.add_child(basemaps['Google Satellite'])
