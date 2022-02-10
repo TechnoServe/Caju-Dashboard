@@ -18,7 +18,12 @@ ssh_user = 'ec2-user'
 ssh_port = 22
 
 
-def open_ssh_tunnel(verbose=False):
+def __open_ssh_tunnel__(verbose=False):
+    """
+    Open an SSH tunnel and connect using a username and ssh private key.
+    Pass True to display the Verbose.
+    Return the tunnel created.
+    """
     # Open an SSH tunnel and connect using a username and ssh private key.
 
     if verbose:
@@ -34,25 +39,34 @@ def open_ssh_tunnel(verbose=False):
     tunnel.start()
 
 
-def mysql_connect():
+def __mysql_connect__():
+    """
+    Connect to a MySQL server using the SSH tunnel connection.
+    Return the connection object.
+    """
     # Connect to a MySQL server using the SSH tunnel connection
 
     global connection
 
-    connection = pymysql.connect(host='127.0.0.1', user=sql_username,
+    connection = pymysql.connect(host=sql_hostname, user=sql_username,
                                  passwd=sql_password, db=sql_main_database,
                                  port=tunnel.local_bind_port)
     return connection
 
 
-def mysql_disconnect():
+def __mysql_disconnect__():
+    """
+    Close the connection, passed in parameter, to the database
+    """
     connection.close()
 
 
-def close_ssh_tunnel():
+def __close_ssh_tunnel__():
+    """
+    Close the SSH tunnel passed as parameter.
+    """
     tunnel.close()
 
 
-open_ssh_tunnel()
-mysql_connect()
-cur = mysql_connect().cursor()
+__open_ssh_tunnel__()
+cur = __mysql_connect__().cursor()

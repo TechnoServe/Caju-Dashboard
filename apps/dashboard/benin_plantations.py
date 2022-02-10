@@ -22,7 +22,8 @@ def __highlight_function__(feature):
 
 
 @shared_task(bind=True)
-def add_benin_plantation(self, path_link, dept_yieldHa):
+def add_benin_plantation(self, path_link, dept_yield_ha):
+    base_url = "http://127.0.0.1:8000"
     benin_plantation_layer = folium.FeatureGroup(name=gettext('Plantation Locations'), show=True, overlay=True)
 
     # Plantation translation variables
@@ -122,7 +123,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
             department_name = BeninYield.objects.filter(plantation_code=code_2)[0].department
             tree_ha_pred_plant = round(
                 round(AlteiaData.objects.filter(plantation_code=code)[0].cashew_tree_cover / 10000, 2), 1)
-            yield_pred_plant = int(tree_ha_pred_plant * dept_yieldHa[department_name])
+            yield_pred_plant = int(tree_ha_pred_plant * dept_yield_ha[department_name])
             surface_areaP = round(BeninYield.objects.filter(plantation_code=code_2)[0].surface_area, 1)
             total_yieldP = int(round(BeninYield.objects.filter(plantation_code=code_2)[0].total_yield_kg))
             yield_haP = int(total_yieldP / surface_areaP)
@@ -222,7 +223,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                         </tr>
                         <tr>
                             <td>{Yield_Per_Hectare}</td>
-                            <td>{dept_yieldHa[department_name]}</td>
+                            <td>{dept_yield_ha[department_name]}</td>
                             <td>{yield_haP}</td>  
                         </tr>
                         <tr>
@@ -292,7 +293,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                         </table>
                         <table>
                             <td><div style= "text-align: center">
-                                    <button class="btn btn-outline-light" style="background-color: #004b55;" onclick= "window.open('http://127.0.0.1:8000{path_link}drone/{code}/{coordinate_xy}/','_blank')" role="button"
+                                    <button class="btn btn-outline-light" style="background-color: #004b55;" onclick= "window.open('{base_url}{path_link}drone/{code}/{coordinate_xy}/','_blank')" role="button"
                                         ><i class="fab fa-accusoft me-2"></i>{View_Drone_Image}</button
                                     >
                                     
@@ -303,7 +304,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                         </table>
                         <script>
                         window.open(
-                            'http://127.0.0.1:8000{path_link}/drone/{code}/{coordinate_xy}/',
+                            '{base_url}{path_link}/drone/{code}/{coordinate_xy}/',
                             '_blank'
                             );
                         <script>

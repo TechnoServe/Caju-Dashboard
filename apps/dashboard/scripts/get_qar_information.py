@@ -1,13 +1,15 @@
-import logging
+import asyncio
 import os
 
 import geojson
 import paramiko
-import pymysql
-import sshtunnel
+from apscheduler.schedulers.background import BackgroundScheduler
 from shapely.geometry import shape, Point
-from sshtunnel import SSHTunnelForwarder
+
 from apps.dashboard.db_conn_string import cur
+from datetime import datetime
+
+from apscheduler.triggers.interval import IntervalTrigger
 
 """
 Add your path to your pkey perm file
@@ -55,53 +57,7 @@ class QarObject:
         }
 
 
-def open_ssh_tunnel(verbose=False):
-    """
-    Open an SSH tunnel and connect using a username and ssh private key.
-    Pass True to display the Verbose.
-    Return the tunnel created.
-    """
-
-    if verbose:
-        sshtunnel.DEFAULT_LOGLEVEL = logging.DEBUG
-
-    tunnel = SSHTunnelForwarder(
-        (ssh_host, ssh_port),
-        ssh_username=ssh_user,
-        ssh_pkey=mypkey,
-        remote_bind_address=(sql_hostname, sql_port))
-
-    tunnel.start()
-    return tunnel
-
-
-def close_ssh_tunnel(tunnel):
-    """
-    Close the SSH tunnel passed as parameter.
-    """
-    tunnel.close()
-
-
-def mysql_connect(tunnel):
-    """
-    Connect to a MySQL server using the SSH tunnel connection.
-    Return the connection object.
-    """
-
-    conn = pymysql.connect(host='127.0.0.1', user=sql_username,
-                           passwd=sql_password, db=sql_main_database,
-                           port=tunnel.local_bind_port)
-    return conn
-
-
-def mysql_disconnect(conn):
-    """
-    Close the connection, passed in parameter, to the database
-    """
-    conn.close()
-
-
-def get_items(cur):
+def __get_items__():
     """
     Execute an SQL query to get:
             ' document_id, qar, kor,'
@@ -136,21 +92,25 @@ def get_items(cur):
     ]
 
 
-def get_department_from_coord(longitude, latitude):
-    """
-    Read geolocalization data from 'ben_adm1.json' file
-    Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in Benin
-    Return the name of the department found or 'Unknown' otherwise
-    """
-    with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
-        departments_geojson = geojson.load(f)
-    point = Point(longitude, latitude)
-    name = "Unknown"
-    for feature in departments_geojson['features']:
-        polygon = shape(feature['geometry'])
-        if polygon.contains(point):
-            name = feature["properties"]["NAME_1"]
-    return name
+def __get_department_from_coord__(qars):
+    def ___location_finder__(index):
+        """
+        Read geolocalization data from 'ben_adm1.json' file
+        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in Benin
+        Return the name of the department found or 'Unknown' otherwise
+        """
+        with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
+            departments_geojson = geojson.load(f)
+        point = Point(qars[index].longitude, qars[index].latitude)
+        for feature in departments_geojson['features']:
+            polygon = shape(feature['geometry'])
+            if polygon.contains(point):
+                print(feature["properties"]["NAME_1"])
+                qars[index].department = feature["properties"]["NAME_1"]
+
+    for i in range(len(qars)):
+        ___location_finder__(i)
+    return qars
 
 
 def get_qar_data_from_db():
@@ -160,12 +120,26 @@ def get_qar_data_from_db():
     Return a list of Qar objects
     """
     try:
-        qars = get_items(cur)
+        qars = __get_items__()
 
-        for i in range(len(qars)):
-            qars[i].department = get_department_from_coord(qars[i].longitude, qars[i].latitude)
+        __get_department_from_coord__(qars)
+
     except Exception as e:
         print({e})
         qars = []
 
     return qars
+
+
+current_qars = None
+
+scheduler = BackgroundScheduler()
+
+
+@scheduler.scheduled_job(IntervalTrigger(days=1))
+def update_qars():
+    global current_qars
+    current_qars = get_qar_data_from_db()
+
+
+scheduler.start()

@@ -1,6 +1,7 @@
 import json
 import locale
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import ee
 import folium
@@ -21,10 +22,9 @@ from apps.dashboard.nursery_information import NurseryLayer
 from apps.dashboard.qar_informations import QarLayer
 
 # Google service account for the GEE geotiff
-from apps.dashboard.scripts.get_qar_information import get_qar_data_from_db
+from apps.dashboard.scripts.get_qar_information import get_qar_data_from_db, current_qars
 from apps.dashboard.tasks import get_qar_data_from_db_task
 import asyncio
-import aiohttp
 from asgiref.sync import sync_to_async
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
@@ -175,22 +175,23 @@ def full_map(request):
         path_link = request.path
         cashew_map = get_base_map()
 
-        async def __get_context_data__(path_link, cashew_map, **kwargs):
+        async def __get_context_data__(**kwargs):
             try:
-                loop = asyncio.get_event_loop()
+                __loop = asyncio.get_event_loop()
 
                 print('...Getting database QAR...')
-                start_time = time.time()
-                qars = get_qar_data_from_db()
+                __start_time = time.time()
+                qars = current_qars
                 # Adding the qar layer from the class QarLayer
                 marker_cluster = MarkerCluster(name=gettext("QAR Information"))
                 qar_layer = QarLayer(marker_cluster, qars).add_qar()
                 qar_layer.add_to(cashew_map)
-                print("--- %s seconds ---" % (time.time() - start_time))
+                print("--- %s seconds ---" % (time.time() - __start_time))
 
-                future2 = loop.run_in_executor(None, __task2_func__, cashew_map, qars, path_link)
-                future3 = loop.run_in_executor(None, __task3_func__, cashew_map, qars)
-                future1 = loop.run_in_executor(None, __task1_func__, cashew_map, qars)
+                executor = ThreadPoolExecutor(max_workers=3)
+                future2 = __loop.run_in_executor(executor, __task2_func__, cashew_map, qars, path_link)
+                future3 = __loop.run_in_executor(executor, __task3_func__, cashew_map, qars)
+                future1 = __loop.run_in_executor(executor, __task1_func__, cashew_map, qars)
 
                 await future2
                 await future3
@@ -200,14 +201,11 @@ def full_map(request):
                 print(e)
                 pass
 
-            return cashew_map
-
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(__get_context_data__(path_link, cashew_map))
+        loop.run_until_complete(__get_context_data__())
         loop.close()
-        # cashew_map = get_context_data(path_link, cashew_map)
 
         # adding folium layer control for the previously added shapefiles
         cashew_map.add_child(folium.LayerControl())
