@@ -191,10 +191,10 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                         background-color: #e7edf0;
                         }}
                     </style>
-                        
+
                     </head>
                     <body>
-                    
+
 
                         <h6>{Plantation_Owner}: {nameP}</h3>
                         <h6>{Plantation_ID}: {code}</h4>
@@ -235,9 +235,9 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                             <td>NA</td>
                             <td>{yield_treeP}</td>
                         </tr>
-                        
+
                         </table>
-                        
+
                         <h6>
                         {Average_Surface_AreaP}
                         </h6>
@@ -251,32 +251,32 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                             <td>{Number_of_Farms}</td>
                             <td>{counter}</td>
                                 <td>{counter}</td>
-                        
+
                         </tr>
                         <tr>
                             <td>{Total_Plantation_Yield}</td>
                             <td>{r_total_grand_pred_yield / 1000:n}K</td>
                             <td>{r_total_grand_ground_yield / 1000:n}K</td>
-                            
+
                         </tr>
                         <tr>
                             <td>{Total_Plantation_Area}</td>
                             <td>{grand_plantation_size}</td>
                             <td>{total_grand_ground_surface}</td>
-                        
+
                         </tr>
                         <tr>
                             <td>{Cashew_Surface_Area}</td>
                             <td>{total_grand_pred_surface}</td>
                             <td>NA</td>
-                        
+
                         </tr>
-                        
+
                         <tr>
                             <td>{Average_Yield_Per}</td>
                             <td>{average_pred_yield_ha}</td>
                             <td>{average_ground_yield_ha}</td>
-                            
+
                         </tr>
                         <tr>
                             <td>{Total_Number_of}</td>
@@ -288,14 +288,14 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                             <td>NA</td>
                             <td>{total_grand_yield_tree}</td>
                         </tr>
-                        
+
                         </table>
                         <table>
                             <td><div style= "text-align: center">
                                     <button class="btn btn-outline-light" style="background-color: #004b55;" onclick= "window.open('http://127.0.0.1:8000{path_link}drone/{code}/{coordinate_xy}/','_blank')" role="button"
                                         ><i class="fab fa-accusoft me-2"></i>{View_Drone_Image}</button
                                     >
-                                    
+
                             </div></td>
                         </table>
                         <table>
@@ -307,7 +307,7 @@ def add_benin_plantation(self, path_link, dept_yieldHa):
                             '_blank'
                             );
                         <script>
-                        
+
                     </body>
                     </html>
                 '''

@@ -34,7 +34,7 @@ from apps.dashboard.models import Plantation
 from apps.dashboard.nursery_information import NurseryLayer
 from .db_conn_string import cur
 from apps.dashboard.qar_informations import QarLayer
-from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, Department_choice
+from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice
 
 # Google service account for the GEE geotiff
 from .map_legend import macro
@@ -45,187 +45,6 @@ ee.Initialize(credentials)
 locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 # alldept = ee.Image('users/ashamba/allDepartments_v0')
 alldept = ee.Image('users/cajusupport/allDepartments_v1')
-
-
-class MyHome:
-
-    def __init__(self):
-        self.Qars = None
-        print('')
-        self.figure = folium.Figure()
-
-    def get_base_map(self):
-        cashew_map = None
-        try:
-            # Basemap dictionary
-            basemaps = {
-                'Google Maps': folium.TileLayer(
-                    tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-                    attr=gettext('Google'),
-                    name='Maps',
-                    max_zoom=25,
-                    overlay=True,
-                    control=False
-                ),
-                'Google Satellite': folium.TileLayer(
-                    tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-                    attr='Google',
-                    name=gettext('Google Satellite'),
-                    max_zoom=25,
-                    overlay=True,
-                    show=False,
-                    control=True
-                ),
-                'Mapbox Satellite': folium.TileLayer(
-                    tiles='https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{'
-                          'y}.png?access_token=pk.eyJ1Ijoic2hha2F6IiwiYSI6ImNrczMzNTl3ejB6eTYydnBlNzR0dHUwcnUifQ'
-                          '.vHqPio3Pe0PehWpIuf5QUg',
-                    attr='Mapbox',
-                    name=gettext('Mapbox Satellite'),
-                    max_zoom=25,
-                    overlay=True,
-                    show=False,
-                    control=True
-                )
-            }
-
-            # Initialize map object
-
-            cashew_map = folium.Map(
-                location=[9.0, 2.4],
-                zoom_start=8,
-                prefer_canvas=True,
-                tiles=None
-            )
-            cashew_map.get_root().add_child(macro)
-
-            cashew_map.add_child(basemaps['Google Maps'])
-            cashew_map.add_child(basemaps['Google Satellite'])
-            cashew_map.add_child(basemaps['Mapbox Satellite'])
-
-            plugins.Fullscreen(
-                position='topright',
-                title='Full Screen',
-                title_cancel='Exit Full Screen',
-                force_separate_button=False
-            ).add_to(cashew_map)
-
-            # Adding the nursery layer from the class Nursery_LAYER
-            marker_cluster = MarkerCluster(name=gettext("Nursery Information"))
-            Nursery_layer = NurseryLayer(marker_cluster).add_nursery()
-            Nursery_layer.add_to(cashew_map)
-
-            print('')
-            print('Define a method for displaying Earth Engine image tiles on a folium map.')
-            start_time = time.time()
-
-            def add_ee_layer(self, ee_image_object, vis_params, name):
-                map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
-                folium.raster_layers.TileLayer(
-                    tiles=map_id_dict['tile_fetcher'].url_format,
-                    attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
-                    name=name,
-                    overlay=True,
-                    control=True
-                ).add_to(self)
-
-            folium.Map.add_ee_layer = add_ee_layer
-            folium.map.FeatureGroup.add_ee_layer = add_ee_layer
-            zones = alldept.eq(1)
-            zones = zones.updateMask(zones.neq(0))
-            cashew_map.add_ee_layer(zones, {'palette': "red"}, gettext('Satellite Prediction'))
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-            print('')
-            print('The no boundary layer to remove shapefiles on the Benin region')
-            start_time = time.time()
-            No_Boundary_layer = folium.FeatureGroup(name=gettext('No Boundary'), show=False, overlay=False)
-            No_Boundary_layer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-        except Exception as e:
-            pass
-
-        return cashew_map
-
-    def get_context_data(self, path_link, cashew_map, **kwargs):
-        try:
-
-            print('...Getting database QAR...')
-            start_time = time.time()
-            self.Qars = qar.get_qar_data_from_db()
-            # Adding the qar layer from the class QarLayer
-            marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-            qarLayer = QarLayer(marker_cluster, self.Qars).add_qar()
-            qarLayer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-            print('')
-            print('Adding the shapefiles with popups for the Benin Republic region')
-            start_time = time.time()
-            Benin_layer = add_benin_republic(self.Qars)
-            Benin_layer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-            print('')
-            print('Adding the shapefiles with popups for the Benin departments region')
-            start_time = time.time()
-            Benin_dept_layer, dept_yieldHa = add_benin_department(self.Qars)
-            Benin_dept_layer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-            print('')
-            print('Adding the shapefiles with popups for the Benin commune region')
-            start_time = time.time()
-            Benin_commune_layer = add_benin_commune(self.Qars)
-            Benin_commune_layer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-            print('')
-            print('Adding the shapefiles with popups for the Benin plantations')
-            start_time = time.time()
-            Benin_plantation_layer = add_benin_plantation(path_link, dept_yieldHa)
-            Benin_plantation_layer.add_to(cashew_map)
-            print("--- %s seconds ---" % (time.time() - start_time))
-
-        except Exception as e:
-            print(e)
-            pass
-
-        return cashew_map
-
-
-@login_required(login_url="/")
-def index(request):
-    path_link = request.path
-    home_obj = MyHome()
-    cashew_map = home_obj.get_base_map()
-
-    # adding folium layer control for the previously added shapefiles
-    cashew_map.add_child(folium.LayerControl())
-    cashew_map = cashew_map._repr_html_()
-
-    context = {'map': cashew_map, 'segment': 'map'}
-    html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request))
-
-
-@login_required(login_url="/")
-def full_map(request):
-    path_link = request.path
-    home_obj = MyHome()
-    cashew_map = home_obj.get_base_map()
-    cashew_map = home_obj.get_context_data(path_link, cashew_map)
-
-    # adding folium layer control for the previously added shapefiles
-    cashew_map.add_child(folium.LayerControl())
-    cashew_map = cashew_map._repr_html_()
-    data = {'map': cashew_map, 'segment': 'map'}
-
-    return HttpResponse(
-        json.dumps(data),
-        content_type='application/javascript; charset=utf8'
-    )
 
 
 @login_required(login_url="/")
@@ -605,7 +424,7 @@ def analytics(request):
 
     if request.method == "POST":
         form = KorDateForm(data=request.POST or None)
-        form1 = Department_choice(data=request.POST or None)
+        form1 = DepartmentChoice(data=request.POST or None)
         dep_commune_sum_list = []
         dep_commune_names = []
         per_kor = []
@@ -722,7 +541,7 @@ def analytics(request):
 
     else:
         form = KorDateForm()
-        form1 = Department_choice()
+        form1 = DepartmentChoice()
         dep_commune_sum_list = []
         dep_commune_names = []
         kor_time = []
@@ -845,7 +664,7 @@ def nut_count(request):
 
     if request.method == "POST":
         form = KorDateForm(data=request.POST or None)
-        form1 = Department_choice(data=request.POST or None)
+        form1 = DepartmentChoice(data=request.POST or None)
         dep_commune_sum_list = []
         dep_commune_names = []
         per_Nut_count = []
@@ -962,7 +781,7 @@ def nut_count(request):
 
     else:
         form = KorDateForm()
-        form1 = Department_choice()
+        form1 = DepartmentChoice()
         dep_commune_sum_list = []
         dep_commune_names = []
         Nut_count_time = []
@@ -1042,7 +861,8 @@ def defective_rate(request):
     for x in department_sum_list0:
         department_names.append(x[0])
 
-    query = ("SELECT defective_rate, location_sub_region, location_country FROM free_qar_result WHERE location_country=%s")
+    query = (
+        "SELECT defective_rate, location_sub_region, location_country FROM free_qar_result WHERE location_country=%s")
     cur.execute(query, (country,))
 
     infos_commune = []
@@ -1085,7 +905,7 @@ def defective_rate(request):
 
     if request.method == "POST":
         form = KorDateForm(data=request.POST or None)
-        form1 = Department_choice(data=request.POST or None)
+        form1 = DepartmentChoice(data=request.POST or None)
         dep_commune_sum_list = []
         dep_commune_names = []
         per_defective_rate = []
@@ -1202,7 +1022,7 @@ def defective_rate(request):
 
     else:
         form = KorDateForm()
-        form1 = Department_choice()
+        form1 = DepartmentChoice()
         dep_commune_sum_list = []
         dep_commune_names = []
         defective_rate_time = []
@@ -1220,103 +1040,4 @@ def defective_rate(request):
     context2['dep_commune_names'] = dep_commune_names
     context2['dep_commune_sum_list'] = dep_commune_sum_list
     return render(request, 'dashboard/defective_rate.html', context2)
-
-
-@login_required(login_url="/")
-def drone(request, plant_id, coordinate_xy):
-    basemaps = {
-        'Google Maps': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-            attr=gettext('Google'),
-            name='Maps',
-            max_zoom=18,
-            overlay=True,
-            control=False
-        ),
-        'Google Satellite': folium.TileLayer(
-            tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-            attr='Google',
-            name=gettext('Satellite'),
-            max_zoom=25,
-            overlay=True,
-            show=True,
-            control=False
-        ),
-        'Mapbox Satellite': folium.TileLayer(
-            tiles='https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2hha2F6IiwiYSI6ImNrczMzNTl3ejB6eTYydnBlNzR0dHUwcnUifQ.vHqPio3Pe0PehWpIuf5QUg',
-            attr='Mapbox',
-            name=gettext('Satellite View'),
-            max_zoom=30,
-            overlay=True,
-            show=True,
-            control=True
-        )
-    }
-    # figure = folium.Figure()
-
-    alldept = ee.Image('users/ashamba/allDepartments_v0')
-
-    coordinate_xy = (coordinate_xy).replace('[', "").replace(']', "").replace(' ', "").split(',')
-    coordinate_xy = [float(coordinate_xy[0]), float(coordinate_xy[1])]
-
-    # coordinate_xy = [9.45720800, 2.64348809]
-
-    m = folium.Map(
-        location=coordinate_xy,
-        zoom_start=18,
-        prefer_canvas=True,
-        tiles=None
-    )
-
-    m.add_child(basemaps['Google Satellite'])
-
-    def add_ee_layer_drone(self, ee_image_object, vis_params, name):
-        map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
-        folium.raster_layers.TileLayer(
-            tiles=map_id_dict['tile_fetcher'].url_format,
-            attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
-            name=name,
-            overlay=True,
-            show=True,
-            control=True
-        ).add_to(self)
-
-    def add_ee_layer(self, ee_image_object, vis_params, name):
-        map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
-        folium.raster_layers.TileLayer(
-            tiles=map_id_dict['tile_fetcher'].url_format,
-            attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
-            name=name,
-            overlay=True,
-            show=False,
-            control=True
-        ).add_to(self)
-
-    folium.Map.add_ee_layer_drone = add_ee_layer_drone
-
-    zones = alldept.eq(1)
-    zones = zones.updateMask(zones.neq(0))
-    folium.Map.add_ee_layer = add_ee_layer
-
-    try:
-        with open(f"staticfiles/tree_crown_geojson/{plant_id}.geojson") as f:
-            crown_json = geojson.load(f)
-        crown_geojson = folium.GeoJson(data=crown_json,
-                                       name='Tree Tops',
-                                       show=False,
-                                       zoom_on_click=True)
-        crown_geojson.add_to(m)
-        rgb = ee.Image(f'users/ashamba/{plant_id}')
-        m.add_ee_layer_drone(rgb, {}, 'Drone Image')
-    except Exception as e:
-        print(e)
-        pass
-
-    m.add_ee_layer(zones, {'palette': "red"}, gettext('Satellite Prediction'))
-    m.add_child(folium.LayerControl())
-    m = m._repr_html_()
-    context = {'map': m, 'segment': 'map'}
-
-    html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request))
 

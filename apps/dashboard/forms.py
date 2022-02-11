@@ -140,7 +140,7 @@ class KorDateForm(forms.Form):
 
 
 country = "Benin"
-query = ("SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s")
+query = "SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s"
 cur.execute(query, (country,))
 
 infos = []
@@ -165,9 +165,8 @@ while len(names_with_duplicate) > y:
 names_sorted = list(set(names_with_duplicate))
 names_sorted = sorted(names_sorted)
 
-
 DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in names_sorted]
 
 
-class Department_choice(forms.Form):
+class DepartmentChoice(forms.Form):
     department = forms.ChoiceField(label="Select Department", choices=DEPARTMENT_CHOICES)
