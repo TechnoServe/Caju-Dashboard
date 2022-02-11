@@ -57,8 +57,8 @@
                             <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
                             <br>
                                 <label for="departments">{% trans "Select Department: " %}</label>
-                                    {{ Department_choice.department }}
-                                <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                                    &nbsp&nbsp&nbsp{{ Department_choice.department }}
+                                &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                         </div>
                         <div class="card-body border-0">
                             <div class="chart-container" style="position: relative;">
@@ -73,7 +73,7 @@
                             <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
                             <br>
                                 {{ form.as_table }}
-                              <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                              &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                         </div>
                         <div class="chart-container" style="position: relative;">
                             <canvas id="kor_Chart"></canvas>

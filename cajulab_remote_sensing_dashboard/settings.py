@@ -156,15 +156,13 @@ LOCALE_PATHS = (
 # CELERY_RESULT_BACKEND = 'django-db'
 #
 # CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/²-files/
+# https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 # django_heroku.settings(locals())
 
 # Extra places for collectstatic to find static files.
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfile')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
