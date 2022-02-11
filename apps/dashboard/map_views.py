@@ -14,14 +14,15 @@ from django.utils.translation import gettext
 from folium import plugins
 from folium.plugins import MarkerCluster
 
-from apps.dashboard.benin_commune import add_benin_commune, current_benin_commune_layer
-from apps.dashboard.benin_department import add_benin_department, current_benin_department_layer
+from apps.dashboard.benin_commune import current_benin_commune_layer
+from apps.dashboard.benin_department import current_benin_department_layer
 from apps.dashboard.benin_plantations import add_benin_plantation
-from apps.dashboard.benin_republic import add_benin_republic, current_benin_republic_layer
+from apps.dashboard.benin_republic import current_benin_republic_layer
 from apps.dashboard.nursery_information import NurseryLayer
 from apps.dashboard.qar_informations import QarLayer
 # Google service account for the GEE geotiff
 from apps.dashboard.scripts.get_qar_information import current_qars
+from .map_legend import macro
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
 credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
@@ -94,6 +95,8 @@ def get_base_map():
             prefer_canvas=True,
             tiles=None
         )
+
+        cashew_map.get_root().add_child(macro)
 
         cashew_map.add_child(basemaps['Google Maps'])
         cashew_map.add_child(basemaps['Google Satellite'])

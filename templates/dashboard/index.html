@@ -7,7 +7,7 @@
 <!-- Specific CSS goes HERE -->
 {% block stylesheets %}
     <style>
-        .parent1 {
+        .parent {
             position: relative;
             overflow: hidden;
             right: 5%;
@@ -16,8 +16,16 @@
         {#margin: 10px;#}
         }
 
+        .parent div {
+            height: 100% !important;
+        }
+
+        .parent div div {
+            padding-bottom: inherit !important;
+        }
+        
         .child1 {
-            position: relative;
+            position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
@@ -27,10 +35,9 @@
         }
 
         .child2 {
-            position: relative;
-            width: inherit;
-            height: inherit;
-            padding-bottom: 200%;
+            position: absolute;
+            width: 100%;
+            height: 100%;
             top: 0;
             left: 0;
             opacity: 1;
@@ -38,13 +45,6 @@
         {#z-index: 1;#}{#margin: 30px;#}
         }
 
-        .parent1 div {
-            height: 100% !important;
-        }
-
-        .parent1 div div {
-            padding-bottom: inherit !important;
-        }
     </style>
 
 {% endblock stylesheets %}
@@ -52,18 +52,7 @@
 {% block content %}
 
     {% csrf_token %}
-    <!-- Header -->
-
-
-    {#    <div style="overflow: hidden">#}
-    {#        <div class="inner first" style="width: 105%; position: relative; top: 0; right: 5%">#}
-    {#            {{ segment }}#}
-    {#        </div>#}
-    {#        <div class="inner second" style="width: 105%; position: relative; top: -0vh; right: 5%">#}
-    {#            {{ map | safe }}#}
-    {#        </div>#}
-    {#    </div>#}
-    <div class="parent1">
+    <div class="parent">
         <div class="child1">
         </div>
         <div class="child2">
