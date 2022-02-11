@@ -205,7 +205,7 @@ def full_map(request):
         cashew_map = cashew_map._repr_html_()
         data = {'map': cashew_map, 'segment': 'map'}
 
-        print("--- %s seconds ---" % (time.time() - start_time))
+        print("TOTAL LOADING TIME--- %s seconds ---" % (time.time() - start_time))
         return HttpResponse(
             json.dumps(data),
             content_type='application/javascript; charset=utf8'

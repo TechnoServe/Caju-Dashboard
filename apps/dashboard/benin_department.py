@@ -507,7 +507,6 @@ def add_benin_department(self, qars):
 
         temp_layer1.add_to(benin_dept_layer)
 
-    print("add_benin_department --- %s seconds ---" % (time.time() - __start_time))
     return benin_dept_layer, dept_yield_ha
 
 

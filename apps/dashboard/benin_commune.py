@@ -512,7 +512,6 @@ def add_benin_commune(self, qars):
     loop.run_until_complete(__get_data__())
     loop.close()
     # __get_data__()
-    print("add_benin_commune --- %s seconds ---" % (time.time() - __start_time))
     return benin_commune_layer
 
 

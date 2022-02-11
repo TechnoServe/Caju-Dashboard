@@ -400,7 +400,6 @@ def add_benin_republic(self, qars):
         folium.Popup(iframe, max_width=2000).add_to(temp_layer0)
         temp_layer0.add_to(benin_layer)
 
-    print("add_benin_republic --- %s seconds ---" % (time.time() - __start_time))
     return benin_layer
 
 
