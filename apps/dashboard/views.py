@@ -731,9 +731,17 @@ def nut_count(request):
         if form.is_valid():
             date1 = form.cleaned_data.get("my_date_field")
             date1 = str(date1)
+            date1 = list(date1)
+            date1[8] = "0"
+            date1[9] = "1"
+            date1 = "".join(date1)
             date1 = date1.replace("-", "/")
             date2 = form.cleaned_data.get("my_date_field1")
             date2 = str(date2)
+            date2 = list(date2)
+            date2[8] = "0"
+            date2[9] = "1"
+            date2 = "".join(date2)
             date2 = date2.replace("-", "/")
 
             date1 = date1 + " 00:00:00"
@@ -972,9 +980,17 @@ def defective_rate(request):
         if form.is_valid():
             date1 = form.cleaned_data.get("my_date_field")
             date1 = str(date1)
+            date1 = list(date1)
+            date1[8] = "0"
+            date1[9] = "1"
+            date1 = "".join(date1)
             date1 = date1.replace("-", "/")
             date2 = form.cleaned_data.get("my_date_field1")
             date2 = str(date2)
+            date2 = list(date2)
+            date2[8] = "0"
+            date2[9] = "1"
+            date2 = "".join(date2)
             date2 = date2.replace("-", "/")
 
             date1 = date1 + " 00:00:00"
