@@ -12,6 +12,11 @@ pandas~=1.4.0
 python-dotenv==0.19.2
 Shapely==1.8.0
 sshtunnel==0.4.0
+mysql-connector-python~=8.0.28
+asgiref==3.5.0
+polib==1.1.1
+sqlparse==0.4.2
+tzdata==2021.5
 branca~=0.4.2
 whitenoise
 alteia~=2.0.0

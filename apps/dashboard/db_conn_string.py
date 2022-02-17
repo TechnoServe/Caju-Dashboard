@@ -8,13 +8,13 @@ from sshtunnel import SSHTunnelForwarder
 
 mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
-sql_hostname = '127.0.0.1'
-sql_username = 'dbuser'
-sql_password = '12345678cnqa'
-sql_main_database = 'cnqa'
+sql_hostname = os.path.join(os.getenv("SQL_HOSTNAME"))
+sql_username = os.path.join(os.getenv("SQL_USERNAME"))
+sql_password = os.path.join(os.getenv("SQL_PASSWORD"))
+sql_main_database = os.path.join(os.getenv("SQL_DATABASE"))
 sql_port = 3306
-ssh_host = 'ec2-3-22-99-140.us-east-2.compute.amazonaws.com'
-ssh_user = 'ec2-user'
+ssh_host = os.path.join(os.getenv("SSH_HOSTNAME"))
+ssh_user = os.path.join(os.getenv("SSH_USER"))
 ssh_port = 22
 
 
