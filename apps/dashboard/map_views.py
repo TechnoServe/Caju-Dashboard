@@ -282,7 +282,7 @@ def drone(request, plant_id, coordinate_xy):
         feature = next(filter(lambda x: x["properties"]["Plantation code"] == plant_id, features), None)
         folium.GeoJson(
             data=feature,
-            name='Plantation Shape',
+            name=gettext('Plantation Shape'),
             # style_function=lambda x: {
             #     'fillOpacity': 0
             #     # if x['properties']['name'] == 'Alabama'
@@ -296,7 +296,7 @@ def drone(request, plant_id, coordinate_xy):
         directory = "static/plantation_data/" + plant_id
         with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
-        tree_crows = folium.GeoJson(feature_geojson, name='Tree Crowns', zoom_on_click=True, embed=False)
+        tree_crows = folium.GeoJson(feature_geojson, name=gettext('Tree Crowns'), zoom_on_click=True, embed=False)
         tree_crows.add_to(cashew_map)
 
     def add_alteia_tree_tops_density():
@@ -306,7 +306,7 @@ def drone(request, plant_id, coordinate_xy):
         tree_tops_density = folium.GeoJson(
             data=feature_geojson,
             zoom_on_click=True, embed=False,
-            name='Tree Tops Density',
+            name=gettext('Tree Tops Density'),
             marker=folium.Circle(
                 color="#FFFFFF", opacity=0.9, weight=1,
                 fill=True, fill_color="#FF0000", fill_opacity=1,
