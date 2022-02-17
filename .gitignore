@@ -8,4 +8,6 @@ cnqa.sql
 venv
 *.db
 .env
+my_db.db
 static/plantation_data/
+.env
