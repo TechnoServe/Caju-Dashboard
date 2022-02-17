@@ -1,12 +1,6 @@
 import collections
 import datetime
-import json
-import locale
-import time
 
-import ee
-import folium
-import geojson
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -18,33 +12,14 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext
 from django.views import generic
-from folium import plugins
-from folium.plugins import MarkerCluster
 
-import apps.dashboard.scripts.get_qar_information as qar
 from apps.authentication import utils
-from apps.authentication.models import RemOrganization, RemRole, RemUser
 from apps.authentication.forms import RegisterOrganization, RegisterRole
+from apps.authentication.models import RemOrganization, RemRole, RemUser
 from apps.dashboard import models
-from apps.dashboard.benin_commune import add_benin_commune
-from apps.dashboard.benin_department import add_benin_department
-from apps.dashboard.benin_plantations import add_benin_plantation
-from apps.dashboard.benin_republic import add_benin_republic
 from apps.dashboard.models import Plantation
-from apps.dashboard.nursery_information import NurseryLayer
 from .db_conn_string import cur
-from apps.dashboard.qar_informations import QarLayer
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice
-
-# Google service account for the GEE geotiff
-from .map_legend import macro
-
-service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(service_account, 'privatekey.json')
-ee.Initialize(credentials)
-locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
-# alldept = ee.Image('users/ashamba/allDepartments_v0')
-alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
 
 @login_required(login_url="/")
@@ -1064,4 +1039,3 @@ def defective_rate(request):
     context2['dep_commune_names'] = dep_commune_names
     context2['dep_commune_sum_list'] = dep_commune_sum_list
     return render(request, 'dashboard/defective_rate.html', context2)
-

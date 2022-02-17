@@ -8,7 +8,7 @@ urlpatterns = [
 
     path('', map_views.index, name='map'),
     path('full_map/', map_views.full_map, name='full_map'),
-    path('drone/<plant_id>/<coordinate_xy>/', map_views.drone, name='drone'),
+    # path('drone/<plant_id>/<coordinate_xy>/<bounds>/', map_views.drone, name='drone'),
     path('full_map/drone/<plant_id>/<coordinate_xy>/', map_views.drone, name='drone'),
 
     path('tables/', views.tables, name='tables'),
