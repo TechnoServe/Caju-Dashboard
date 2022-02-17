@@ -13,7 +13,7 @@ alteia_sdk = alteia.SDK(
     password="9tMNaztVkL4MqQ$"
 )
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 
 def create_plantatio_dir(plantation_id):

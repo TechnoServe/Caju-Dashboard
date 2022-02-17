@@ -3,13 +3,14 @@ from django.urls import path
 from . import views
 from .views import analytics, nut_count, defective_rate
 from . import map_views
+from . import drone_views
 
 urlpatterns = [
 
     path('', map_views.index, name='map'),
     path('full_map/', map_views.full_map, name='full_map'),
     # path('drone/<plant_id>/<coordinate_xy>/<bounds>/', map_views.drone, name='drone'),
-    path('full_map/drone/<plant_id>/<coordinate_xy>/', map_views.drone, name='drone'),
+    path('full_map/drone/<plant_id>/<coordinate_xy>/', drone_views.drone, name='drone'),
 
     path('tables/', views.tables, name='tables'),
     path('plantations/', views.plantations, name='plantations'),
