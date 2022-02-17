@@ -7,3 +7,4 @@ apps/dashboard/tns-wiredin-cqna.pem
 cnqa.sql
 venv
 *.db
+.env

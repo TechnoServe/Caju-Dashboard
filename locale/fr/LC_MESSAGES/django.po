@@ -886,7 +886,7 @@ msgstr "Altitude"
 #, fuzzy
 #| msgid "Country"
 msgid "Nut Count"
-msgstr "Pays"
+msgstr "Nombre de noix"
 
 #: .\templates\dashboard\nut_count.html:29
 msgid "Nut count average per Departement"

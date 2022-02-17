@@ -2,7 +2,6 @@ APScheduler==3.8.1
 area==1.1.1
 celery==5.2.3
 folium==0.12.1.post1
-mariadb==1.0.9
 paramiko==2.9.2
 PyMySQL==1.0.2
 Django~=4.0.2
@@ -14,4 +13,8 @@ python-dotenv==0.19.2
 Shapely==1.8.0
 sshtunnel==0.4.0
 mysql-connector-python~=8.0.28
-branca~=0.4.2
+asgiref==3.5.0
+polib==1.1.1
+sqlparse==0.4.2
+tzdata==2021.5
+
