@@ -9,4 +9,5 @@ venv
 *.db
 .env
 my_db.db
-media
+static/plantation_data/
+.env

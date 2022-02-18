@@ -20,7 +20,7 @@ def create_benin_tree_crowns_layer(self):
     dirs = []
     start_time = time.time()
     print("START--- %s seconds ---" % (time.time() - start_time))
-    for (dirpath, dirnames, filenames) in os.walk("media/plantation_data"):
+    for (dirpath, dirnames, filenames) in os.walk("static/plantation_data"):
         dirs.append(dirpath)
     dirs.pop(0)
 

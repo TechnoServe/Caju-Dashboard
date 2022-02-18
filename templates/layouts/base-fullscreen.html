@@ -8,9 +8,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="canonical" href="https://www.technoserve.org/">
-
+  
   <title>
-    {% trans  "TechnoServe" %}
+    {% trans  "Technoserve" %}
   </title>
 
   <link
@@ -21,10 +21,10 @@
   <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
   <!-- Icons -->
-  <link rel="stylesheet" href="/apps/static/assets/vendor/nucleo/css/nucleo.css" type="text/css">
-  <link rel="stylesheet" href="/apps/static/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/vendor/nucleo/css/nucleo.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" type="text/css">
   <!-- Argon CSS -->
-  <link rel="stylesheet" href="/apps/static/assets/css/argon.css?v=1.2.0" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/css/argon.css?v=1.2.0' %}" type="text/css">
 
   <!-- Specific CSS goes HERE -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -34,7 +34,7 @@
 
   <div class="main-content">
 
-    {% include "includes/../includes/langnav.html" %}
+    {% include "includes/langnav.html" %}
 
     <!-- Header -->
     <div class="header bg-gradient-primary py-7 py-lg-8">
@@ -47,8 +47,8 @@
                    href="https://www.tnsbenin.org/english/cajulab-the-drone-cartography-for-intelligent-production-of-cashew-nuts-facing-the-climate">{% trans "Cajúlab Presents" %}</a>
               </h1>
               <!-- <p class="text-lead text-light">
-                Remote Sensing Dashboard
-                in conjunction with <a target="_blank" class="text-white" href="https://www.technoserve.org/">Technoserve</a>.
+                Remote Sensing Dashboard 
+                in conjunction with <a target="_blank" class="text-white" href="https://www.technoserve.org/">Technoserve</a>.  
               </p> -->
             </div>
           </div>
@@ -60,23 +60,19 @@
         </svg>
       </div>
     </div>
-
+    
     {% block content %}{% endblock content %}
 
-    {% include "includes/../includes/footer-fullscreen.html" %}
+    {% include "includes/footer-fullscreen.html" %}
 
   </div>
+    
+  {% include "includes/scripts.html" %}
 
-  {% include "includes/../includes/scripts.html" %}
-
-  <!-- Specific JS goes HERE -->
-  {% block javascripts %}
-    <script>
-        console.log({{ static }})
-    </script>
-  {% endblock javascripts %}
-
-  <script src="/apps/static/assets/js/argon.js?v=1.2.0"></script>
+  <!-- Specific JS goes HERE --> 
+  {% block javascripts %}{% endblock javascripts %}
+  
+  <script src="{% static 'assets/js/argon.js?v=1.2.0' %}"></script>
 
 </body>
 

@@ -38,12 +38,12 @@ template = """
 <div class='legend-title'>Legend</div>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><img src="/apps/static/assets/img/legend/1.png">&nbsp;&nbsp;QAR</li>
-    <li><img src="/apps/static/assets/img/legend/2.png">&nbsp;&nbsp;Emplacements des plantations</li>
-    <li><img src="/apps/static/assets/img/legend/3.png">&nbsp;&nbsp;Pépinière</li>
-    <li><img src="/apps/static/assets/img/legend/4.png">&nbsp;&nbsp;Emplacements des plantations</li>
-    <li><img src="/apps/static/assets/img/legend/5.png">&nbsp;&nbsp;Emplacements des plantations</li>
-    <li><img src="/apps/static/assets/img/legend/6.png">&nbsp;&nbsp;Prédiction satellitaire</li>
+    <li><img src="/static/assets/img/legend/1.png">&nbsp;&nbsp;QAR</li>
+    <li><img src="/static/assets/img/legend/2.png">&nbsp;&nbsp;Emplacements des plantations</li>
+    <li><img src="/static/assets/img/legend/3.png">&nbsp;&nbsp;Pépinière</li>
+    <li><img src="/static/assets/img/legend/4.png">&nbsp;&nbsp;Emplacements des plantations</li>
+    <li><img src="/static/assets/img/legend/5.png">&nbsp;&nbsp;Emplacements des plantations</li>
+    <li><img src="/static/assets/img/legend/6.png">&nbsp;&nbsp;Prédiction satellitaire</li>
 
   </ul>
 </div>

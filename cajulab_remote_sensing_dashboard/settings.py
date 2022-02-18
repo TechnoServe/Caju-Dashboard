@@ -19,7 +19,6 @@ load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -30,7 +29,7 @@ SECRET_KEY = 'django-insecure-x8g^t5z6!gs%bj4f9#2u6%myi(1ipx*@s1eshl0ya_ly9j_1ra
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 # CELERY STUFF
 
@@ -78,12 +77,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'cajulab_remote_sensing_dashboard.urls'
 
-TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [BASE_DIR / 'templates']
+        ,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -163,6 +161,13 @@ LOCALE_PATHS = (
 
 # django_heroku.settings(locals())
 
+# Extra places for collectstatic to find static files.
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "/static/"),
+    os.path.join(BASE_DIR, "/staticfiles/"),
+)
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -177,7 +182,7 @@ MAILER_EMAIL_BACKEND = EMAIL_BACKEND
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # prod_db = dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(prod_db)
@@ -192,18 +197,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_AGE = 3600
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-#############################################################
-# SRC: https://devcenter.heroku.com/articles/django-assets
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
-STATIC_URL = 'apps/static/'
-
-# Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    BASE_DIR / "apps/static",
-)
-
-#############################################################
