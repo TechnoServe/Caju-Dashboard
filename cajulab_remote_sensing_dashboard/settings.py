@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-x8g^t5z6!gs%bj4f9#2u6%myi(1ipx*@s1eshl0ya_ly9j_1ra
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 # CELERY STUFF
 
@@ -163,9 +163,10 @@ LOCALE_PATHS = (
 
 # Extra places for collectstatic to find static files.
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfile')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "/static/"),
+    os.path.join(BASE_DIR, "/staticfiles/"),
 )
 
 EMAIL_USE_TLS = True
