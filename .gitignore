@@ -11,3 +11,5 @@ venv
 my_db.db
 static/plantation_data/
 .env
+privatekey.json
+.env
