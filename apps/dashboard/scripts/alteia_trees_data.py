@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 def create_plantatio_dir(plantation_id):
     directory = plantation_id
-    parent_dir = BASE_DIR.__str__() + "/static/plantation_data/"
+    parent_dir = BASE_DIR.__str__() + "/media/plantation_data/"
     path = os.path.join(parent_dir, directory)
     if os.path.exists(path.__str__()) is False:
         os.mkdir(path)

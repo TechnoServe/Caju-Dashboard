@@ -79,14 +79,14 @@ def drone(request, plant_id, coordinate_xy):
         ).add_to(cashew_map)
 
     def add_alteia_tree_crows():
-        directory = "static/plantation_data/" + plant_id
+        directory = "media/plantation_data/" + plant_id
         with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
         tree_crows = folium.GeoJson(feature_geojson, name=gettext('Tree Crowns'), zoom_on_click=True, embed=False)
         tree_crows.add_to(cashew_map)
 
     def add_alteia_tree_tops_density():
-        directory = "static/plantation_data/" + plant_id
+        directory = "media/plantation_data/" + plant_id
         with open(directory + "/Tree Tops Density.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
         tree_tops_density = folium.GeoJson(
@@ -128,7 +128,7 @@ def drone(request, plant_id, coordinate_xy):
         cashew_map.add_child(basemaps['Google Satellite'])
         add_ee_layer_drone()
         add_ee_layer()
-        parent_dir = BASE_DIR.__str__() + "/static/plantation_data/"
+        parent_dir = BASE_DIR.__str__() + "/media/plantation_data/"
         path = os.path.join(parent_dir, plant_id)
         if os.path.exists(path.__str__()) is False:
             print("download_trees_data")
