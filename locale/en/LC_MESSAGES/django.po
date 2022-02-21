@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-17 21:46+0100\n"
+"POT-Creation-Date: 2022-02-20 22:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,992 +18,1214 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: apps/dashboard/benin_commune.py:26
-msgid "Benin Communes"
+#: .\apps\authentication\utils.py:20 .\apps\dashboard\models.py:16
+#: .\apps\dashboard\models.py:75 .\apps\dashboard\models.py:140
+msgid "Male"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:32 apps/dashboard/benin_republic.py:30
-msgid "Departments Cashew Tree Cover Statistics In"
+#: .\apps\authentication\utils.py:21 .\apps\dashboard\models.py:17
+#: .\apps\dashboard\models.py:76 .\apps\dashboard\models.py:141
+msgid "Female"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:33 apps/dashboard/benin_department.py:36
-#: apps/dashboard/benin_republic.py:31
-msgid "Active Trees"
+#: .\apps\authentication\utils.py:22 .\apps\dashboard\models.py:18
+#: .\apps\dashboard\models.py:77 .\apps\dashboard\models.py:142
+msgid "Others"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:34 apps/dashboard/benin_department.py:37
-#: apps/dashboard/benin_republic.py:32 templates/dashboard/yield.html:66
-msgid "Sick Trees"
+#: .\apps\authentication\views.py:52 .\apps\authentication\views.py:225
+msgid "Invalid credentials"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:35 apps/dashboard/benin_department.py:38
-#: apps/dashboard/benin_republic.py:33 templates/dashboard/yield.html:67
-msgid "Dead Trees"
+#: .\apps\authentication\views.py:86
+msgid "Activate your Cashew Remote Sensing account."
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:36 apps/dashboard/benin_department.py:39
-#: apps/dashboard/benin_republic.py:34
-msgid "Out of Production Trees"
+#: .\apps\authentication\views.py:106
+msgid "Please confirm your email address to complete the registration"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:37 apps/dashboard/benin_department.py:40
-#: apps/dashboard/benin_republic.py:35
-msgid "Cashew Trees Status in"
+#: .\apps\authentication\views.py:109 .\apps\authentication\views.py:142
+#: .\apps\authentication\views.py:201 .\apps\authentication\views.py:281
+#: .\apps\authentication\views.py:315 .\apps\dashboard\views.py:74
+#: .\apps\dashboard\views.py:119 .\apps\dashboard\views.py:179
+msgid "Form is not valid"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:38 apps/dashboard/benin_department.py:41
-#: apps/dashboard/benin_republic.py:36
-msgid "is ranked"
+#: .\apps\authentication\views.py:138 .\apps\dashboard\views.py:70
+msgid "Organization created - please <a href=\"/register\">register user</a>."
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:39 apps/dashboard/benin_department.py:43
-#: apps/dashboard/benin_republic.py:38
-msgid "Satellite Est"
+#: .\apps\authentication\views.py:198
+msgid "Form is not valid - Passwords do not match"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:40 apps/dashboard/benin_department.py:44
-#: apps/dashboard/benin_republic.py:39
+#: .\apps\authentication\views.py:248
+msgid "Reset your Password"
+msgstr ""
+
+#: .\apps\authentication\views.py:274
+msgid ""
+"We have emailed you instructions for setting your "
+"password.                         If an account exists with the email you "
+"have entered, you should receive them shortly.                        If you "
+"do not receive an email, please make sure you've entered the address you "
+"registered with correctly,                         and check your spam "
+"folder."
+msgstr ""
+
+#: .\apps\authentication\views.py:311
+msgid "Password change successful. Now you can"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:48
+msgid "Drone Image"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:62 .\apps\dashboard\map_views.py:152
+msgid "Satellite Prediction"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:76
+msgid "Plantation Shape"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:85
+#: .\apps\dashboard\layers_builders\benin_tree_crowns.py:18
+msgid "Tree Crowns"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:95
+#: .\apps\dashboard\layers_builders\benin_tree_tops_density.py:18
+msgid "Tree Tops Density"
+msgstr ""
+
+#: .\apps\dashboard\drone_views.py:108
+msgid "Satellite"
+msgstr ""
+
+#: .\apps\dashboard\forms.py:137
+msgid "From"
+msgstr ""
+
+#: .\apps\dashboard\forms.py:138
+msgid "To"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:90
+#: .\apps\dashboard\layers_builders\benin_commune.py:131
+#: .\apps\dashboard\layers_builders\benin_department.py:87
+#: .\apps\dashboard\layers_builders\benin_department.py:129
+#: .\apps\dashboard\layers_builders\benin_republic.py:87
+#: .\apps\dashboard\layers_builders\benin_republic.py:246
 msgid "TNS Survey"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:43 apps/dashboard/benin_department.py:47
-#: apps/dashboard/benin_republic.py:42
+#: .\apps\dashboard\layers_builders\benin_commune.py:91
+#: .\apps\dashboard\layers_builders\benin_department.py:88
+#: .\apps\dashboard\layers_builders\benin_republic.py:247
+msgid "Nut Count Average"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:92
+#: .\apps\dashboard\layers_builders\benin_department.py:89
+#: .\apps\dashboard\layers_builders\benin_republic.py:248
+msgid "Defective Rate Average"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:93
+#: .\apps\dashboard\layers_builders\benin_department.py:90
+#: .\apps\dashboard\layers_builders\benin_republic.py:96
+#: .\apps\dashboard\layers_builders\benin_republic.py:249
+msgid "KOR Average"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:123
+#: .\apps\dashboard\layers_builders\benin_republic.py:78
+msgid "Departments Cashew Tree Cover Statistics In"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:124
+#: .\apps\dashboard\layers_builders\benin_department.py:121
+#: .\apps\dashboard\layers_builders\benin_republic.py:79
+msgid "Active Trees"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:125
+#: .\apps\dashboard\layers_builders\benin_department.py:122
+#: .\apps\dashboard\layers_builders\benin_republic.py:80
+#: .\apps\templates\dashboard\yield.html:66
+msgid "Sick Trees"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:126
+#: .\apps\dashboard\layers_builders\benin_department.py:123
+#: .\apps\dashboard\layers_builders\benin_republic.py:81
+#: .\apps\templates\dashboard\yield.html:67
+msgid "Dead Trees"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:127
+#: .\apps\dashboard\layers_builders\benin_department.py:124
+#: .\apps\dashboard\layers_builders\benin_republic.py:82
+msgid "Out of Production Trees"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:128
+#: .\apps\dashboard\layers_builders\benin_department.py:125
+#: .\apps\dashboard\layers_builders\benin_republic.py:83
+msgid "Cashew Trees Status in"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:129
+#: .\apps\dashboard\layers_builders\benin_department.py:126
+#: .\apps\dashboard\layers_builders\benin_republic.py:84
+msgid "is ranked"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:130
+#: .\apps\dashboard\layers_builders\benin_department.py:86
+#: .\apps\dashboard\layers_builders\benin_department.py:128
+#: .\apps\dashboard\layers_builders\benin_republic.py:86
+#: .\apps\dashboard\layers_builders\benin_republic.py:245
+msgid "Satellite Est"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_commune.py:134
+#: .\apps\dashboard\layers_builders\benin_department.py:132
+#: .\apps\dashboard\layers_builders\benin_republic.py:90
 msgid "Total Cashew Yield (kg)"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:44 apps/dashboard/benin_department.py:48
-#: apps/dashboard/benin_republic.py:43
+#: .\apps\dashboard\layers_builders\benin_commune.py:135
+#: .\apps\dashboard\layers_builders\benin_department.py:133
+#: .\apps\dashboard\layers_builders\benin_republic.py:91
 msgid "Total Area (ha)"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:45 apps/dashboard/benin_department.py:49
-#: apps/dashboard/benin_republic.py:44
+#: .\apps\dashboard\layers_builders\benin_commune.py:136
+#: .\apps\dashboard\layers_builders\benin_department.py:134
+#: .\apps\dashboard\layers_builders\benin_republic.py:92
 msgid "Cashew Tree Cover (ha)"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:46 apps/dashboard/benin_department.py:50
-#: apps/dashboard/benin_republic.py:45
+#: .\apps\dashboard\layers_builders\benin_commune.py:137
+#: .\apps\dashboard\layers_builders\benin_department.py:135
+#: .\apps\dashboard\layers_builders\benin_republic.py:93
 msgid "Yield/Hectare (kg/ha)"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:47 apps/dashboard/benin_department.py:51
-#: apps/dashboard/benin_plantations.py:39 apps/dashboard/benin_republic.py:46
+#: .\apps\dashboard\layers_builders\benin_commune.py:138
+#: .\apps\dashboard\layers_builders\benin_department.py:136
+#: .\apps\dashboard\layers_builders\benin_plantations.py:40
+#: .\apps\dashboard\layers_builders\benin_republic.py:94
 msgid "Yield per Tree (kg/tree)"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:48 apps/dashboard/benin_department.py:52
-#: apps/dashboard/benin_plantations.py:38 apps/dashboard/benin_republic.py:47
+#: .\apps\dashboard\layers_builders\benin_commune.py:139
+#: .\apps\dashboard\layers_builders\benin_department.py:137
+#: .\apps\dashboard\layers_builders\benin_plantations.py:39
+#: .\apps\dashboard\layers_builders\benin_republic.py:95
 msgid "Number of Trees"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:49 apps/dashboard/benin_department.py:53
-#: apps/dashboard/benin_plantations.py:50 apps/dashboard/benin_republic.py:49
+#: .\apps\dashboard\layers_builders\benin_commune.py:140
+#: .\apps\dashboard\layers_builders\benin_department.py:138
+#: .\apps\dashboard\layers_builders\benin_plantations.py:51
+#: .\apps\dashboard\layers_builders\benin_republic.py:98
 msgid "Source: TNS/BeninCaju Yield Surveys 2020"
 msgstr ""
 
-#: apps/dashboard/benin_commune.py:51
+#: .\apps\dashboard\layers_builders\benin_commune.py:142
 msgid ""
 "among Benin communes in terms of total cashew yield according to the TNS "
 "Yield Survey"
 msgstr ""
 
-#: apps/dashboard/benin_department.py:27
-msgid "Benin Departments"
+#: .\apps\dashboard\layers_builders\benin_commune.py:495
+msgid "Benin Communes"
 msgstr ""
 
-#: apps/dashboard/benin_department.py:54
+#: .\apps\dashboard\layers_builders\benin_department.py:139
 msgid "Predicted Cashew Tree Cover Communes Statistics In"
 msgstr ""
 
-#: apps/dashboard/benin_department.py:56
+#: .\apps\dashboard\layers_builders\benin_department.py:141
 msgid ""
 "among Benin departments in terms of total cashew yield according to the TNS "
 "Yield Survey"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:26
+#: .\apps\dashboard\layers_builders\benin_department.py:479
+msgid "Benin Departments"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_drones.py:36
+msgid "Benin Drone"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\benin_plantations.py:27
 msgid "Plantation Locations"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:29
+#: .\apps\dashboard\layers_builders\benin_plantations.py:30
 msgid "Plantation Owner"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:30
+#: .\apps\dashboard\layers_builders\benin_plantations.py:31
 msgid "Plantation ID"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:31
-#: templates/dashboard/plantations.html:58
+#: .\apps\dashboard\layers_builders\benin_plantations.py:32
+#: .\apps\templates\dashboard\plantations.html:58
 msgid "Village"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:32
+#: .\apps\dashboard\layers_builders\benin_plantations.py:33
 msgid "Satellite Estimate"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:33
+#: .\apps\dashboard\layers_builders\benin_plantations.py:34
 msgid "2020 Yield Survey"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:34
+#: .\apps\dashboard\layers_builders\benin_plantations.py:35
 msgid "Cashew Yield (kg)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:35
+#: .\apps\dashboard\layers_builders\benin_plantations.py:36
 msgid "Plantation Size (ha)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:36
-#: apps/dashboard/benin_plantations.py:46
+#: .\apps\dashboard\layers_builders\benin_plantations.py:37
+#: .\apps\dashboard\layers_builders\benin_plantations.py:47
 msgid "Cashew Surface Area (ha)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:37
+#: .\apps\dashboard\layers_builders\benin_plantations.py:38
 msgid "Yield Per Hectare (kg/ha)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:41
+#: .\apps\dashboard\layers_builders\benin_plantations.py:42
 msgid ""
 "Average Surface Area and Cashew Yield Information for Plantations in Benin "
 "Republic"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:43
+#: .\apps\dashboard\layers_builders\benin_plantations.py:44
 msgid "Number of Farms"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:44
+#: .\apps\dashboard\layers_builders\benin_plantations.py:45
 msgid "Total Plantation Yield (kg)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:45
+#: .\apps\dashboard\layers_builders\benin_plantations.py:46
 msgid "Total Plantation Area (ha)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:47
+#: .\apps\dashboard\layers_builders\benin_plantations.py:48
 msgid "Average Yield Per Hectare (kg/ha)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:48
+#: .\apps\dashboard\layers_builders\benin_plantations.py:49
 msgid "Total Number of Trees"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:49
+#: .\apps\dashboard\layers_builders\benin_plantations.py:50
 msgid "Average Yield per Tree (kg/tree)"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:51
+#: .\apps\dashboard\layers_builders\benin_plantations.py:52
 msgid "View Drone Image"
 msgstr ""
 
-#: apps/dashboard/benin_plantations.py:54
+#: .\apps\dashboard\layers_builders\benin_plantations.py:55
 msgid "Benin Plantations"
 msgstr ""
 
-#: apps/dashboard/benin_republic.py:24 apps/dashboard/benin_republic.py:64
-msgid "Benin Republic"
-msgstr ""
-
-#: apps/dashboard/benin_republic.py:37
+#: .\apps\dashboard\layers_builders\benin_republic.py:85
 msgid "globally in terms of total cashew yield"
 msgstr ""
 
-#: apps/dashboard/benin_republic.py:48
+#: .\apps\dashboard\layers_builders\benin_republic.py:97
 msgid "9th"
 msgstr ""
 
-#: apps/dashboard/nursery_information.py:13
+#: .\apps\dashboard\layers_builders\benin_republic.py:100
+#: .\apps\dashboard\layers_builders\benin_republic.py:386
+msgid "Benin Republic"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\nursery_information.py:20
 msgid "Commune Name"
 msgstr ""
 
-#: apps/dashboard/nursery_information.py:14
+#: .\apps\dashboard\layers_builders\nursery_information.py:21
 msgid "Nursery Owner"
 msgstr ""
 
-#: apps/dashboard/nursery_information.py:15
+#: .\apps\dashboard\layers_builders\nursery_information.py:22
 msgid "Nursery Area (ha)"
 msgstr ""
 
-#: apps/dashboard/nursery_information.py:16
-#: templates/dashboard/nurseries.html:59
+#: .\apps\dashboard\layers_builders\nursery_information.py:23
+#: .\apps\templates\dashboard\nurseries.html:59
 msgid "Number of Plants"
 msgstr ""
 
-#: apps/dashboard/views.py:46 apps/dashboard/views.py:394
-#: templates/dashboard/login.html:26 templates/dashboard/register.html:27
+#: .\apps\dashboard\layers_builders\qar_informations.py:12
+msgid "Region"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\qar_informations.py:13
+msgid "Site"
+msgstr ""
+
+#: .\apps\dashboard\layers_builders\qar_informations.py:14
+#: .\apps\templates\dashboard\analytics.html:15
+#: .\apps\templates\includes\sidenav.html:142
+msgid "KOR"
+msgstr ""
+
+#: .\apps\dashboard\map_legend.py:4
+msgid "QAR"
+msgstr ""
+
+#: .\apps\dashboard\map_views.py:55
+msgid "QAR Information"
+msgstr ""
+
+#: .\apps\dashboard\map_views.py:79 .\apps\templates\dashboard\login.html:27
+#: .\apps\templates\dashboard\register.html:28
 msgid "Google"
 msgstr ""
 
-#: apps/dashboard/views.py:55
+#: .\apps\dashboard\map_views.py:88
 msgid "Google Satellite"
 msgstr ""
 
-#: apps/dashboard/views.py:64
+#: .\apps\dashboard\map_views.py:99
 msgid "Mapbox Satellite"
 msgstr ""
 
-#: apps/dashboard/views.py:89
+#: .\apps\dashboard\map_views.py:130
 msgid "Nursery Information"
 msgstr ""
 
-#: apps/dashboard/views.py:108 apps/dashboard/views.py:478
-msgid "Satellite Prediction"
-msgstr ""
-
-#: apps/dashboard/views.py:111
+#: .\apps\dashboard\map_views.py:158
 msgid "No Boundary"
 msgstr ""
 
-#: apps/dashboard/views.py:195
-msgid "Organization created - please <a href=\"/register\">register user</a>."
-msgstr ""
-
-#: apps/dashboard/views.py:199 apps/dashboard/views.py:244
-msgid "Form is not valid"
-msgstr ""
-
-#: apps/dashboard/views.py:403
-msgid "Satellite"
-msgstr ""
-
-#: apps/dashboard/views.py:412
-msgid "Satellite View"
-msgstr ""
-
-#: cajulab_remote_sensing_dashboard/settings.py:121
-msgid "English"
-msgstr ""
-
-#: cajulab_remote_sensing_dashboard/settings.py:122
-msgid "French"
-msgstr ""
-
-#: templates/authentication/acc_active_email.html:112
-#: templates/authentication/password_reset_email.html:112
+#: .\apps\templates\authentication\acc_active_email.html:112
+#: .\apps\templates\authentication\password_reset_email.html:112
 msgid ""
 "We are thrilled to have you here! Get ready to dive into your new account."
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:130
+#: .\apps\templates\authentication\acc_active_email.html:130
 msgid "Welcome"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:144
+#: .\apps\templates\authentication\acc_active_email.html:144
 msgid ""
 "We are excited to have you get started. First, you need to confirm your "
 "account. Just press the button below"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:168
+#: .\apps\templates\authentication\acc_active_email.html:168
 msgid "Confirm Account"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:181
-#: templates/authentication/password_reset_email.html:184
+#: .\apps\templates\authentication\acc_active_email.html:181
+#: .\apps\templates\authentication\password_reset_email.html:184
 msgid ""
 "If that does not work, copy and paste the following link in your browser:"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:198
-#: templates/authentication/password_reset_email.html:203
+#: .\apps\templates\authentication\acc_active_email.html:198
+#: .\apps\templates\authentication\password_reset_email.html:203
 msgid ""
 "If you have any questions, just reply to this email we are always happy to "
 "help out."
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:204
+#: .\apps\templates\authentication\acc_active_email.html:204
 msgid "Cheers"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:204
+#: .\apps\templates\authentication\acc_active_email.html:204
 msgid "Technoserve Team"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:216
-#: templates/authentication/password_reset_email.html:222
+#: .\apps\templates\authentication\acc_active_email.html:216
+#: .\apps\templates\authentication\password_reset_email.html:222
 msgid "Need more help?"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:218
-#: templates/authentication/password_reset_email.html:224
+#: .\apps\templates\authentication\acc_active_email.html:218
+#: .\apps\templates\authentication\password_reset_email.html:224
 msgid "We are here to help you out"
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:231
+#: .\apps\templates\authentication\acc_active_email.html:231
 msgid "If these emails get annoying, please feel free to "
 msgstr ""
 
-#: templates/authentication/acc_active_email.html:232
-#: templates/authentication/password_reset_email.html:240
+#: .\apps\templates\authentication\acc_active_email.html:232
+#: .\apps\templates\authentication\password_reset_email.html:240
 msgid "unsubscribe"
 msgstr ""
 
-#: templates/authentication/full_login.html:21
-#: templates/authentication/register.html:20
-msgid "Sign Up"
-msgstr ""
-
-#: templates/authentication/full_login.html:30
-#: templates/authentication/login.html:31
-#: templates/authentication/password_reset_form.html:28
-#: templates/authentication/register.html:29
-#: templates/authentication/register_org.html:30
-#: templates/authentication/register_role.html:30
-msgid "Add your credentials"
-msgstr ""
-
-#: templates/authentication/full_login.html:77
-msgid "Gender:"
-msgstr ""
-
-#: templates/authentication/full_login.html:90
-msgid "Date of Birth:"
-msgstr ""
-
-#: templates/authentication/full_login.html:123
-#: templates/authentication/register.html:96
-msgid "Organization Name:"
-msgstr ""
-
-#: templates/authentication/full_login.html:136
-#: templates/authentication/register.html:109
-msgid "Role:"
-msgstr ""
-
-#: templates/authentication/full_login.html:198
-#: templates/authentication/register.html:141
-#: templates/authentication/register_org.html:126
-#: templates/authentication/register_role.html:69
-#: templates/dashboard/register.html:66
-msgid "Privacy Policy"
-msgstr ""
-
-#: templates/authentication/full_login.html:204
-#: templates/authentication/register.html:147
-#: templates/dashboard/register.html:72
-msgid "Create account"
-msgstr ""
-
-#: templates/authentication/full_login.html:219
-#: templates/authentication/register.html:162
-#: templates/authentication/register_org.html:147
-#: templates/authentication/register_role.html:90
-#: templates/dashboard/page-403.html:24 templates/includes/langnav.html:15
-#: templates/includes/navigation-fullscreen.html:29
-#: templates/includes/sidenav.html:59
-msgid "Login"
-msgstr ""
-
-#: templates/authentication/full_login.html:222
-#: templates/authentication/login.html:79
-#: templates/authentication/new_password.html:73
-#: templates/authentication/password_change_failed.html:34
-#: templates/authentication/password_reset_form.html:63
-#: templates/authentication/register.html:165
-#: templates/authentication/register_org.html:150
-#: templates/authentication/register_role.html:93
-#: templates/dashboard/email_confirm_invalid.html:34
-#: templates/dashboard/email_confirmed.html:33
-#: templates/dashboard/login.html:68
-msgid "Contact Us"
-msgstr ""
-
-#: templates/authentication/login.html:21
-msgid "Sign In"
-msgstr ""
-
-#: templates/authentication/login.html:62 templates/dashboard/login.html:54
-msgid "Remember me"
-msgstr ""
-
-#: templates/authentication/login.html:66 templates/dashboard/login.html:58
-msgid "Sign in"
-msgstr ""
-
-#: templates/authentication/login.html:76
-#: templates/authentication/new_password.html:70
-#: templates/authentication/password_reset_form.html:60
-#: templates/includes/langnav.html:20
-#: templates/includes/navigation-fullscreen.html:34
-msgid "Register"
-msgstr ""
-
-#: templates/authentication/new_password.html:19
-#: templates/authentication/password_reset_form.html:18
-msgid "Forgot Password"
-msgstr ""
-
-#: templates/authentication/new_password.html:26
-#: templates/dashboard/email_confirmed.html:23
-msgid "login"
-msgstr ""
-
-#: templates/authentication/new_password.html:26
-msgid "your account."
-msgstr ""
-
-#: templates/authentication/new_password.html:30
-msgid "Add and confirm your new password"
-msgstr ""
-
-#: templates/authentication/new_password.html:62
-msgid "Save"
-msgstr ""
-
-#: templates/authentication/password_change_failed.html:20
-msgid "Ooops password change link is invalid!"
-msgstr ""
-
-#: templates/authentication/password_change_failed.html:24
-#: templates/dashboard/email_confirm_invalid.html:24
-msgid "Please reach out to us through this"
-msgstr ""
-
-#: templates/authentication/password_change_failed.html:24
-#: templates/dashboard/email_confirm_invalid.html:24
-msgid "link"
-msgstr ""
-
-#: templates/authentication/password_change_failed.html:31
-#: templates/dashboard/email_confirm_invalid.html:31
-#: templates/dashboard/email_confirmed.html:30
-#: templates/dashboard/page-403.html:31 templates/dashboard/page-404.html:24
-#: templates/dashboard/page-404.html:31 templates/dashboard/page-500.html:24
-#: templates/dashboard/page-500.html:31
-msgid "Home"
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:145
-msgid "To initiate the password reset process for your"
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:145
-msgid "Satellite Data Visualisation Dashboard account, click the link below."
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:170
-msgid "Confirm Password Reset"
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:210
-msgid "Regards,"
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:210
-msgid "Caju-Lab Support Team."
-msgstr ""
-
-#: templates/authentication/password_reset_email.html:238
-msgid "If these emails get annoying, please feel free to"
-msgstr ""
-
-#: templates/authentication/password_reset_form.html:52
-msgid "Change Password"
-msgstr ""
-
-#: templates/authentication/register.html:141
-#: templates/authentication/register_org.html:126
-#: templates/authentication/register_role.html:69
-#: templates/dashboard/register.html:66
-msgid "I agree with the"
-msgstr ""
-
-#: templates/authentication/register_org.html:21
-msgid "Register Organization"
-msgstr ""
-
-#: templates/authentication/register_org.html:132
-msgid "Create Organization"
-msgstr ""
-
-#: templates/authentication/register_role.html:21
-msgid "Register Role"
-msgstr ""
-
-#: templates/authentication/register_role.html:75
-msgid "Create Role"
-msgstr ""
-
-#: templates/authentication/role_options.html:2
-msgid "Not Listed"
-msgstr ""
-
-#: templates/dashboard/companies.html:14
-msgid "Tables"
-msgstr ""
-
-#: templates/dashboard/companies.html:39
-msgid "Organizations"
-msgstr ""
-
-#: templates/dashboard/companies.html:46
-msgid "Organization Name"
-msgstr ""
-
-#: templates/dashboard/companies.html:47
-msgid "Description"
-msgstr ""
-
-#: templates/dashboard/companies.html:48 templates/dashboard/companies.html:171
-msgid "Phone Number"
-msgstr ""
-
-#: templates/dashboard/companies.html:49
-msgid "Email"
-msgstr ""
-
-#: templates/dashboard/companies.html:50 templates/dashboard/companies.html:176
-msgid "Website"
-msgstr ""
-
-#: templates/dashboard/companies.html:51 templates/dashboard/profile.html:135
-msgid "Address"
-msgstr ""
-
-#: templates/dashboard/companies.html:106
-#: templates/dashboard/companies.html:222
-#: templates/dashboard/nurseries.html:152
-#: templates/dashboard/plantations.html:162
-#: templates/dashboard/shipment.html:126 templates/dashboard/yield.html:156
-msgid "Previous"
-msgstr ""
-
-#: templates/dashboard/companies.html:117
-#: templates/dashboard/companies.html:233
-#: templates/dashboard/nurseries.html:188
-#: templates/dashboard/nurseries.html:196
-#: templates/dashboard/plantations.html:198
-#: templates/dashboard/plantations.html:206
-#: templates/dashboard/shipment.html:162 templates/dashboard/shipment.html:170
-#: templates/dashboard/yield.html:192 templates/dashboard/yield.html:200
-msgid "Next"
-msgstr ""
-
-#: templates/dashboard/companies.html:160
-msgid "Plantation"
-msgstr ""
-
-#: templates/dashboard/companies.html:167
-#: templates/dashboard/plantations.html:48 templates/dashboard/shipment.html:50
-#: templates/dashboard/yield.html:59
-msgid "Plantation Name"
-msgstr ""
-
-#: templates/dashboard/companies.html:168
-#: templates/dashboard/plantations.html:49
-msgid "Plantation Code"
-msgstr ""
-
-#: templates/dashboard/companies.html:169
-msgid "Plantation Age"
-msgstr ""
-
-#: templates/dashboard/companies.html:170
-msgid "Owner Name"
-msgstr ""
-
-#: templates/dashboard/companies.html:172
-msgid "Plantation Address"
-msgstr ""
-
-#: templates/dashboard/companies.html:173
-msgid "Owner Address"
-msgstr ""
-
-#: templates/dashboard/companies.html:174
-#: templates/dashboard/plantations.html:53
-msgid "Total Trees"
-msgstr ""
-
-#: templates/dashboard/companies.html:175 templates/dashboard/nurseries.html:58
-msgid "Partner"
-msgstr ""
-
-#: templates/dashboard/email_confirm_invalid.html:20
+#: .\apps\templates\authentication\email_confirm_invalid.html:19
 msgid " Ooops activation link is invalid!"
 msgstr ""
 
-#: templates/dashboard/email_confirmed.html:19
+#: .\apps\templates\authentication\email_confirm_invalid.html:23
+#: .\apps\templates\authentication\password_change_failed.html:24
+msgid "Please reach out to us through this"
+msgstr ""
+
+#: .\apps\templates\authentication\email_confirm_invalid.html:23
+#: .\apps\templates\authentication\password_change_failed.html:24
+msgid "link"
+msgstr ""
+
+#: .\apps\templates\authentication\email_confirm_invalid.html:30
+#: .\apps\templates\authentication\email_confirmed.html:30
+#: .\apps\templates\authentication\password_change_failed.html:31
+#: .\apps\templates\dashboard\page-403.html:31
+#: .\apps\templates\dashboard\page-404.html:24
+#: .\apps\templates\dashboard\page-404.html:31
+#: .\apps\templates\dashboard\page-500.html:24
+#: .\apps\templates\dashboard\page-500.html:31
+msgid "Home"
+msgstr ""
+
+#: .\apps\templates\authentication\email_confirm_invalid.html:33
+#: .\apps\templates\authentication\email_confirmed.html:33
+#: .\apps\templates\authentication\full_login.html:222
+#: .\apps\templates\authentication\login.html:79
+#: .\apps\templates\authentication\new_password.html:73
+#: .\apps\templates\authentication\password_change_failed.html:34
+#: .\apps\templates\authentication\password_reset_form.html:63
+#: .\apps\templates\authentication\register.html:165
+#: .\apps\templates\authentication\register_org.html:150
+#: .\apps\templates\authentication\register_role.html:93
+#: .\apps\templates\dashboard\login.html:69
+msgid "Contact Us"
+msgstr ""
+
+#: .\apps\templates\authentication\email_confirmed.html:19
 msgid "Thank you for your email confirmation."
 msgstr ""
 
-#: templates/dashboard/email_confirmed.html:23
+#: .\apps\templates\authentication\email_confirmed.html:23
 msgid "Now you can"
 msgstr ""
 
-#: templates/dashboard/email_confirmed.html:23
+#: .\apps\templates\authentication\email_confirmed.html:23
+#: .\apps\templates\authentication\new_password.html:26
+msgid "login"
+msgstr ""
+
+#: .\apps\templates\authentication\email_confirmed.html:23
 msgid "your account"
 msgstr ""
 
-#: templates/dashboard/login.html:18
+#: .\apps\templates\authentication\full_login.html:21
+#: .\apps\templates\authentication\register.html:20
+msgid "Sign Up"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:30
+#: .\apps\templates\authentication\login.html:31
+#: .\apps\templates\authentication\password_reset_form.html:28
+#: .\apps\templates\authentication\register.html:29
+#: .\apps\templates\authentication\register_org.html:30
+#: .\apps\templates\authentication\register_role.html:30
+msgid "Add your credentials"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:77
+msgid "Gender:"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:90
+msgid "Date of Birth:"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:123
+#: .\apps\templates\authentication\register.html:96
+msgid "Organization Name:"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:136
+#: .\apps\templates\authentication\register.html:109
+msgid "Role:"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:198
+#: .\apps\templates\authentication\register_org.html:126
+#: .\apps\templates\authentication\register_role.html:69
+#: .\apps\templates\dashboard\register.html:67
+msgid "Privacy Policy"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:204
+#: .\apps\templates\authentication\register.html:147
+#: .\apps\templates\dashboard\register.html:73
+msgid "Create account"
+msgstr ""
+
+#: .\apps\templates\authentication\full_login.html:219
+#: .\apps\templates\authentication\register.html:162
+#: .\apps\templates\authentication\register_org.html:147
+#: .\apps\templates\authentication\register_role.html:90
+#: .\apps\templates\dashboard\page-403.html:24
+#: .\apps\templates\includes\langnav.html:16
+#: .\apps\templates\includes\navigation-fullscreen.html:29
+msgid "Login"
+msgstr ""
+
+#: .\apps\templates\authentication\login.html:21
+msgid "Sign In"
+msgstr ""
+
+#: .\apps\templates\authentication\login.html:62
+#: .\apps\templates\dashboard\login.html:55
+msgid "Remember me"
+msgstr ""
+
+#: .\apps\templates\authentication\login.html:66
+#: .\apps\templates\dashboard\login.html:59
+msgid "Sign in"
+msgstr ""
+
+#: .\apps\templates\authentication\login.html:76
+#: .\apps\templates\authentication\new_password.html:70
+#: .\apps\templates\authentication\password_reset_form.html:60
+#: .\apps\templates\includes\langnav.html:21
+#: .\apps\templates\includes\navigation-fullscreen.html:34
+msgid "Register"
+msgstr ""
+
+#: .\apps\templates\authentication\new_password.html:19
+#: .\apps\templates\authentication\password_reset_form.html:18
+msgid "Forgot Password"
+msgstr ""
+
+#: .\apps\templates\authentication\new_password.html:26
+msgid "your account."
+msgstr ""
+
+#: .\apps\templates\authentication\new_password.html:30
+msgid "Add and confirm your new password"
+msgstr ""
+
+#: .\apps\templates\authentication\new_password.html:62
+msgid "Save"
+msgstr ""
+
+#: .\apps\templates\authentication\password_change_failed.html:20
+msgid "Ooops password change link is invalid!"
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:145
+msgid "To initiate the password reset process for your"
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:145
+msgid "Satellite Data Visualisation Dashboard account, click the link below."
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:170
+msgid "Confirm Password Reset"
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:210
+msgid "Regards,"
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:210
+msgid "Caju-Lab Support Team."
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_email.html:238
+msgid "If these emails get annoying, please feel free to"
+msgstr ""
+
+#: .\apps\templates\authentication\password_reset_form.html:52
+msgid "Change Password"
+msgstr ""
+
+#: .\apps\templates\authentication\register.html:141
+#: .\apps\templates\authentication\register_org.html:126
+#: .\apps\templates\authentication\register_role.html:69
+#: .\apps\templates\dashboard\register.html:67
+msgid "I agree with the"
+msgstr ""
+
+#: .\apps\templates\authentication\register.html:141
+msgid "Privacy Policies"
+msgstr ""
+
+#: .\apps\templates\authentication\register_org.html:21
+msgid "Register Organization"
+msgstr ""
+
+#: .\apps\templates\authentication\register_org.html:132
+msgid "Create Organization"
+msgstr ""
+
+#: .\apps\templates\authentication\register_role.html:21
+msgid "Register Role"
+msgstr ""
+
+#: .\apps\templates\authentication\register_role.html:75
+msgid "Create Role"
+msgstr ""
+
+#: .\apps\templates\authentication\role_options.html:2
+msgid "Not Listed"
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:29
+msgid "KOR average per Departement"
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:40
+msgid "KOR average per Commune"
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:57
+msgid "KOR average per Departement communes"
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:59
+#: .\apps\templates\dashboard\defective_rate.html:59
+#: .\apps\templates\dashboard\nut_count.html:59
+msgid "Select Department: "
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:61
+#: .\apps\templates\dashboard\analytics.html:76
+#: .\apps\templates\dashboard\defective_rate.html:61
+#: .\apps\templates\dashboard\defective_rate.html:76
+#: .\apps\templates\dashboard\nut_count.html:61
+#: .\apps\templates\dashboard\nut_count.html:76
+msgid "Submit"
+msgstr ""
+
+#: .\apps\templates\dashboard\analytics.html:73
+msgid "KOR Graph against date period"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:14
+msgid "Tables"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:39
+msgid "Organizations"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:46
+msgid "Organization Name"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:47
+msgid "Description"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:48
+#: .\apps\templates\dashboard\companies.html:171
+#: .\apps\templates\dashboard\profile.html:160
+msgid "Phone Number"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:49
+msgid "Email"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:50
+#: .\apps\templates\dashboard\companies.html:176
+msgid "Website"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:51
+msgid "Address"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:106
+#: .\apps\templates\dashboard\companies.html:222
+#: .\apps\templates\dashboard\nurseries.html:152
+#: .\apps\templates\dashboard\plantations.html:162
+#: .\apps\templates\dashboard\shipment.html:126
+#: .\apps\templates\dashboard\yield.html:156
+msgid "Previous"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:117
+#: .\apps\templates\dashboard\companies.html:233
+#: .\apps\templates\dashboard\nurseries.html:188
+#: .\apps\templates\dashboard\nurseries.html:196
+#: .\apps\templates\dashboard\plantations.html:198
+#: .\apps\templates\dashboard\plantations.html:206
+#: .\apps\templates\dashboard\shipment.html:162
+#: .\apps\templates\dashboard\shipment.html:170
+#: .\apps\templates\dashboard\yield.html:192
+#: .\apps\templates\dashboard\yield.html:200
+msgid "Next"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:160
+msgid "Plantation"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:167
+#: .\apps\templates\dashboard\plantations.html:48
+#: .\apps\templates\dashboard\shipment.html:50
+#: .\apps\templates\dashboard\yield.html:59
+msgid "Plantation Name"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:168
+#: .\apps\templates\dashboard\plantations.html:49
+msgid "Plantation Code"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:169
+msgid "Plantation Age"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:170
+msgid "Owner Name"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:172
+msgid "Plantation Address"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:173
+msgid "Owner Address"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:174
+#: .\apps\templates\dashboard\plantations.html:53
+msgid "Total Trees"
+msgstr ""
+
+#: .\apps\templates\dashboard\companies.html:175
+#: .\apps\templates\dashboard\nurseries.html:58
+msgid "Partner"
+msgstr ""
+
+#: .\apps\templates\dashboard\defective_rate.html:15
+msgid "Defective rate"
+msgstr ""
+
+#: .\apps\templates\dashboard\defective_rate.html:29
+msgid "Defective rate average per Departement"
+msgstr ""
+
+#: .\apps\templates\dashboard\defective_rate.html:40
+msgid "Defective rate average per Commune"
+msgstr ""
+
+#: .\apps\templates\dashboard\defective_rate.html:57
+msgid "Defective rate average per Departement communes"
+msgstr ""
+
+#: .\apps\templates\dashboard\defective_rate.html:73
+msgid "Defective rate Graph against date period"
+msgstr ""
+
+#: .\apps\templates\dashboard\login.html:19
 msgid "Sign in with"
 msgstr ""
 
-#: templates/dashboard/login.html:22 templates/dashboard/register.html:23
+#: .\apps\templates\dashboard\login.html:23
+#: .\apps\templates\dashboard\register.html:24
 msgid "Github"
 msgstr ""
 
-#: templates/dashboard/login.html:32
+#: .\apps\templates\dashboard\login.html:33
 msgid "Or sign in with credentials"
 msgstr ""
 
-#: templates/dashboard/login.html:65
+#: .\apps\templates\dashboard\login.html:66
 msgid "Create Account"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:14 templates/dashboard/nurseries.html:41
-#: templates/includes/sidenav.html:140
+#: .\apps\templates\dashboard\nurseries.html:14
+#: .\apps\templates\dashboard\nurseries.html:41
+#: .\apps\templates\includes\sidenav.html:125
 msgid "Nurseries"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:48
+#: .\apps\templates\dashboard\nurseries.html:48
 msgid "Nursery Name"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:49
+#: .\apps\templates\dashboard\nurseries.html:49
 msgid "Owner First Name"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:50
+#: .\apps\templates\dashboard\nurseries.html:50
 msgid "Owner Last Name"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:51
+#: .\apps\templates\dashboard\nurseries.html:51
 msgid "Nursery Address"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:52
-#: templates/dashboard/plantations.html:54 templates/dashboard/profile.html:149
+#: .\apps\templates\dashboard\nurseries.html:52
+#: .\apps\templates\dashboard\plantations.html:54
 msgid "Country"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:53
-#: templates/dashboard/plantations.html:56 templates/dashboard/shipment.html:55
+#: .\apps\templates\dashboard\nurseries.html:53
+#: .\apps\templates\dashboard\plantations.html:56
+#: .\apps\templates\dashboard\shipment.html:55
 msgid "Commune"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:54
+#: .\apps\templates\dashboard\nurseries.html:54
 msgid "Current Area"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:55
-#: templates/dashboard/plantations.html:60
+#: .\apps\templates\dashboard\nurseries.html:55
+#: .\apps\templates\dashboard\plantations.html:60
 msgid "Latitude"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:56
-#: templates/dashboard/plantations.html:61
+#: .\apps\templates\dashboard\nurseries.html:56
+#: .\apps\templates\dashboard\plantations.html:61
 msgid "Longitude"
 msgstr ""
 
-#: templates/dashboard/nurseries.html:57
-#: templates/dashboard/plantations.html:62
+#: .\apps\templates\dashboard\nurseries.html:57
+#: .\apps\templates\dashboard\plantations.html:62
 msgid "Altitude"
 msgstr ""
 
-#: templates/dashboard/page-403.html:20
+#: .\apps\templates\dashboard\nut_count.html:15
+#: .\apps\templates\includes\sidenav.html:153
+msgid "Nut Count"
+msgstr ""
+
+#: .\apps\templates\dashboard\nut_count.html:29
+msgid "Nut count average per Departement"
+msgstr ""
+
+#: .\apps\templates\dashboard\nut_count.html:40
+msgid "Nut count average per Commune"
+msgstr ""
+
+#: .\apps\templates\dashboard\nut_count.html:57
+msgid "Nut count average per Departement communes"
+msgstr ""
+
+#: .\apps\templates\dashboard\nut_count.html:73
+msgid "Nut count Graph against date period"
+msgstr ""
+
+#: .\apps\templates\dashboard\page-403.html:20
 msgid "Oups! Error 403"
 msgstr ""
 
-#: templates/dashboard/page-403.html:24
-msgid "Access denied - Please authenticate"
+#: .\apps\templates\dashboard\page-403.html:24
+msgid "Access denied"
 msgstr ""
 
-#: templates/dashboard/page-403.html:35 templates/dashboard/page-404.html:35
-#: templates/dashboard/page-500.html:35
+#: .\apps\templates\dashboard\page-403.html:35
+#: .\apps\templates\dashboard\page-404.html:35
+#: .\apps\templates\dashboard\page-500.html:35
 msgid "Get Support"
 msgstr ""
 
-#: templates/dashboard/page-404.html:20
+#: .\apps\templates\dashboard\page-404.html:20
 msgid "Oups! Error 404"
 msgstr ""
 
-#: templates/dashboard/page-404.html:24
+#: .\apps\templates\dashboard\page-404.html:24
 msgid "Page not found"
 msgstr ""
 
-#: templates/dashboard/page-500.html:20
+#: .\apps\templates\dashboard\page-500.html:20
 msgid "Oups! Error 500"
 msgstr ""
 
-#: templates/dashboard/page-500.html:24
+#: .\apps\templates\dashboard\page-500.html:24
 msgid "Server error, please contact support"
 msgstr ""
 
-#: templates/dashboard/plantations.html:14 templates/includes/sidenav.html:119
+#: .\apps\templates\dashboard\plantations.html:14
+#: .\apps\templates\includes\sidenav.html:98
 msgid "Plantations"
 msgstr ""
 
-#: templates/dashboard/plantations.html:41
+#: .\apps\templates\dashboard\plantations.html:41
 msgid "Plantations Data"
 msgstr ""
 
-#: templates/dashboard/plantations.html:50
+#: .\apps\templates\dashboard\plantations.html:50
 msgid "Owner First name"
 msgstr ""
 
-#: templates/dashboard/plantations.html:51
+#: .\apps\templates\dashboard\plantations.html:51
 msgid "Owner Last name"
 msgstr ""
 
-#: templates/dashboard/plantations.html:52
+#: .\apps\templates\dashboard\plantations.html:52
 msgid "Gender"
 msgstr ""
 
-#: templates/dashboard/plantations.html:55 templates/dashboard/shipment.html:54
+#: .\apps\templates\dashboard\plantations.html:55
+#: .\apps\templates\dashboard\shipment.html:54
 msgid "Department"
 msgstr ""
 
-#: templates/dashboard/plantations.html:57
+#: .\apps\templates\dashboard\plantations.html:57
 msgid "Arrondissement"
 msgstr ""
 
-#: templates/dashboard/plantations.html:59
+#: .\apps\templates\dashboard\plantations.html:59
 msgid "Area(Ha)"
 msgstr ""
 
-#: templates/dashboard/profile.html:18
+#: .\apps\templates\dashboard\profile.html:22
 msgid "Hello"
 msgstr ""
 
-#: templates/dashboard/profile.html:20
+#: .\apps\templates\dashboard\profile.html:24
 msgid ""
 "This is your profile page. You can see the progress you have made with your "
 "work and manage your projects or assigned tasks"
 msgstr ""
 
-#: templates/dashboard/profile.html:21 templates/dashboard/profile.html:88
+#: .\apps\templates\dashboard\profile.html:25
+#: .\apps\templates\dashboard\profile.html:96
 msgid "Edit profile"
 msgstr ""
 
-#: templates/dashboard/profile.html:43
-msgid "Connect"
-msgstr ""
-
-#: templates/dashboard/profile.html:44
-msgid "Message"
-msgstr ""
-
-#: templates/dashboard/profile.html:97
+#: .\apps\templates\dashboard\profile.html:104
 msgid "User information"
 msgstr ""
 
-#: templates/dashboard/profile.html:102
-msgid "Username"
+#: .\apps\templates\dashboard\profile.html:110
+msgid "First Name"
 msgstr ""
 
-#: templates/dashboard/profile.html:108
-msgid "Email address"
+#: .\apps\templates\dashboard\profile.html:118
+msgid "Last Name"
 msgstr ""
 
-#: templates/dashboard/profile.html:116
-msgid "First name"
-msgstr ""
-
-#: templates/dashboard/profile.html:122
-msgid "Last name"
-msgstr ""
-
-#: templates/dashboard/profile.html:130
+#: .\apps\templates\dashboard\profile.html:144
 msgid "Contact information"
 msgstr ""
 
-#: templates/dashboard/profile.html:143
-msgid "City"
+#: .\apps\templates\dashboard\profile.html:150
+msgid "Email address"
 msgstr ""
 
-#: templates/dashboard/profile.html:155
+#: .\apps\templates\dashboard\profile.html:168
 msgid "Organization"
 msgstr ""
 
-#: templates/dashboard/profile.html:163
-msgid "About me"
-msgstr ""
-
-#: templates/dashboard/profile.html:166
-msgid "About Me"
-msgstr ""
-
-#: templates/dashboard/profile.html:167
-msgid "Something about me, does not update for now."
-msgstr ""
-
-#: templates/dashboard/register.html:19
+#: .\apps\templates\dashboard\register.html:20
 msgid "Sign up with"
 msgstr ""
 
-#: templates/dashboard/register.html:33
+#: .\apps\templates\dashboard\register.html:34
 msgid "Or sign up with credentials"
 msgstr ""
 
-#: templates/dashboard/register.html:60
+#: .\apps\templates\dashboard\register.html:61
 msgid "password strength:"
 msgstr ""
 
-#: templates/dashboard/register.html:60
+#: .\apps\templates\dashboard\register.html:61
 msgid "strong"
 msgstr ""
 
-#: templates/dashboard/shipment.html:16 templates/dashboard/shipment.html:43
-#: templates/includes/sidenav.html:133
+#: .\apps\templates\dashboard\shipment.html:16
+#: .\apps\templates\dashboard\shipment.html:43
+#: .\apps\templates\includes\sidenav.html:116
 msgid "Shipment"
 msgstr ""
 
-#: templates/dashboard/shipment.html:51
+#: .\apps\templates\dashboard\shipment.html:51
 msgid "Shipment Date"
 msgstr ""
 
-#: templates/dashboard/shipment.html:52
+#: .\apps\templates\dashboard\shipment.html:52
 msgid "Port Number"
 msgstr ""
 
-#: templates/dashboard/shipment.html:53
+#: .\apps\templates\dashboard\shipment.html:53
 msgid "Cashew Quantity"
 msgstr ""
 
-#: templates/dashboard/shipment.html:56
+#: .\apps\templates\dashboard\shipment.html:56
 msgid "Plantation Area"
 msgstr ""
 
-#: templates/dashboard/yield.html:14
+#: .\apps\templates\dashboard\yield.html:14
 msgid "Yields"
 msgstr ""
 
-#: templates/dashboard/yield.html:60
+#: .\apps\templates\dashboard\yield.html:60
 msgid "Product ID"
 msgstr ""
 
-#: templates/dashboard/yield.html:61
+#: .\apps\templates\dashboard\yield.html:61
 msgid "Year"
 msgstr ""
 
-#: templates/dashboard/yield.html:62
+#: .\apps\templates\dashboard\yield.html:62
 msgid "Total Plants"
 msgstr ""
 
-#: templates/dashboard/yield.html:63
+#: .\apps\templates\dashboard\yield.html:63
 msgid "Yields (Kg)"
 msgstr ""
 
-#: templates/dashboard/yield.html:64
+#: .\apps\templates\dashboard\yield.html:64
 msgid "Yields/Ha (Kg)"
 msgstr ""
 
-#: templates/dashboard/yield.html:65
+#: .\apps\templates\dashboard\yield.html:65
 msgid "Yields/Tree (Kg)"
 msgstr ""
 
-#: templates/dashboard/yield.html:68
+#: .\apps\templates\dashboard\yield.html:68
 msgid "Out of Prod. Trees"
 msgstr ""
 
-#: templates/includes/footer.html:9
+#: .\apps\templates\includes\footer.html:9
 msgid "More Dashboards"
 msgstr ""
 
-#: templates/includes/footer.html:15
+#: .\apps\templates\includes\footer.html:15
 msgid "Creative-Tim"
 msgstr ""
 
-#: templates/includes/footer.html:16
+#: .\apps\templates\includes\footer.html:16
 msgid "AppSeed"
 msgstr ""
 
-#: templates/includes/langnav.html:25
-msgid "Already signed in?"
-msgstr ""
-
-#: templates/includes/langnav.html:37
+#: .\apps\templates\includes\langnav.html:38
+#: .\apps\templates\includes\sidenav.html:208
 msgid "Language"
 msgstr ""
 
-#: templates/includes/langnav.html:56
+#: .\apps\templates\includes\langnav.html:57
 msgid "Like us on Facebook"
 msgstr ""
 
-#: templates/includes/langnav.html:58
-#: templates/includes/navigation-fullscreen.html:44
+#: .\apps\templates\includes\langnav.html:59
+#: .\apps\templates\includes\navigation-fullscreen.html:44
 msgid "Facebook"
 msgstr ""
 
-#: templates/includes/langnav.html:63
+#: .\apps\templates\includes\langnav.html:64
 msgid "Follow us on Twitter"
 msgstr ""
 
-#: templates/includes/langnav.html:65
-#: templates/includes/navigation-fullscreen.html:51
+#: .\apps\templates\includes\langnav.html:66
+#: .\apps\templates\includes\navigation-fullscreen.html:51
 msgid "Twitter"
 msgstr ""
 
-#: templates/includes/langnav.html:70
+#: .\apps\templates\includes\langnav.html:71
 msgid "Support Technoserve"
 msgstr ""
 
-#: templates/includes/langnav.html:72
+#: .\apps\templates\includes\langnav.html:73
 msgid "Support"
 msgstr ""
 
-#: templates/includes/navigation-fullscreen.html:60
+#: .\apps\templates\includes\navigation-fullscreen.html:60
 msgid "Caju-Support"
 msgstr ""
 
-#: templates/includes/navigation.html:43
+#: .\apps\templates\includes\navigation.html:44
 msgid "You have"
 msgstr ""
 
-#: templates/includes/navigation.html:43
+#: .\apps\templates\includes\navigation.html:44
 msgid "notifications"
 msgstr ""
 
-#: templates/includes/sidenav.html:9
+#: .\apps\templates\includes\sidenav.html:18
 msgid "Cashew Dashboard"
 msgstr ""
 
-#: templates/includes/sidenav.html:40
+#: .\apps\templates\includes\sidenav.html:42
 msgid "Map"
 msgstr ""
 
-#: templates/includes/sidenav.html:46
+#: .\apps\templates\includes\sidenav.html:49
 msgid "Profile"
 msgstr ""
 
-#: templates/includes/sidenav.html:72
+#: .\apps\templates\includes\sidenav.html:58
 msgid "Registration"
 msgstr ""
 
-#: templates/includes/sidenav.html:82
+#: .\apps\templates\includes\sidenav.html:68
 msgid "New Member"
 msgstr ""
 
-#: templates/includes/sidenav.html:93
+#: .\apps\templates\includes\sidenav.html:80
 msgid "New Organization"
 msgstr ""
 
-#: templates/includes/sidenav.html:126
+#: .\apps\templates\includes\sidenav.html:107
 msgid "Yield"
 msgstr ""
 
-#: templates/includes/sidenav.html:147
+#: .\apps\templates\includes\sidenav.html:132
+msgid "Analytics"
+msgstr ""
+
+#: .\apps\templates\includes\sidenav.html:164
+msgid "Defective Rate"
+msgstr ""
+
+#: .\apps\templates\includes\sidenav.html:176
 msgid "Logout"
 msgstr ""
 
-#: templates/includes/sidenav.html:155
+#: .\apps\templates\includes\sidenav.html:184
 msgid "Resources"
 msgstr ""
 
-#: templates/includes/sidenav.html:165
+#: .\apps\templates\includes\sidenav.html:194
 msgid "About TechnoServe"
 msgstr ""
 
-#: templates/includes/sidenav.html:174
+#: .\apps\templates\includes\sidenav.html:203
 msgid "Visit TechnoServe"
 msgstr ""
 
-#: templates/layouts/base-fullscreen.html:12 templates/layouts/base.html:12
+#: .\apps\templates\layouts\base-fullscreen.html:13
+msgid "TechnoServe"
+msgstr ""
+
+#: .\apps\templates\layouts\base-fullscreen.html:47
+msgid "Cajúlab Presents"
+msgstr ""
+
+#: .\apps\templates\layouts\base.html:13
 msgid "Technoserve"
 msgstr ""
 
-#: templates/layouts/base-fullscreen.html:46
-msgid "Cajúlab Presents"
+#: .\cajulab_remote_sensing_dashboard\settings.py:141
+msgid "English"
+msgstr ""
+
+#: .\cajulab_remote_sensing_dashboard\settings.py:142
+msgid "French"
 msgstr ""

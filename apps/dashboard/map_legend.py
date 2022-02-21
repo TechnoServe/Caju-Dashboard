@@ -38,7 +38,7 @@ template = """
 <div class='legend-title'>Legend</div>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><img src="/apps/static/assets/img/legend/1.png">&nbsp;&nbsp;QAR</li>
+    <li><img src="/apps/static/assets/img/legend/1.png">&nbsp;&nbsp;Qualité de la noix de cajou</li>
     <li><img src="/apps/static/assets/img/legend/2.png">&nbsp;&nbsp;Emplacements des plantations</li>
     <li><img src="/apps/static/assets/img/legend/3.png">&nbsp;&nbsp;Pépinière</li>
     <li><img src="/apps/static/assets/img/legend/4.png">&nbsp;&nbsp;Emplacements des plantations</li>
@@ -60,8 +60,7 @@ template = """
     font-size: 90%;
     }
   .maplegend .legend-scale ul {
-    margin: 0;
-    margin-bottom: 5px;
+    margin: 0 0 5px;
     padding: 0;
     float: left;
     list-style: none;

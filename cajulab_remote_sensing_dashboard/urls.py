@@ -21,11 +21,8 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
-]
-
-urlpatterns += i18n_patterns(
     path('', include('apps.authentication.urls'), name='Authentication'),
     path('dashboard/', include('apps.dashboard.urls'), name='Dashboard'),
 )
