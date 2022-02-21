@@ -12,6 +12,8 @@ class QarLayer:
         qar_region = gettext('Region')
         qar_site = gettext("Site")
         qar_kor = gettext("KOR")
+        qar_nut_count = gettext("Nut Count")
+        qar_defective_rate = gettext("Defective Rate")
 
         # Loop through every nursery owner and add to the nursery marker popups
         for i in range(len(self.qars)):
@@ -30,6 +32,12 @@ class QarLayer:
                                 </h5>
                                 <h5 style="font-family: 'Trebuchet MS', sans-serif">
                                     {qar_kor}: <b>{current_object.kor}</b>
+                                </h5>
+                                <h5 style="font-family: 'Trebuchet MS', sans-serif">
+                                    {qar_nut_count}: <b>{current_object.nut_count}</b>
+                                </h5>
+                                <h5 style="font-family: 'Trebuchet MS', sans-serif">
+                                    {qar_defective_rate}: <b>{current_object.defective_rate}</b>
                                 </h5>
                                 <a href="https://www.technoserve.org/our-work/agriculture/cashew/?_ga=2.159985149.1109250972.1626437600-1387218312.1616379774"target="_blank">click link to website</a>
                                 <img src="https://gumlet.assettype.com/deshdoot/import/2019/12/tripXOXO-e1558439144643.jpg?w=1200&h=750&auto=format%2Ccompress&fit=max" width="200" height="70">
