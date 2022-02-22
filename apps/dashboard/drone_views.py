@@ -23,9 +23,11 @@ alteia_sdk = alteia.SDK(
 )
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
+credentials = ee.ServiceAccountCredentials(
+    service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
-locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
+# Use '' for auto, or force e.g. to 'en_US.UTF-8'
+locale.setlocale(locale.LC_ALL, '')
 alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
 
@@ -35,9 +37,9 @@ def drone(request, plant_id, coordinate_xy):
         html_template = loader.get_template('dashboard/page-403.html')
         return HttpResponseBadRequest(html_template.render({"result": 'Invalid request'}, request))
 
-    if request.user.is_staff is False and request.user.is_superuser is False:
-        html_template = loader.get_template('dashboard/page-403.html')
-        return HttpResponseBadRequest(html_template.render({"result": 'Invalid request'}, request))
+    # if request.user.is_staff is False and request.user.is_superuser is False:
+    #     html_template = loader.get_template('dashboard/page-403.html')
+    #     return HttpResponseBadRequest(html_template.render({"result": 'Invalid request'}, request))
 
     def add_ee_layer_drone():
         ee_image_object = ee.Image(f'users/ashamba/{plant_id}')
@@ -70,7 +72,8 @@ def drone(request, plant_id, coordinate_xy):
             plantation_json = geojson.load(f)
         plantation_geojson = folium.GeoJson(data=plantation_json)
         features = plantation_geojson.data['features']
-        feature = next(filter(lambda x: x["properties"]["Plantation code"] == plant_id, features), None)
+        feature = next(filter(
+            lambda x: x["properties"]["Plantation code"] == plant_id, features), None)
         folium.GeoJson(
             data=feature,
             name=gettext('Plantation Shape'),
@@ -82,7 +85,8 @@ def drone(request, plant_id, coordinate_xy):
         directory = "media/plantation_data/" + plant_id
         with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
-        tree_crows = folium.GeoJson(feature_geojson, name=gettext('Tree Crowns'), zoom_on_click=True, embed=False)
+        tree_crows = folium.GeoJson(feature_geojson, name=gettext(
+            'Tree Crowns'), zoom_on_click=True, embed=False)
         tree_crows.add_to(cashew_map)
 
     def add_alteia_tree_tops_density():
@@ -113,7 +117,8 @@ def drone(request, plant_id, coordinate_xy):
         ),
     }
 
-    coordinate_xy = coordinate_xy.replace('[', "").replace(']', "").replace(' ', "").split(',')
+    coordinate_xy = coordinate_xy.replace(
+        '[', "").replace(']', "").replace(' ', "").split(',')
     coordinate_xy = [float(coordinate_xy[0]), float(coordinate_xy[1])]
 
     cashew_map = folium.Map(
