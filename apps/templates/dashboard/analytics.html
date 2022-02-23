@@ -21,12 +21,14 @@
 
     <!-- Page content -->
     <div class="container-fluid mt--6">
+        <form method="POST">
+            {% csrf_token %}
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
                     <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR average per Departement" %}</h3>
+                        <h3 class="mb-0">{% trans "KOR average per" %}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id="0" type="button" class="btn btn-primary">{% trans "Department" %}</button><button id="1" type="button" class="btn btn-primary">{% trans "Commune" %}</button></h3>
                     </div>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="department_Chart" width="40" height="10"></canvas>
@@ -35,52 +37,37 @@
             </div>
             <div class="col-md-6">
                 <div class="card">
-                <!-- Card header -->
+                    <!-- Card header -->
                     <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR average per Commune" %}</h3>
+                        <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                        <br>
+                        <label for="departments">{% trans "Select Department: " %}</label>
+                        &nbsp&nbsp&nbsp{{ Department_choice.department }}
+                        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
-                            <canvas id="commune_Chart"></canvas>
+                            <canvas id="dep_commune_Chart" width="40" height="10"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                    <!-- Card header -->
-                        <div class="card-header border-0" style="background-color: #f7f7f7">
-                            <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
-                            <br>
-                                <label for="departments">{% trans "Select Department: " %}</label>
-                                    &nbsp&nbsp&nbsp{{ Department_choice.department }}
-                                &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
-                        </div>
-                        <div class="card-body border-0">
-                            <div class="chart-container" style="position: relative;">
-                                <canvas id="dep_commune_Chart"></canvas>
-                            </div>
-                        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                        <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
+                        <br>
+                        {{ form.as_table }}
+                        &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header border-0" style="background-color: #f7f7f7">
-                            <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
-                            <br>
-                                {{ form.as_table }}
-                              &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
-                        </div>
-                        <div class="chart-container" style="position: relative;">
-                            <canvas id="kor_Chart"></canvas>
-                        </div>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="kor_Chart" width="40" height="13"></canvas>
                     </div>
                 </div>
             </div>
+        </div>
         </form>
     </div>
 
@@ -88,7 +75,7 @@
 
 {% endblock content %}
 
-<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE -->
 {% block javascripts %}
         <script type="text/javascript">
             function generateRandomColor(){
@@ -99,6 +86,7 @@
                 let randColor = randomNumber.padStart(6, 0);
                 return `#${randColor.toUpperCase()}`
             }
+            var ctx = document.getElementById('department_Chart')
             var department_labels = {{ department_name|safe }}
             var department_datas = {{ department_sum_list|safe }}
             var department_dataset = []
@@ -108,17 +96,16 @@
                 const b = Math.floor(Math.random() * 255);
                department_dataset.push('rgba('+r+', '+g+', '+b+', 0.6)');
             }
-            const department_data = {
-            labels: department_labels,
-            datasets: [{
-                    label: 'KOR average per Departement',
-                data: department_datas,
-                backgroundColor: department_dataset,
-                }]
-            };
-            const department_config = {
+            var department_config = {
                 type: 'polarArea',
-                data: department_data,
+                data: {
+                    labels: department_labels,
+                    datasets: [{
+                            label: 'KOR average per Departement',
+                        data: department_datas,
+                        backgroundColor: department_dataset,
+                        }]
+                },
                 options: {
                     scales: {
                        r: {
@@ -135,53 +122,30 @@
                     }
                 }
             };
-
-            const department_Chart = new Chart(
-                document.getElementById('department_Chart'),
-                department_config,
-            );
-
-            var labels_commune = {{ commune_name|safe }}
-            var datas_commune = {{ commune_sum_list|safe }}
-            var dataset_commune = []
-            for (let i in datas_commune) {
-                const r = Math.floor(Math.random() * 255);
-                const g = Math.floor(Math.random() * 255);
-                const b = Math.floor(Math.random() * 255);
-               dataset_commune.push('rgba('+r+', '+g+', '+b+', 0.6)');
-            }
-            const commune_data = {
-            labels: labels_commune,
-            datasets: [{
-                    label: 'KOR average per Commune',
-                data: datas_commune,
-                backgroundColor: dataset_commune,
-                hoverBorderWidth: "30px",
-                }]
-            };
-            const commune_config = {
-                type: 'polarArea',
-                data: commune_data,
-                options: {
-                    scales: {
-                       r: {
-                           ticks: {
-                               z: 1,
-                               showLabelBackdrop: true,
-                               backdropColor: "rgba(255,255,255,0.5)",
-                               font: {
-                                   weight: 600,
-                               },
-                           },
-                           grid: false,
-                       }
-                    }
+            var department_Chart = new Chart(ctx, department_config);
+            $("#0").click(function() {
+                var data0 = department_Chart.config.data;
+                data0.datasets[0].data = department_datas;
+                data0.datasets[0].backgroundColor = department_dataset;
+                data0.labels = department_labels;
+                department_Chart.update();
+            });
+            $("#1").click(function() {
+                var labels_commune = {{ commune_name|safe }}
+                var datas_commune = {{ commune_sum_list|safe }}
+                var dataset_commune = []
+                for (let i in datas_commune) {
+                    const r = Math.floor(Math.random() * 255);
+                    const g = Math.floor(Math.random() * 255);
+                    const b = Math.floor(Math.random() * 255);
+                   dataset_commune.push('rgba('+r+', '+g+', '+b+', 0.6)');
                 }
-            };
-            const commune_Chart = new Chart(
-                document.getElementById('commune_Chart'),
-                commune_config
-            );
+                var data1 = department_Chart.config.data;
+                data1.datasets[0].data = datas_commune;
+                data1.datasets[0].backgroundColor = dataset_commune;
+                data1.labels = labels_commune;
+                department_Chart.update();
+            });
 
             var kor_labels = {{ kor_time|safe }}
             var kor_datas = {{ per_kor|safe }}
@@ -228,7 +192,7 @@
                 document.getElementById('kor_Chart'),
                 config
             );
-          
+
             var labels_dep_commune = {{ dep_commune_names|safe }}
             var datas_dep_commune = {{ dep_commune_sum_list|safe }}
             var dataset_dep_commune = []
@@ -270,5 +234,16 @@
                 document.getElementById('dep_commune_Chart'),
                 dep_commune_config
             );
+            const capitalize = (s) => {
+              if (typeof s !== 'string') return ''
+              return s.charAt(0).toUpperCase() + s.slice(1)
+            }
+            $(document).ready(function(){
+                $('#id_department').change(function(){
+                     $("#id_department option:selected").text();
+                     var department_selected = $(this).val()
+                     console.log(capitalize(department_selected));
+            });
+        });
         </script>
 {% endblock javascripts %}
