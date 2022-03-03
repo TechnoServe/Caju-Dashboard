@@ -24,7 +24,8 @@ def highlight_function(feature):
 
 @shared_task(bind=True)
 def add_benin_plantation(self, path_link, dept_yield_ha):
-    benin_plantation_layer = folium.FeatureGroup(name=gettext('Plantation Locations'), show=True, overlay=True)
+    benin_plantation_layer = folium.FeatureGroup(
+        name=gettext('Plantation Locations'), show=True, overlay=True)
 
     # Plantation translation variables
     Plantation_Owner = gettext("Plantation Owner")
@@ -70,15 +71,19 @@ def add_benin_plantation(self, path_link, dept_yield_ha):
         items = len(SpecialTuple.objects.filter(alteia_id=code_sum))
         if items != 0:
             counter += 1
-            code_2_sum = SpecialTuple.objects.filter(alteia_id=code_sum)[0].plantation_id
+            code_2_sum = SpecialTuple.objects.filter(
+                alteia_id=code_sum)[0].plantation_id
 
             # load statistics from the database and
             grand_pred_surface += round(
                 AlteiaData.objects.filter(plantation_code=code_sum)[0].cashew_tree_cover / 10000, 2)
-            grand_ground_surface += BeninYield.objects.filter(plantation_code=code_2_sum)[0].surface_area
-            grand_total_yield += BeninYield.objects.filter(plantation_code=code_2_sum)[0].total_yield_kg
+            grand_ground_surface += BeninYield.objects.filter(
+                plantation_code=code_2_sum)[0].surface_area
+            grand_total_yield += BeninYield.objects.filter(
+                plantation_code=code_2_sum)[0].total_yield_kg
             grand_plantation_size += area(feature['geometry']) / 10000
-            grand_num_tree += BeninYield.objects.filter(plantation_code=code_2_sum)[0].total_number_trees
+            grand_num_tree += BeninYield.objects.filter(plantation_code=code_2_sum)[
+                0].total_number_trees
 
     # formating statistics for displaying on popups
 
@@ -88,9 +93,11 @@ def add_benin_plantation(self, path_link, dept_yield_ha):
     total_grand_pred_yield = int(round(390 * grand_pred_surface))
     total_grand_ground_yield = int(round(grand_total_yield))
     grand_plantation_size = int(round(grand_plantation_size))
-    average_ground_yield_ha = int(total_grand_ground_yield / total_grand_ground_surface)
+    average_ground_yield_ha = int(
+        total_grand_ground_yield / total_grand_ground_surface)
     total_grand_num_tree = int(round(grand_num_tree))
-    total_grand_yield_tree = int(round(total_grand_ground_yield / total_grand_num_tree))
+    total_grand_yield_tree = int(
+        round(total_grand_ground_yield / total_grand_num_tree))
 
     # formating numbers greater than 90000 to show 91k
 
@@ -113,20 +120,28 @@ def add_benin_plantation(self, path_link, dept_yield_ha):
         if items != 0:
             plantation_size = area(feature['geometry']) / 10000
             plantation_size = round(plantation_size, 1)
-            code_2 = SpecialTuple.objects.filter(alteia_id=code)[0].plantation_id
+            code_2 = SpecialTuple.objects.filter(alteia_id=code)[
+                0].plantation_id
             temp_layer_a = folium.GeoJson(feature, zoom_on_click=True)
-            department_name = BeninYield.objects.filter(plantation_code=code_2)[0].department
+            department_name = BeninYield.objects.filter(
+                plantation_code=code_2)[0].department
             tree_ha_pred_plant = round(
                 round(AlteiaData.objects.filter(plantation_code=code)[0].cashew_tree_cover / 10000, 2), 1)
-            yield_pred_plant = int(tree_ha_pred_plant * dept_yield_ha[department_name])
-            surface_areaP = round(BeninYield.objects.filter(plantation_code=code_2)[0].surface_area, 1)
-            total_yieldP = int(round(BeninYield.objects.filter(plantation_code=code_2)[0].total_yield_kg))
+            yield_pred_plant = int(
+                tree_ha_pred_plant * dept_yield_ha[department_name])
+            surface_areaP = round(BeninYield.objects.filter(
+                plantation_code=code_2)[0].surface_area, 1)
+            total_yieldP = int(round(BeninYield.objects.filter(
+                plantation_code=code_2)[0].total_yield_kg))
             yield_haP = int(total_yieldP / surface_areaP)
-            num_treeP = int(BeninYield.objects.filter(plantation_code=code_2)[0].total_number_trees)
+            num_treeP = int(BeninYield.objects.filter(
+                plantation_code=code_2)[0].total_number_trees)
             yield_treeP = int(round(total_yieldP / num_treeP))
             nameP = BeninYield.objects.filter(plantation_code=code_2)[0].owner_first_name + ' ' + \
-                    BeninYield.objects.filter(plantation_code=code_2)[0].owner_last_name
-            village = BeninYield.objects.filter(plantation_code=code_2)[0].village
+                BeninYield.objects.filter(plantation_code=code_2)[
+                0].owner_last_name
+            village = BeninYield.objects.filter(
+                plantation_code=code_2)[0].village
 
             try:
                 r_total_yieldP = round(total_yieldP,
