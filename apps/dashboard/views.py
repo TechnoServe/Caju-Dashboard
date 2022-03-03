@@ -18,7 +18,7 @@ from apps.authentication.forms import RegisterOrganization, RegisterRole
 from apps.authentication.models import RemOrganization, RemRole, RemUser
 from apps.dashboard import models
 from apps.dashboard.models import Plantation
-from .db_conn_string import cur
+from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice
 
 
@@ -300,7 +300,8 @@ def shipment(request):
 @login_required(login_url="/")
 def analytics(request):
     context = {}
-
+    __open_ssh_tunnel__()
+    cur = __mysql_connect__().cursor()
     country = "Benin"
     query = ("SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s")
     cur.execute(query, (country,))
@@ -541,13 +542,16 @@ def analytics(request):
     context['Department_choice'] = form1
     context['dep_commune_names'] = dep_commune_names
     context['dep_commune_sum_list'] = dep_commune_sum_list
+    __mysql_disconnect__()
+    __close_ssh_tunnel__()
     return render(request, 'dashboard/analytics.html', context)
 
 
 @login_required(login_url="/")
 def nut_count(request):
     context1 = {}
-
+    __open_ssh_tunnel__()
+    cur = __mysql_connect__().cursor()
     # Query to fetch nut_count from remote database
     country = "Benin"
     query = ("SELECT nut_count,location_region,location_country FROM free_qar_result WHERE location_country=%s")
@@ -789,13 +793,16 @@ def nut_count(request):
     context1['Department_choice'] = form1
     context1['dep_commune_names'] = dep_commune_names
     context1['dep_commune_sum_list'] = dep_commune_sum_list
+    __mysql_disconnect__()
+    __close_ssh_tunnel__()
     return render(request, 'dashboard/nut_count.html', context1)
 
 
 @login_required(login_url="/")
 def defective_rate(request):
     context2 = {}
-
+    __open_ssh_tunnel__()
+    cur = __mysql_connect__().cursor()
     # Query to fetch nut_count from remote database
     country = "Benin"
     query = ("SELECT defective_rate,location_region,location_country FROM free_qar_result WHERE location_country=%s")
@@ -1038,4 +1045,6 @@ def defective_rate(request):
     context2['Department_choice'] = form1
     context2['dep_commune_names'] = dep_commune_names
     context2['dep_commune_sum_list'] = dep_commune_sum_list
+    __mysql_disconnect__()
+    __close_ssh_tunnel__()
     return render(request, 'dashboard/defective_rate.html', context2)

@@ -12,7 +12,7 @@ from django.forms import ModelForm
 from django.utils.translation import gettext as _
 
 from apps.authentication.models import RemUser, RemOrganization
-from apps.dashboard.db_conn_string import cur
+from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 
 ACTIVE = 1
 INACTIVE = 0
@@ -143,9 +143,13 @@ class KorDateForm(forms.Form):
     my_date_field1 = forms.DateField(label=to, initial=dates, widget=DateInput)
 
 
+__open_ssh_tunnel__()
+cur = __mysql_connect__().cursor()
 country = "Benin"
 query = "SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s"
 cur.execute(query, (country,))
+__mysql_disconnect__()
+__close_ssh_tunnel__()
 
 infos = []
 for kor in cur:

@@ -66,7 +66,3 @@ def __close_ssh_tunnel__():
     Close the SSH tunnel passed as parameter.
     """
     tunnel.close()
-
-
-__open_ssh_tunnel__()
-cur = __mysql_connect__().cursor()

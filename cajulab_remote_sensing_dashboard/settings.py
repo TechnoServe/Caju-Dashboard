@@ -100,14 +100,14 @@ WSGI_APPLICATION = 'cajulab_remote_sensing_dashboard.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'my_db.db',
     }
-}
-"""
+}"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -117,7 +117,7 @@ DATABASES = {
         'HOST': os.getenv('HOST'),
         'PORT': os.getenv('PORT'),
     }
-}"""
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -172,7 +172,6 @@ LOCALE_PATHS = (
 
 # django_heroku.settings(locals())
 
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
@@ -207,12 +206,11 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfiles')
+#STATIC_ROOT = os.path.join(CORE_DIR, 'staticfile')
 STATIC_URL = 'apps/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     BASE_DIR / "apps/static",
 )
-
 #############################################################

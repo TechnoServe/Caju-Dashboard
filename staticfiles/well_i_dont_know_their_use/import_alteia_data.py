@@ -1,8 +1,8 @@
-import pandas as pd
-import numpy as np
+import os
 import re
-import os, sys
+
 import django
+import pandas as pd
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cajulab_remote_sensing_dashboard.settings'
 django.setup()
@@ -14,8 +14,7 @@ def nursery_row_converter(row, listy):
     # convert pandas row to a dictionary
     # requires a list of columns and a row as a tuple
     count = 1
-    picti
-    onary = {'Index': row[0]}
+    pictionary = {'Index': row[0]}
     for item in listy:
         if item == 'Provenance':
             word = re.sub('N°', '', row[count])
@@ -48,7 +47,8 @@ def alteia_data_to_db(alteia_list):
 
 
 def clean_alteia_data():
-    alteia_df = pd.read_excel("./staticfiles/new_data/alteia_df.xlsx", engine='openpyxl')
+    alteia_df = pd.read_excel(
+        "./staticfiles/new_data/alteia_df.xlsx", engine='openpyxl')
     alteia_list = convert_to_dict_list(alteia_df)
     alteia_data_to_db(alteia_list)
 
