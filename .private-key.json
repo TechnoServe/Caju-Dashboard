@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "solar-fuze-338810",
+  "private_key_id": "9da4ac379ef2139cbfc6886dbc1208c3d5eb2de7",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDon+ljhhd4TcSG\noS9zoCPcu60mWhXIlGtmGBGudWIW+s4pOh62M8qNtzdJMBGszi7zMyS1sDWtOz0J\ne1f99mFpUHuKH0CZFwSJOcgaXZI+DiPKqNxc4MjtnLtEjzAyqKB5P0OGHsLub6++\nfkMhefGKLb/T/5Hh7V852+cEZe088kuhwndj0o551mSqMEz1aiiTXVQ4DR0HOPvK\nb2T58eu+gwxB1Aegpopw0bF/Ql+X7RFILR9K/P6V2LtahRSDUsT3S9YhSmAV8FCd\nXyf7sAtynQ+1T4gJspTn8HApeN+J5qumivkxeyhQyQSZWIHf0JqbjmiRxz3qRhv+\nb7jOBLgbAgMBAAECggEAaq3PA5+eSsLrMcxgbPePCq6cmL5uR/ZcjEzUavuU2LH6\n8mgfZnI43SWc+njLWkKRwGD/YDznWMKWWq9QanxfLsNEbFKptqsaHu47KHAp3UBx\nxIIM0KEbM/CQ5r99nHW9Ze0Pw8V+oobggwz3LzZzgOk7E/cbiQ7pASkp99fgZHZf\nNtO9mDG4iyJ82vyDiRPwxjzi/Rfuv4OySPovbZ0zgraZuGRoP6MwsnFiX670GzRx\nS5m98IXIk2aa3xIsf8uRznnpS+dC4hG3J5usXZ1h5omoIG+h800LpCBinEkNE8Fp\nwnDXP2gM6E0XayoZhYkKZQuEM3HrmcEyg4FnYhNz4QKBgQD6j3u3fESIc+jhP41z\niHKbJhWBrv9iNb0KRbfehyQlleeKSKvhomu5NBsj2c3V/AsL10jZvsocW6UpSsr/\nWK73wi5Z0VbP3K+cUAgRPg/POg8XXQE3hirtxUiO6HXOHciGRZAouGbaHSncQh6Y\nHEyFXc5ZoWALC996Y5hd56KqewKBgQDtrL+FUKH2OUgdF3tM+38djUJtvUxwiNTg\nN5iw++1t+4NRSzQ608+z0LosygYcCtciq24r1HmkBiw+LRIN9fGLEN/EYizFaR0f\nkJPPAU+b+88Yo738D03B6f+/hHwd1IrjnjFGo51ui5O+/EOLlbpIX4l9qKbi5+Zo\n3rMPucoG4QKBgFGvsY/STa2GzGeTBpSh6Ws3cU+EM/JavrS4ogdEW759Lq1gn9jB\n0QjiOe7oNTkMILXNjAyhLNct8ZySq7evu+s+PUo++2Rs+Dunw9mLODBBJ2ZgheMK\nNLir1snwc2etQhC0YRlFdRKq61jJnZvNrgzU1k9WUy+GwWbvTV9gAyI9AoGAOZ9l\nO5wl+D1BB5SW1z4uPmruDQ8VBj+WZNn10gryMHUHDGGQQybxN2ZGjO9Z9diG+ifX\n6RZ1e1fnyBdDRlE3g4DOz50Bv8bRQcLaoxhtRaMSPaYNPJw1POtPjw4+zTinh7Hl\nvnuSgqeiZW5hrejaJgvLmMSX2XFhwlEj1o8ztOECgYA7gEoK5dU+nZnaxDeH9Aa5\nmEqjVMxVZ4Lil04HJ4kZg7FjXOHL8vUloU31LQjphgt/1TtDvX/La0BYaW5UhdwP\nKLnRkUcGv+8aWgi4PKynApmxhXVG3jTfWmPE6gWyR8MPHAAAYul+wvvYcRlEn6mi\nxq0JtMz+lbSpZYR6KnE/qw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "tnslabs@solar-fuze-338810.iam.gserviceaccount.com",
+  "client_id": "100702429245067071871",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/tnslabs%40solar-fuze-338810.iam.gserviceaccount.com"
+}

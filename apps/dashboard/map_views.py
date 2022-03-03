@@ -22,12 +22,14 @@ from apps.dashboard.layers_builders.nursery_information import NurseryLayer
 from apps.dashboard.layers_builders.qar_informations import QarLayer
 # Google service account for the GEE geotiff
 from apps.dashboard.scripts.get_qar_information import current_qars
-from .map_legend import macro
+from .map_legend import macro_en, macro_fr
 
 service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
+credentials = ee.ServiceAccountCredentials(
+    service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
-locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
+# Use '' for auto, or force e.g. to 'en_US.UTF-8'
+locale.setlocale(locale.LC_ALL, '')
 # alldept = ee.Image('users/ashamba/allDepartments_v0')
 alldept = ee.Image('users/cajusupport/allDepartments_v1')
 
@@ -49,27 +51,16 @@ def __task3_func__(cashew_map):
     benin_commune_layer.add_to(cashew_map)
 
 
-def __task4_func__(cashew_map):
+def __task4_func__(cashew_map, base_url):
     qars = current_qars
     # Adding the qar layer from the class QarLayer
     marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-    qar_layer = QarLayer(marker_cluster, qars).add_qar()
+    print(base_url)
+    qar_layer = QarLayer(marker_cluster, qars, base_url).add_qar()
     qar_layer.add_to(cashew_map)
 
 
-def __task5_func__(cashew_map):
-    # benin_tree_crowns_layer = current_tree_crowns_layer
-    # benin_tree_crowns_layer.add_to(cashew_map)
-    pass
-
-
-def __task6_func__(cashew_map):
-    # benin_tree_tops_density_layer = current_tree_tops_density_layer
-    # benin_tree_tops_density_layer.add_to(cashew_map)
-    pass
-
-
-def get_base_map():
+def get_base_map(path_link):
     cashew_map = None
     try:
         # Basemap dictionary
@@ -113,7 +104,10 @@ def get_base_map():
             tiles=None
         )
 
-        cashew_map.get_root().add_child(macro)
+        if "/en/" in path_link.__str__():
+            cashew_map.get_root().add_child(macro_en)
+        elif "/fr/" in path_link.__str__():
+            cashew_map.get_root().add_child(macro_fr)
 
         cashew_map.add_child(basemaps['Google Maps'])
         cashew_map.add_child(basemaps['Google Satellite'])
@@ -149,13 +143,15 @@ def get_base_map():
         folium.map.FeatureGroup.add_ee_layer = add_ee_layer
         zones = alldept.eq(1)
         zones = zones.updateMask(zones.neq(0))
-        cashew_map.add_ee_layer(zones, {'palette': "red"}, gettext('Satellite Prediction'))
+        cashew_map.add_ee_layer(
+            zones, {'palette': "red"}, gettext('Satellite Prediction'))
         # print("--- %s seconds ---" % (time.time() - start_time))
 
         # print('')
         # print('The no boundary layer to remove shapefiles on the Benin region')
         # start_time = time.time()
-        no_boundary_layer = folium.FeatureGroup(name=gettext('No Boundary'), show=False, overlay=False)
+        no_boundary_layer = folium.FeatureGroup(
+            name=gettext('No Boundary'), show=False, overlay=False)
         no_boundary_layer.add_to(cashew_map)
         # print("--- %s seconds ---" % (time.time() - start_time))
 
@@ -168,7 +164,8 @@ def get_base_map():
 
 @login_required(login_url="/")
 def index(request):
-    cashew_map = get_base_map()
+    path_link = request.build_absolute_uri(request.path)
+    cashew_map = get_base_map(path_link=path_link)
 
     # adding folium layer control for the previously added shapefiles
     cashew_map.add_child(folium.LayerControl())
@@ -188,23 +185,25 @@ def full_map(request):
     start_time = time.time()
 
     try:
+        base_url = "{0}://{1}".format(request.scheme,
+                                      request.get_host(), request.path)
         path_link = request.build_absolute_uri(request.path)
-        cashew_map = get_base_map()
+        cashew_map = get_base_map(path_link=path_link)
 
         async def __get_context_data__():
             try:
                 __loop = asyncio.get_event_loop()
 
                 executor = ThreadPoolExecutor(max_workers=5)
-                # future5 = __loop.run_in_executor(executor, __task5_func__, cashew_map)
-                # future6 = __loop.run_in_executor(executor, __task6_func__, cashew_map)
-                future1 = __loop.run_in_executor(executor, __task1_func__, cashew_map)
-                future2 = __loop.run_in_executor(executor, __task2_func__, cashew_map, path_link)
-                future3 = __loop.run_in_executor(executor, __task3_func__, cashew_map)
-                future4 = __loop.run_in_executor(executor, __task4_func__, cashew_map)
+                future1 = __loop.run_in_executor(
+                    executor, __task1_func__, cashew_map)
+                future2 = __loop.run_in_executor(
+                    executor, __task2_func__, cashew_map, path_link)
+                future3 = __loop.run_in_executor(
+                    executor, __task3_func__, cashew_map)
+                future4 = __loop.run_in_executor(
+                    executor, __task4_func__, cashew_map, base_url)
 
-                # await future5
-                # await future6
                 await future1
                 await future2
                 await future3
@@ -221,11 +220,12 @@ def full_map(request):
         loop.close()
 
         # adding folium layer control for the previously added shapefiles
-        cashew_map.add_child(folium.LayerControl())
+        cashew_map.add_child(folium.LayerControl(collapsed=False))
         cashew_map = cashew_map._repr_html_()
         data = {'map': cashew_map, 'segment': 'map'}
 
-        print("TOTAL LOADING TIME--- %s seconds ---" % (time.time() - start_time))
+        print("TOTAL LOADING TIME--- %s seconds ---" %
+              (time.time() - start_time))
         return HttpResponse(
             json.dumps(data),
             content_type='application/javascript; charset=utf8'
