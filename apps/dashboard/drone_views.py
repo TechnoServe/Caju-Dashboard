@@ -22,14 +22,6 @@ alteia_sdk = alteia.SDK(
     password=os.getenv("ALTEIA_PASSWORD")
 )
 
-service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(
-    service_account, os.getenv("PRIVATE_KEY"))
-ee.Initialize(credentials)
-# Use '' for auto, or force e.g. to 'en_US.UTF-8'
-locale.setlocale(locale.LC_ALL, '')
-alldept = ee.Image('users/cajusupport/allDepartments_v1')
-
 
 @login_required(login_url="/")
 def drone(request, plant_id, coordinate_xy):
@@ -55,6 +47,7 @@ def drone(request, plant_id, coordinate_xy):
         ).add_to(cashew_map)
 
     def add_ee_layer():
+        alldept = ee.Image('users/cajusupport/allDepartments_v1')
         ee_image_object = alldept.eq(1)
         ee_image_object = ee_image_object.updateMask(ee_image_object.neq(0))
         map_id_dict = ee.Image(ee_image_object).getMapId({'palette': "red"})
@@ -146,7 +139,7 @@ def drone(request, plant_id, coordinate_xy):
         print(e)
         pass
 
-    cashew_map.add_child(folium.LayerControl())
+    cashew_map.add_child(folium.LayerControl(collapsed=False))
     cashew_map = cashew_map._repr_html_()
     context = {'map': cashew_map, 'segment': 'map'}
 
