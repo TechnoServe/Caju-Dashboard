@@ -41,20 +41,9 @@ class QarLayer:
 
     def add_qar(self):
         # Loop through every nursery owner and add to the nursery marker popups
-        iconprefix = 'fa'
-        iconname = 'f494'
-        iconcolor = 'white'
-        markercolor = "blue"
-        iconurl = self.base_url + '/apps/static/assets/img/warehouse_icon.png'
         iconurl = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=50&hoffset=0&voffset=-1&background=1167b1"
         for i in range(len(self.qars)):
             current_object = self.qars[i]
-            # icon = folium.Icon(
-            #     color=markercolor,
-            #     icon=iconname,
-            #     icon_color=iconcolor,
-            #     prefix=iconprefix,
-            # )
             icon = folium.features.CustomIcon(
                 iconurl,
                 icon_size=(45, 45),
