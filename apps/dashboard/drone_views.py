@@ -34,7 +34,7 @@ def drone(request, plant_id, coordinate_xy):
     #     return HttpResponseBadRequest(html_template.render({"result": 'Invalid request'}, request))
 
     def add_ee_layer_drone():
-        ee_image_object = ee.Image(f'users/ashamba/{plant_id}')
+        ee_image_object = ee.Image(f'users/cajusupport/drones_geotiff/{plant_id}')
         map_id_dict = ee.Image(ee_image_object).getMapId({})
         folium.raster_layers.TileLayer(
             tiles=map_id_dict['tile_fetcher'].url_format,
