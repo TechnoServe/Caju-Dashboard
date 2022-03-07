@@ -24,15 +24,12 @@ from apps.dashboard.layers_builders.qar_informations import QarLayer
 from apps.dashboard.scripts.get_qar_information import current_qars
 from .map_legend import macro_en, macro_fr
 
-service_account = 'cajulab@benin-cajulab-web-application.iam.gserviceaccount.com'
+service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
 credentials = ee.ServiceAccountCredentials(
     service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 locale.setlocale(locale.LC_ALL, '')
-# alldept = ee.Image('users/ashamba/allDepartments_v0')
-alldept = ee.Image('users/cajusupport/allDepartments_v1')
-
 
 def __task1_func__(cashew_map):
     benin_layer = current_benin_republic_layer
@@ -120,14 +117,9 @@ def get_base_map(path_link):
             force_separate_button=False
         ).add_to(cashew_map)
 
-        # Adding the nursery layer from the class Nursery_LAYER
         marker_cluster = MarkerCluster(name=gettext("Nursery Information"))
         nursery_layer = NurseryLayer(marker_cluster).add_nursery()
         nursery_layer.add_to(cashew_map)
-
-        # print('')
-        # print('Define a method for displaying Earth Engine image tiles on a folium map.')
-        # start_time = time.time()
 
         def add_ee_layer(self, ee_image_object, vis_params, name):
             map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
@@ -141,19 +133,16 @@ def get_base_map(path_link):
 
         folium.Map.add_ee_layer = add_ee_layer
         folium.map.FeatureGroup.add_ee_layer = add_ee_layer
+
+        alldept = ee.Image('users/cajusupport/allDepartments_v1')
         zones = alldept.eq(1)
         zones = zones.updateMask(zones.neq(0))
         cashew_map.add_ee_layer(
             zones, {'palette': "red"}, gettext('Satellite Prediction'))
-        # print("--- %s seconds ---" % (time.time() - start_time))
 
-        # print('')
-        # print('The no boundary layer to remove shapefiles on the Benin region')
-        # start_time = time.time()
         no_boundary_layer = folium.FeatureGroup(
             name=gettext('No Boundary'), show=False, overlay=False)
         no_boundary_layer.add_to(cashew_map)
-        # print("--- %s seconds ---" % (time.time() - start_time))
 
     except Exception as e:
         print({e})
