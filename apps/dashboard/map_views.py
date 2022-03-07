@@ -220,7 +220,7 @@ def full_map(request):
         loop.close()
 
         # adding folium layer control for the previously added shapefiles
-        cashew_map.add_child(folium.LayerControl(collapsed=False))
+        cashew_map.add_child(folium.LayerControl(collapsed=True))
         cashew_map = cashew_map._repr_html_()
         data = {'map': cashew_map, 'segment': 'map'}
 

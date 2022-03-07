@@ -24,17 +24,12 @@ class NurseryLayer:
 
         # Loop through every nursery owner and add to the nursery marker popups
         nurseries = Nursery.objects.all()
-        iconurl = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=50&hoffset=0&voffset=-1&background=3A5F0B"
         for i in range(len(nurseries)):
             current_object = nurseries[i]
-            icon = folium.features.CustomIcon(
-                iconurl,
-                icon_size=(45, 45),
-            )
             folium.Marker(location=[current_object.latitude, current_object.longitude],
                           rise_on_hover=True,
                           rise_offset=250,
-                          icon=icon,
+                          icon=folium.Icon(color="red", icon="leaf"),
                           popup=f'''
                                 <div style="">
                                 <h4 style="font-family: 'Trebuchet MS', sans-serif">{commune_name}: <b>{current_object.commune}</b></h4>
