@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
+from apps.dashboard import views
 
 urlpatterns = i18n_patterns(
     path('admin/', admin.site.urls),
@@ -29,3 +30,8 @@ urlpatterns = i18n_patterns(
 
 urlpatterns += static(settings.STATIC_URL)
 # urlpatterns += staticfiles_urlpatterns()
+
+handler400 = views.error_400
+handler403 = views.error_403
+handler404 = views.error_404
+handler500 = views.error_500

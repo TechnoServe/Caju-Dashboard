@@ -11472,7 +11472,7 @@ button.bg-darker:focus
 .pt-7,
 .py-7
 {
-    padding-top: 6rem !important;
+    padding-top: 8rem !important;
 }
 
 .pr-7,
@@ -11484,7 +11484,7 @@ button.bg-darker:focus
 .pb-7,
 .py-7
 {
-    padding-bottom: 6rem !important;
+    padding-bottom: 8rem !important;
 }
 
 .pl-7,
@@ -22201,15 +22201,19 @@ textarea[resize='horizontal']
 
     transition: all .4s ease;
 }
-@media (min-width: 1200px)
+@media (min-width: 75em)
 {
     .sidenav:hover
     {
         max-width: 250px;
     }
-    .sidenav .sidenav-toggler
+    .sidenav
     {
         padding: 1.5rem;
+    }
+    .sidenav-toggler {
+        padding: 1.5rem;
+        display: none;
     }
 }
 .sidenav .navbar-brand,

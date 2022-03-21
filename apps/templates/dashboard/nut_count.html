@@ -12,7 +12,7 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">{% trans "Nut Count" %}</h6>
+            <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6 class="h2 text-white d-inline-block mb-0">{% trans "Nut Count" %}</h6>
           </div>
         </div>
       </div>
@@ -159,7 +159,7 @@
               labels: Nut_count_labels,
               datasets: [
                 {
-                  label: 'Nut count Graph against date period',
+                  label: "{{ nut_date_period|safe }}",
                   data: Nut_count_datas,
                   borderColor: generateRandomColor(),
                   backgroundColor: 'white',

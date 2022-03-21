@@ -1,11 +1,10 @@
 {% load static %}
 {% load i18n %}
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
-
     <!-- Brand -->
     <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{% url 'map' %}">
-            <img src="/apps/static/assets/img/brand/TNS-Labs-Logo-v2.png" alt="Technoserve-Logo." class="navbar-brand-img">
+            <img src="{% static 'assets/img/brand/TNS-Labs-Logo-v2.png' %}" alt="Technoserve-Logo." class="navbar-brand-img">
         </a>
     </div>
 
@@ -215,6 +214,5 @@
             </ul>
         </div>
     </div>
-
 </nav>
 <!-- End vertical navbar -->

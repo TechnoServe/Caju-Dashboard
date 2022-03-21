@@ -9,7 +9,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from apps.authentication.models import RemUser, RemOrganization
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
@@ -134,13 +134,10 @@ current_time = datetime.datetime.now()
 dates0 = str(date(year=current_time.year - 1, month=current_time.month, day=current_time.day))
 dates = str(date.today())
 
-fro = _('From')
-to = _('To')
-
 
 class KorDateForm(forms.Form):
-    my_date_field = forms.DateField(label=fro, initial=dates0, widget=DateInput)
-    my_date_field1 = forms.DateField(label=to, initial=dates, widget=DateInput)
+    my_date_field = forms.DateField(label=_("From"), initial=dates0, widget=DateInput)
+    my_date_field1 = forms.DateField(label=_("To"), initial=dates, widget=DateInput)
 
 
 __open_ssh_tunnel__()

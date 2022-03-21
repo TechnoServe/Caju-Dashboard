@@ -11,10 +11,11 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="header pb-6 d-flex align-items-center"
-                 style="min-height: 500px; background-image: url(/static/assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+                 style="min-height: 500px; background-image: url({% static 'assets/img/theme/profile-cover.jpg' %}); background-size: cover; background-position: center top;">
                 <!-- Mask -->
                 <span class="mask bg-gradient-default opacity-8"></span>
                 <!-- Header container -->
+                <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main" style="  position: absolute; margin-bottom: 320px; margin-left: 20px;}"><i class="fas fa-bars"></i></button>
                 <div class="container-fluid d-flex align-items-center">
                     <div class="row">
                         <div class="col-lg-7 col-md-10">
@@ -33,13 +34,13 @@
                 <div class="row">
                     <div class="col-xl-4 order-xl-2">
                         <div class="card card-profile">
-                            <img src="/apps/static/assets/img/theme/img-1-1000x600.jpg"
+                            <img src="{% static 'assets/img/theme/img-1-1000x600.jpg' %}"
                                  alt="Image placeholder" class="card-img-top">
                             <div class="row justify-content-center">
                                 <div class="col-lg-3 order-lg-2">
                                     <div class="card-profile-image">
                                         <a href="#">
-                                            <img src="/apps/static/assets/img/theme/avatar.jpg"
+                                            <img src="{% static 'assets/img/theme/avatar.jpg' %}"
                                                  class="rounded-circle" style="border-color: #DFF4F4">
                                         </a>
                                     </div>

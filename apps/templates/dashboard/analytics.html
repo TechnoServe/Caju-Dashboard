@@ -12,7 +12,7 @@
       <div class="header-body">
         <div class="row align-items-center py-4">
           <div class="col-lg-6 col-7">
-            <h6 class="h2 text-white d-inline-block mb-0">{% trans "KOR" %}</h6>
+              <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6 class="h2 text-white d-inline-block mb-0">{% trans "KOR" %}</h6>
           </div>
         </div>
       </div>
@@ -123,7 +123,7 @@
                 }
             };
             var department_Chart = new Chart(ctx, department_config);
-            $("#0").click(function() {
+            $('#0').click(function() {
                 var data0 = department_Chart.config.data;
                 data0.datasets[0].data = department_datas;
                 data0.datasets[0].backgroundColor = department_dataset;
@@ -158,7 +158,7 @@
               labels: kor_labels,
               datasets: [
                 {
-                  label: 'KOR Graph against date period',
+                  label: "{{ kor_date_period|safe }}",
                   data: kor_datas,
                   borderColor: generateRandomColor(),
                   backgroundColor: 'white',
@@ -192,7 +192,6 @@
                 document.getElementById('kor_Chart'),
                 config
             );
-
             var labels_dep_commune = {{ dep_commune_names|safe }}
             var datas_dep_commune = {{ dep_commune_sum_list|safe }}
             var dataset_dep_commune = []

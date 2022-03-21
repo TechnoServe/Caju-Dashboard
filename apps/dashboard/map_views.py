@@ -162,7 +162,7 @@ def index(request):
 
     context = {'map': cashew_map, 'segment': 'map'}
     html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request))
+    return HttpResponse(html_template.render(context, request,))
 
 
 @login_required(login_url="/")

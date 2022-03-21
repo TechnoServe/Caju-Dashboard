@@ -27,21 +27,28 @@ def pages(request):
     context = {}
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
-    try:
 
-        load_template = request.path.split('/')[-1]
-        context['segment'] = load_template
+    load_template = request.path.split('/')[-1]
+    context['segment'] = load_template
 
-        html_template = loader.get_template(load_template)
-        return HttpResponse(html_template.render(context, request))
+    html_template = loader.get_template(load_template)
+    return HttpResponse(html_template.render(context, request))
 
-    except template.TemplateDoesNotExist:
-        html_template = loader.get_template('dashboard/page-404.html')
-        return HttpResponse(html_template.render(context, request))
 
-    except Exception as e:
-        html_template = loader.get_template('dashboard/page-500.html')
-        return HttpResponse(html_template.render(context, request))
+def error_400(request, exception):
+    return render(request, 'dashboard/HTTP400.html', status=400)
+
+
+def error_403(request, exception):
+    return render(request, 'dashboard/HTTP403.html', status=403)
+
+
+def error_404(request, exception):
+    return render(request, 'dashboard/HTTP404.html', status=404)
+
+
+def error_500(request):
+    return render(request, 'dashboard/HTTP500.html')
 
 
 @login_required(login_url="/")
@@ -300,6 +307,7 @@ def shipment(request):
 @login_required(login_url="/")
 def analytics(request):
     context = {}
+    kor_date_period = gettext('KOR Graph against date period')
     __open_ssh_tunnel__()
     cur = __mysql_connect__().cursor()
     country = "Benin"
@@ -542,6 +550,7 @@ def analytics(request):
     context['Department_choice'] = form1
     context['dep_commune_names'] = dep_commune_names
     context['dep_commune_sum_list'] = dep_commune_sum_list
+    context['kor_date_period'] = kor_date_period
     __mysql_disconnect__()
     __close_ssh_tunnel__()
     return render(request, 'dashboard/analytics.html', context)
@@ -550,6 +559,7 @@ def analytics(request):
 @login_required(login_url="/")
 def nut_count(request):
     context1 = {}
+    nut_date_period = gettext('Nut count Graph against date period')
     __open_ssh_tunnel__()
     cur = __mysql_connect__().cursor()
     # Query to fetch nut_count from remote database
@@ -793,6 +803,7 @@ def nut_count(request):
     context1['Department_choice'] = form1
     context1['dep_commune_names'] = dep_commune_names
     context1['dep_commune_sum_list'] = dep_commune_sum_list
+    context1['nut_date_period'] = nut_date_period
     __mysql_disconnect__()
     __close_ssh_tunnel__()
     return render(request, 'dashboard/nut_count.html', context1)
@@ -801,6 +812,7 @@ def nut_count(request):
 @login_required(login_url="/")
 def defective_rate(request):
     context2 = {}
+    defective_date_period = gettext('Defective rate Graph against date period')
     __open_ssh_tunnel__()
     cur = __mysql_connect__().cursor()
     # Query to fetch nut_count from remote database
@@ -1045,6 +1057,7 @@ def defective_rate(request):
     context2['Department_choice'] = form1
     context2['dep_commune_names'] = dep_commune_names
     context2['dep_commune_sum_list'] = dep_commune_sum_list
+    context2['defective_date_period'] = defective_date_period
     __mysql_disconnect__()
     __close_ssh_tunnel__()
     return render(request, 'dashboard/defective_rate.html', context2)

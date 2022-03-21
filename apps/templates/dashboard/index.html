@@ -46,6 +46,14 @@
         {#z-index: 1;#}{#margin: 30px;#}
         }
 
+        #sidenav-tog {
+            z-index: 9;
+            position: absolute;
+            margin-left: 30px;
+            margin-top: 30px;
+        }
+
+
     </style>
 
 {% endblock stylesheets %}
@@ -53,6 +61,13 @@
 {% block content %}
 
     {% csrf_token %}
+    <!-- Sidenav toggler -->
+    <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main"
+         id="sidenav-tog">
+        <button class="btn btn-primary" type="button">
+            <i class="fa fa-bars" aria-hidden="true"></i>
+        </button>
+    </div>
     <div class="parent">
         <div class="child1">
         </div>
@@ -61,32 +76,3 @@
         </div>
     </div>
 {% endblock content %}
-
-<!-- Specific JS goes HERE -->
-{% block javascripts %}
-    <script src="/apps/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="/apps/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: "full_map",
-                async: true,
-                dataType: "json",
-                contentType: "application/javascript; charset=utf8",
-                complete: function (data) {
-                    let full_map = data.responseJSON['map'];
-                    $("div.child1").replaceWith(full_map);
-                    setTimeout(
-                        function () {
-                            $('div.child2').fadeOut('', function () {
-                                $('div.child2').replaceWith();
-                            });
-                        }, 250);
-                },
-            });
-        });
-    </script>
-{% endblock javascripts %}

@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-20 22:49+0100\n"
+"POT-Creation-Date: 2022-03-13 02:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +33,6 @@ msgid "Others"
 msgstr "Autre"
 
 #: .\apps\authentication\views.py:52 .\apps\authentication\views.py:225
-#, fuzzy
-#| msgid "Add your credentials"
 msgid "Invalid credentials"
 msgstr "Identifiants incorrects"
 
@@ -49,12 +46,12 @@ msgstr "Veuillez confirmer votre adresse e-mail pour terminer l'inscription"
 
 #: .\apps\authentication\views.py:109 .\apps\authentication\views.py:142
 #: .\apps\authentication\views.py:201 .\apps\authentication\views.py:281
-#: .\apps\authentication\views.py:315 .\apps\dashboard\views.py:74
-#: .\apps\dashboard\views.py:119 .\apps\dashboard\views.py:179
+#: .\apps\authentication\views.py:315 .\apps\dashboard\views.py:81
+#: .\apps\dashboard\views.py:126 .\apps\dashboard\views.py:186
 msgid "Form is not valid"
 msgstr "Le formulaire n'est pas valide"
 
-#: .\apps\authentication\views.py:138 .\apps\dashboard\views.py:70
+#: .\apps\authentication\views.py:138 .\apps\dashboard\views.py:77
 msgid "Organization created - please <a href=\"/register\">register user</a>."
 msgstr ""
 "Organisation créée - veuillez <a href=\"/register\">enregistrer "
@@ -66,19 +63,10 @@ msgstr ""
 "Le formulaire n'est pas valide - Les mots de passe ne correspondent pas"
 
 #: .\apps\authentication\views.py:248
-#, fuzzy
-#| msgid "Forgot Password"
 msgid "Reset your Password"
 msgstr "Mot de passe oublié"
 
 #: .\apps\authentication\views.py:274
-#, fuzzy
-#| msgid ""
-#| "We have emailed you instructions for setting your "
-#| "password.                         If an account exists with the email you "
-#| "have entered, you should receive them shortly.                        If "
-#| "you do not receive an email, please make sure you've entered the address "
-#| "you .,                         and check your spam folder."
 msgid ""
 "We have emailed you instructions for setting your "
 "password.                         If an account exists with the email you "
@@ -98,43 +86,39 @@ msgstr ""
 msgid "Password change successful. Now you can"
 msgstr "Changement de mot de passe réussi. Maintenant vous pouvez"
 
-#: .\apps\dashboard\drone_views.py:48
-#, fuzzy
-#| msgid "View Drone Image"
+#: .\apps\dashboard\drone_views.py:42
 msgid "Drone Image"
 msgstr "Image du Drone"
 
-#: .\apps\dashboard\drone_views.py:62 .\apps\dashboard\map_views.py:152
+#: .\apps\dashboard\drone_views.py:57 .\apps\dashboard\map_views.py:141
 msgid "Satellite Prediction"
 msgstr "Prédiction Satellitaire"
 
-#: .\apps\dashboard\drone_views.py:76
-#, fuzzy
-#| msgid "Plantation Name"
+#: .\apps\dashboard\drone_views.py:72
 msgid "Plantation Shape"
 msgstr "Forme de la plantation"
 
-#: .\apps\dashboard\drone_views.py:85
+#: .\apps\dashboard\drone_views.py:82
 #: .\apps\dashboard\layers_builders\benin_tree_crowns.py:18
 msgid "Tree Crowns"
 msgstr "Couronnes des Arbres"
 
-#: .\apps\dashboard\drone_views.py:95
+#: .\apps\dashboard\drone_views.py:92
 #: .\apps\dashboard\layers_builders\benin_tree_tops_density.py:18
 msgid "Tree Tops Density"
 msgstr "Densité des Cimes des Arbres"
 
-#: .\apps\dashboard\drone_views.py:108
+#: .\apps\dashboard\drone_views.py:105
 msgid "Satellite"
 msgstr "Satellite"
 
-#: .\apps\dashboard\forms.py:137
+#: .\apps\dashboard\forms.py:139
 msgid "From"
-msgstr "De"
+msgstr "Du"
 
-#: .\apps\dashboard\forms.py:138
+#: .\apps\dashboard\forms.py:140
 msgid "To"
-msgstr "À"
+msgstr "Au"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:90
 #: .\apps\dashboard\layers_builders\benin_commune.py:131
@@ -148,16 +132,12 @@ msgstr "Enquête de TNS"
 #: .\apps\dashboard\layers_builders\benin_commune.py:91
 #: .\apps\dashboard\layers_builders\benin_department.py:88
 #: .\apps\dashboard\layers_builders\benin_republic.py:247
-#, fuzzy
-#| msgid "Country"
 msgid "Nut Count Average"
 msgstr "Pays"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:92
 #: .\apps\dashboard\layers_builders\benin_department.py:89
 #: .\apps\dashboard\layers_builders\benin_republic.py:248
-#, fuzzy
-#| msgid "Defective Rate"
 msgid "Defective Rate Average"
 msgstr "Taux de défectuosité"
 
@@ -245,21 +225,21 @@ msgstr "Rendement/Hectare (kg/ha)"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:138
 #: .\apps\dashboard\layers_builders\benin_department.py:136
-#: .\apps\dashboard\layers_builders\benin_plantations.py:40
+#: .\apps\dashboard\layers_builders\benin_plantations.py:41
 #: .\apps\dashboard\layers_builders\benin_republic.py:94
 msgid "Yield per Tree (kg/tree)"
 msgstr "Rendement par Arbre (kg/arbre)"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:139
 #: .\apps\dashboard\layers_builders\benin_department.py:137
-#: .\apps\dashboard\layers_builders\benin_plantations.py:39
+#: .\apps\dashboard\layers_builders\benin_plantations.py:40
 #: .\apps\dashboard\layers_builders\benin_republic.py:95
 msgid "Number of Trees"
 msgstr "Nombre d'arbres"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:140
 #: .\apps\dashboard\layers_builders\benin_department.py:138
-#: .\apps\dashboard\layers_builders\benin_plantations.py:51
+#: .\apps\dashboard\layers_builders\benin_plantations.py:52
 #: .\apps\dashboard\layers_builders\benin_republic.py:98
 msgid "Source: TNS/BeninCaju Yield Surveys 2020"
 msgstr "Source : Enquêtes de rendement TNS/BéninCaju 2020"
@@ -294,54 +274,52 @@ msgid "Benin Departments"
 msgstr "Départements du Bénin"
 
 #: .\apps\dashboard\layers_builders\benin_drones.py:36
-#, fuzzy
-#| msgid "Benin Communes"
 msgid "Benin Drone"
 msgstr "Communes du Bénin"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:27
+#: .\apps\dashboard\layers_builders\benin_plantations.py:28
 msgid "Plantation Locations"
 msgstr "Emplacements des plantations"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:30
+#: .\apps\dashboard\layers_builders\benin_plantations.py:31
 msgid "Plantation Owner"
 msgstr "Propriétaire de plantation"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:31
+#: .\apps\dashboard\layers_builders\benin_plantations.py:32
 msgid "Plantation ID"
 msgstr "ID de la plantation"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:32
+#: .\apps\dashboard\layers_builders\benin_plantations.py:33
 #: .\apps\templates\dashboard\plantations.html:58
 msgid "Village"
 msgstr "Village"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:33
+#: .\apps\dashboard\layers_builders\benin_plantations.py:34
 msgid "Satellite Estimate"
 msgstr "Estimation satellite"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:34
+#: .\apps\dashboard\layers_builders\benin_plantations.py:35
 msgid "2020 Yield Survey"
 msgstr "Enquête de rendement 2020"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:35
+#: .\apps\dashboard\layers_builders\benin_plantations.py:36
 msgid "Cashew Yield (kg)"
 msgstr "Rendement de la noix de cajou (kg)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:36
+#: .\apps\dashboard\layers_builders\benin_plantations.py:37
 msgid "Plantation Size (ha)"
 msgstr "Taille de la plantation (ha)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:37
-#: .\apps\dashboard\layers_builders\benin_plantations.py:47
+#: .\apps\dashboard\layers_builders\benin_plantations.py:38
+#: .\apps\dashboard\layers_builders\benin_plantations.py:48
 msgid "Cashew Surface Area (ha)"
 msgstr "Superficie Cajou (ha)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:38
+#: .\apps\dashboard\layers_builders\benin_plantations.py:39
 msgid "Yield Per Hectare (kg/ha)"
 msgstr "Rendement par hectare (kg/ha)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:42
+#: .\apps\dashboard\layers_builders\benin_plantations.py:43
 msgid ""
 "Average Surface Area and Cashew Yield Information for Plantations in Benin "
 "Republic"
@@ -349,35 +327,35 @@ msgstr ""
 "Informations sur la superficie moyenne et le rendement de la noix de cajou "
 "pour les plantations en République du Bénin"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:44
+#: .\apps\dashboard\layers_builders\benin_plantations.py:45
 msgid "Number of Farms"
 msgstr "Nombre de fermes"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:45
+#: .\apps\dashboard\layers_builders\benin_plantations.py:46
 msgid "Total Plantation Yield (kg)"
 msgstr "Rendement total de la plantation (kg)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:46
+#: .\apps\dashboard\layers_builders\benin_plantations.py:47
 msgid "Total Plantation Area (ha)"
 msgstr "Superficie totale des plantations (ha)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:48
+#: .\apps\dashboard\layers_builders\benin_plantations.py:49
 msgid "Average Yield Per Hectare (kg/ha)"
 msgstr "Rendement moyen par hectare (kg/ha)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:49
+#: .\apps\dashboard\layers_builders\benin_plantations.py:50
 msgid "Total Number of Trees"
 msgstr "Nombre total d'arbres"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:50
+#: .\apps\dashboard\layers_builders\benin_plantations.py:51
 msgid "Average Yield per Tree (kg/tree)"
 msgstr "Rendement moyen par arbre (kg/arbre)"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:52
+#: .\apps\dashboard\layers_builders\benin_plantations.py:53
 msgid "View Drone Image"
 msgstr "Voir l'image du drone"
 
-#: .\apps\dashboard\layers_builders\benin_plantations.py:55
+#: .\apps\dashboard\layers_builders\benin_plantations.py:56
 msgid "Benin Plantations"
 msgstr "Plantations du Bénin"
 
@@ -411,52 +389,68 @@ msgstr "Superficie de la pépinière (ha)"
 msgid "Number of Plants"
 msgstr "Nombre de plantes"
 
-#: .\apps\dashboard\layers_builders\qar_informations.py:12
-#, fuzzy
-#| msgid "Registration"
+#: .\apps\dashboard\layers_builders\qar_informations.py:7
 msgid "Region"
 msgstr "Inscription"
 
-#: .\apps\dashboard\layers_builders\qar_informations.py:13
+#: .\apps\dashboard\layers_builders\qar_informations.py:8
 msgid "Site"
 msgstr "Site"
 
-#: .\apps\dashboard\layers_builders\qar_informations.py:14
+#: .\apps\dashboard\layers_builders\qar_informations.py:9
 #: .\apps\templates\dashboard\analytics.html:15
 #: .\apps\templates\includes\sidenav.html:142
 msgid "KOR"
 msgstr "KOR"
 
-#: .\apps\dashboard\map_legend.py:4
-msgid "QAR"
-msgstr "QAR"
+#: .\apps\dashboard\layers_builders\qar_informations.py:10
+#: .\apps\templates\dashboard\nut_count.html:15
+#: .\apps\templates\includes\sidenav.html:153
+msgid "Nut Count"
+msgstr "Nombre de noix"
 
-#: .\apps\dashboard\map_views.py:55
-#, fuzzy
-#| msgid "User information"
+#: .\apps\dashboard\layers_builders\qar_informations.py:11
+#: .\apps\templates\includes\sidenav.html:164
+msgid "Defective Rate"
+msgstr "Taux de défectuosité"
+
+#: .\apps\dashboard\map_views.py:54
 msgid "QAR Information"
 msgstr "Informations de l'utilisateur"
 
-#: .\apps\dashboard\map_views.py:79 .\apps\templates\dashboard\login.html:27
+#: .\apps\dashboard\map_views.py:67 .\apps\templates\dashboard\login.html:27
 #: .\apps\templates\dashboard\register.html:28
 msgid "Google"
 msgstr "Google"
 
-#: .\apps\dashboard\map_views.py:88
+#: .\apps\dashboard\map_views.py:76
 msgid "Google Satellite"
 msgstr "Satellite Google"
 
-#: .\apps\dashboard\map_views.py:99
+#: .\apps\dashboard\map_views.py:87
 msgid "Mapbox Satellite"
 msgstr "Mapbox Satellite"
 
-#: .\apps\dashboard\map_views.py:130
+#: .\apps\dashboard\map_views.py:120
 msgid "Nursery Information"
 msgstr "Informations sur la pépinière"
 
-#: .\apps\dashboard\map_views.py:158
+#: .\apps\dashboard\map_views.py:144
 msgid "No Boundary"
 msgstr "Aucune limite"
+
+#: .\apps\dashboard\views.py:310 .\apps\templates\dashboard\analytics.html:60
+msgid "KOR Graph against date period"
+msgstr "Graphique de KOR par rapport à la période"
+
+#: .\apps\dashboard\views.py:562 .\apps\templates\dashboard\nut_count.html:60
+msgid "Nut count Graph against date period"
+msgstr "Moyenne du nombre de noix par rapport à la période"
+
+#: .\apps\dashboard\views.py:815
+#: .\apps\templates\dashboard\defective_rate.html:60
+msgid "Defective rate Graph against date period"
+msgstr "Moyenne du taux de défectuosité par rapport à la période"
 
 #: .\apps\templates\authentication\acc_active_email.html:112
 #: .\apps\templates\authentication\password_reset_email.html:112
@@ -543,11 +537,6 @@ msgstr "lien"
 #: .\apps\templates\authentication\email_confirm_invalid.html:30
 #: .\apps\templates\authentication\email_confirmed.html:30
 #: .\apps\templates\authentication\password_change_failed.html:31
-#: .\apps\templates\dashboard\page-403.html:31
-#: .\apps\templates\dashboard\page-404.html:24
-#: .\apps\templates\dashboard\page-404.html:31
-#: .\apps\templates\dashboard\page-500.html:24
-#: .\apps\templates\dashboard\page-500.html:31
 msgid "Home"
 msgstr "Accueil"
 
@@ -631,7 +620,6 @@ msgstr "Créer un compte"
 #: .\apps\templates\authentication\register.html:162
 #: .\apps\templates\authentication\register_org.html:147
 #: .\apps\templates\authentication\register_role.html:90
-#: .\apps\templates\dashboard\page-403.html:24
 #: .\apps\templates\includes\langnav.html:16
 #: .\apps\templates\includes\navigation-fullscreen.html:29
 msgid "Login"
@@ -719,8 +707,6 @@ msgid "I agree with the"
 msgstr "je suis d'accord avec le"
 
 #: .\apps\templates\authentication\register.html:141
-#, fuzzy
-#| msgid "Privacy Policy"
 msgid "Privacy Policies"
 msgstr "Politique de confidentialité"
 
@@ -744,38 +730,107 @@ msgstr "Créer un rôle"
 msgid "Not Listed"
 msgstr "Non listé"
 
-#: .\apps\templates\dashboard\analytics.html:29
-msgid "KOR average per Departement"
-msgstr "Moyenne de KOR par departement"
+#: .\apps\templates\dashboard\HTTP400.html:10
+msgid "We have got some trouble | 400 - Bad Request"
+msgstr "Nous avons quelques problèmes | 400 - Mauvaise requête"
 
-#: .\apps\templates\dashboard\analytics.html:40
-msgid "KOR average per Commune"
-msgstr "Moyenne de KOR par commune"
+#: .\apps\templates\dashboard\HTTP400.html:322
+msgid "Bad Request "
+msgstr "Mauvaise requête "
 
-#: .\apps\templates\dashboard\analytics.html:57
+#: .\apps\templates\dashboard\HTTP400.html:323
+msgid ""
+"The server cannot process the request due to something that is perceived to "
+"be a client error."
+msgstr ""
+"Le serveur ne peut pas traiter la demande en raison de quelque chose qui est perçu comme "
+"une erreur client."
+
+#: .\apps\templates\dashboard\HTTP403.html:9
+msgid "We've got some trouble | 403 - Access Denied"
+msgstr "Nous avons quelques problèmes | 403 - Accès refusé"
+
+#: .\apps\templates\dashboard\HTTP403.html:282
+#| msgid "Access denied"
+msgid "Access Denied "
+msgstr "Accès refusé "
+
+#: .\apps\templates\dashboard\HTTP403.html:283
+msgid "The requested resource requires an authentication."
+msgstr "La ressource demandée nécessite une authentification."
+
+#: .\apps\templates\dashboard\HTTP404.html:9
+msgid "We've got some trouble | 404 - Resource not found"
+msgstr "Nous avons quelques problèmes | 404 - Ressource introuvable"
+
+#: .\apps\templates\dashboard\HTTP404.html:282
+#| msgid "Page not found"
+msgid "Resource not found "
+msgstr "Page non trouvée "
+
+#: .\apps\templates\dashboard\HTTP404.html:283
+msgid ""
+"The requested resource could not be found but may be available again in the "
+"future."
+msgstr ""
+"La ressource demandée est introuvable mais peut être à nouveau disponible "
+"plus tard."
+
+#: .\apps\templates\dashboard\HTTP500.html:9
+msgid "We've got some trouble | 500 - Webservice currently unavailable"
+msgstr "Nous avons quelques problèmes | 500 - Service actuellement indisponible"
+
+#: .\apps\templates\dashboard\HTTP500.html:282
+msgid "Webservice currently unavailable "
+msgstr "Service actuellement indisponible "
+
+#: .\apps\templates\dashboard\HTTP500.html:283
+msgid ""
+"An unexpected condition was encountered.<br/>Our service team has been "
+"dispatched to bring it back online."
+msgstr ""
+"Une condition inattendue a été rencontrée.<br/>Notre équipe de service a été "
+"envoyée pour le remettre en ligne."
+
+#: .\apps\templates\dashboard\analytics.html:31
+msgid "KOR average per"
+msgstr "Moyenne de KOR par"
+
+#: .\apps\templates\dashboard\analytics.html:31
+#: .\apps\templates\dashboard\defective_rate.html:31
+#: .\apps\templates\dashboard\nut_count.html:31
+#: .\apps\templates\dashboard\plantations.html:55
+#: .\apps\templates\dashboard\shipment.html:54
+msgid "Department"
+msgstr "département"
+
+#: .\apps\templates\dashboard\analytics.html:31
+#: .\apps\templates\dashboard\defective_rate.html:31
+#: .\apps\templates\dashboard\nurseries.html:53
+#: .\apps\templates\dashboard\nut_count.html:31
+#: .\apps\templates\dashboard\plantations.html:56
+#: .\apps\templates\dashboard\shipment.html:55
+msgid "Commune"
+msgstr "commune"
+
+#: .\apps\templates\dashboard\analytics.html:42
 msgid "KOR average per Departement communes"
 msgstr "Moyenne de KOR par communes de departement"
 
-#: .\apps\templates\dashboard\analytics.html:59
-#: .\apps\templates\dashboard\defective_rate.html:59
-#: .\apps\templates\dashboard\nut_count.html:59
-#, fuzzy
-#| msgid "Department"
+#: .\apps\templates\dashboard\analytics.html:44
+#: .\apps\templates\dashboard\defective_rate.html:44
+#: .\apps\templates\dashboard\nut_count.html:44
 msgid "Select Department: "
-msgstr "Departement"
+msgstr "Sélectionner le département"
 
-#: .\apps\templates\dashboard\analytics.html:61
-#: .\apps\templates\dashboard\analytics.html:76
-#: .\apps\templates\dashboard\defective_rate.html:61
-#: .\apps\templates\dashboard\defective_rate.html:76
-#: .\apps\templates\dashboard\nut_count.html:61
-#: .\apps\templates\dashboard\nut_count.html:76
+#: .\apps\templates\dashboard\analytics.html:46
+#: .\apps\templates\dashboard\analytics.html:63
+#: .\apps\templates\dashboard\defective_rate.html:46
+#: .\apps\templates\dashboard\defective_rate.html:63
+#: .\apps\templates\dashboard\nut_count.html:46
+#: .\apps\templates\dashboard\nut_count.html:63
 msgid "Submit"
-msgstr "Soummetre"
-
-#: .\apps\templates\dashboard\analytics.html:73
-msgid "KOR Graph against date period"
-msgstr "Graphique de KOR par rapport à la période"
+msgstr "Envoyer"
 
 #: .\apps\templates\dashboard\companies.html:14
 msgid "Tables"
@@ -877,26 +932,16 @@ msgid "Partner"
 msgstr "Partenaire"
 
 #: .\apps\templates\dashboard\defective_rate.html:15
-#, fuzzy
-#| msgid "Active Trees"
 msgid "Defective rate"
 msgstr "Arbres Actifs"
 
-#: .\apps\templates\dashboard\defective_rate.html:29
-msgid "Defective rate average per Departement"
-msgstr "Moyenne du taux de défectuosité par département"
-
-#: .\apps\templates\dashboard\defective_rate.html:40
-msgid "Defective rate average per Commune"
+#: .\apps\templates\dashboard\defective_rate.html:31
+msgid "Defective rate average per"
 msgstr "Moyenne du taux de défectuosité par commune"
 
-#: .\apps\templates\dashboard\defective_rate.html:57
+#: .\apps\templates\dashboard\defective_rate.html:42
 msgid "Defective rate average per Departement communes"
 msgstr "Moyenne du taux de défectuosité par communes de département"
-
-#: .\apps\templates\dashboard\defective_rate.html:73
-msgid "Defective rate Graph against date period"
-msgstr "Moyenne du taux de défectuosité par rapport à la période"
 
 #: .\apps\templates\dashboard\login.html:19
 msgid "Sign in with"
@@ -942,12 +987,6 @@ msgstr "Adresse de la Pépinière"
 msgid "Country"
 msgstr "Pays"
 
-#: .\apps\templates\dashboard\nurseries.html:53
-#: .\apps\templates\dashboard\plantations.html:56
-#: .\apps\templates\dashboard\shipment.html:55
-msgid "Commune"
-msgstr "commune"
-
 #: .\apps\templates\dashboard\nurseries.html:54
 msgid "Current Area"
 msgstr "Zone actuelle"
@@ -967,58 +1006,13 @@ msgstr "Longitude"
 msgid "Altitude"
 msgstr "Altitude"
 
-#: .\apps\templates\dashboard\nut_count.html:15
-#: .\apps\templates\includes\sidenav.html:153
-#, fuzzy
-#| msgid "Country"
-msgid "Nut Count"
-msgstr "Nombre de noix"
-
-#: .\apps\templates\dashboard\nut_count.html:29
-msgid "Nut count average per Departement"
-msgstr "Moyenne du nombre de noix par département"
-
-#: .\apps\templates\dashboard\nut_count.html:40
-msgid "Nut count average per Commune"
+#: .\apps\templates\dashboard\nut_count.html:31
+msgid "Nut count average per"
 msgstr "Moyenne du nombre de noix par commune"
 
-#: .\apps\templates\dashboard\nut_count.html:57
+#: .\apps\templates\dashboard\nut_count.html:42
 msgid "Nut count average per Departement communes"
 msgstr "Moyenne du nombre de noix par commune de département"
-
-#: .\apps\templates\dashboard\nut_count.html:73
-msgid "Nut count Graph against date period"
-msgstr "Moyenne du nombre de noix par rapport à la période"
-
-#: .\apps\templates\dashboard\page-403.html:20
-msgid "Oups! Error 403"
-msgstr "Oups! Erreur 403"
-
-#: .\apps\templates\dashboard\page-403.html:24
-msgid "Access denied"
-msgstr "Accès refusé"
-
-#: .\apps\templates\dashboard\page-403.html:35
-#: .\apps\templates\dashboard\page-404.html:35
-#: .\apps\templates\dashboard\page-500.html:35
-msgid "Get Support"
-msgstr "Obtenir de l'aide"
-
-#: .\apps\templates\dashboard\page-404.html:20
-msgid "Oups! Error 404"
-msgstr "Oups! Erreur 404"
-
-#: .\apps\templates\dashboard\page-404.html:24
-msgid "Page not found"
-msgstr "Page non trouvée"
-
-#: .\apps\templates\dashboard\page-500.html:20
-msgid "Oups! Error 500"
-msgstr "Oups! Erreur 500"
-
-#: .\apps\templates\dashboard\page-500.html:24
-msgid "Server error, please contact support"
-msgstr "Erreur de serveur, veuillez contacter le support"
 
 #: .\apps\templates\dashboard\plantations.html:14
 #: .\apps\templates\includes\sidenav.html:98
@@ -1040,11 +1034,6 @@ msgstr "Nom du propriétaire"
 #: .\apps\templates\dashboard\plantations.html:52
 msgid "Gender"
 msgstr "Le genre"
-
-#: .\apps\templates\dashboard\plantations.html:55
-#: .\apps\templates\dashboard\shipment.html:54
-msgid "Department"
-msgstr "département"
 
 #: .\apps\templates\dashboard\plantations.html:57
 msgid "Arrondissement"
@@ -1178,7 +1167,6 @@ msgid "AppSeed"
 msgstr "AppSeed"
 
 #: .\apps\templates\includes\langnav.html:38
-#: .\apps\templates\includes\sidenav.html:208
 msgid "Language"
 msgstr "Langue"
 
@@ -1252,10 +1240,6 @@ msgstr "Rendement"
 msgid "Analytics"
 msgstr "Données analytiques"
 
-#: .\apps\templates\includes\sidenav.html:164
-msgid "Defective Rate"
-msgstr "Taux de défectuosité"
-
 #: .\apps\templates\includes\sidenav.html:176
 msgid "Logout"
 msgstr "Se déconnecter"
@@ -1273,12 +1257,10 @@ msgid "Visit TechnoServe"
 msgstr "Visitez TechnoServe"
 
 #: .\apps\templates\layouts\base-fullscreen.html:13
-#, fuzzy
-#| msgid "Technoserve"
 msgid "TechnoServe"
 msgstr "Technoserve"
 
-#: .\apps\templates\layouts\base-fullscreen.html:47
+#: .\apps\templates\layouts\base-fullscreen.html:48
 msgid "Cajúlab Presents"
 msgstr "Cajúlab présente"
 
@@ -1286,13 +1268,40 @@ msgstr "Cajúlab présente"
 msgid "Technoserve"
 msgstr "Technoserve"
 
-#: .\cajulab_remote_sensing_dashboard\settings.py:141
+#: .\cajulab_remote_sensing_dashboard\settings.py:152
 msgid "English"
 msgstr "Anglais"
 
-#: .\cajulab_remote_sensing_dashboard\settings.py:142
+#: .\cajulab_remote_sensing_dashboard\settings.py:153
 msgid "French"
 msgstr "Français"
+
+#~ msgid "Oups! Error 403"
+#~ msgstr "Oups! Erreur 403"
+
+#~ msgid "Get Support"
+#~ msgstr "Obtenir de l'aide"
+
+#~ msgid "Oups! Error 404"
+#~ msgstr "Oups! Erreur 404"
+
+#~ msgid "Oups! Error 500"
+#~ msgstr "Oups! Erreur 500"
+
+#~ msgid "Server error, please contact support"
+#~ msgstr "Erreur de serveur, veuillez contacter le support"
+
+#~ msgid "QAR"
+#~ msgstr "QAR"
+
+#~ msgid "KOR average per Departement"
+#~ msgstr "Moyenne de KOR par departement"
+
+#~ msgid "Defective rate average per Departement"
+#~ msgstr "Moyenne du taux de défectuosité par département"
+
+#~ msgid "Nut count average per Departement"
+#~ msgstr "Moyenne du nombre de noix par département"
 
 #~ msgid "Access denied - Please authenticate"
 #~ msgstr "Accès refusé - Veuillez vous authentifier"
