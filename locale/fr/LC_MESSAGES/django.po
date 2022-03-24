@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-13 02:24+0100\n"
+"POT-Creation-Date: 2022-03-23 15:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,6 +119,15 @@ msgstr "Du"
 #: .\apps\dashboard\forms.py:140
 msgid "To"
 msgstr "Au"
+
+#: .\apps\dashboard\forms.py:174
+msgid "select department"
+msgstr "Sélectionner le département"
+
+#: .\apps\dashboard\forms.py:175
+#| msgid "Select Department: "
+msgid "Select Department"
+msgstr "Sélectionner le département"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:90
 #: .\apps\dashboard\layers_builders\benin_commune.py:131
@@ -399,18 +408,18 @@ msgstr "Site"
 
 #: .\apps\dashboard\layers_builders\qar_informations.py:9
 #: .\apps\templates\dashboard\analytics.html:15
-#: .\apps\templates\includes\sidenav.html:142
+#: .\apps\templates\includes\sidenav.html:141
 msgid "KOR"
 msgstr "KOR"
 
 #: .\apps\dashboard\layers_builders\qar_informations.py:10
 #: .\apps\templates\dashboard\nut_count.html:15
-#: .\apps\templates\includes\sidenav.html:153
+#: .\apps\templates\includes\sidenav.html:152
 msgid "Nut Count"
 msgstr "Nombre de noix"
 
 #: .\apps\dashboard\layers_builders\qar_informations.py:11
-#: .\apps\templates\includes\sidenav.html:164
+#: .\apps\templates\includes\sidenav.html:163
 msgid "Defective Rate"
 msgstr "Taux de défectuosité"
 
@@ -439,7 +448,7 @@ msgstr "Informations sur la pépinière"
 msgid "No Boundary"
 msgstr "Aucune limite"
 
-#: .\apps\dashboard\views.py:310 .\apps\templates\dashboard\analytics.html:60
+#: .\apps\dashboard\views.py:310 .\apps\templates\dashboard\analytics.html:58
 msgid "KOR Graph against date period"
 msgstr "Graphique de KOR par rapport à la période"
 
@@ -743,15 +752,14 @@ msgid ""
 "The server cannot process the request due to something that is perceived to "
 "be a client error."
 msgstr ""
-"Le serveur ne peut pas traiter la demande en raison de quelque chose qui est perçu comme "
-"une erreur client."
+"Le serveur ne peut pas traiter la demande en raison de quelque chose qui est "
+"perçu comme une erreur client."
 
 #: .\apps\templates\dashboard\HTTP403.html:9
 msgid "We've got some trouble | 403 - Access Denied"
 msgstr "Nous avons quelques problèmes | 403 - Accès refusé"
 
 #: .\apps\templates\dashboard\HTTP403.html:282
-#| msgid "Access denied"
 msgid "Access Denied "
 msgstr "Accès refusé "
 
@@ -764,7 +772,6 @@ msgid "We've got some trouble | 404 - Resource not found"
 msgstr "Nous avons quelques problèmes | 404 - Ressource introuvable"
 
 #: .\apps\templates\dashboard\HTTP404.html:282
-#| msgid "Page not found"
 msgid "Resource not found "
 msgstr "Page non trouvée "
 
@@ -778,7 +785,8 @@ msgstr ""
 
 #: .\apps\templates\dashboard\HTTP500.html:9
 msgid "We've got some trouble | 500 - Webservice currently unavailable"
-msgstr "Nous avons quelques problèmes | 500 - Service actuellement indisponible"
+msgstr ""
+"Nous avons quelques problèmes | 500 - Service actuellement indisponible"
 
 #: .\apps\templates\dashboard\HTTP500.html:282
 msgid "Webservice currently unavailable "
@@ -817,14 +825,7 @@ msgstr "commune"
 msgid "KOR average per Departement communes"
 msgstr "Moyenne de KOR par communes de departement"
 
-#: .\apps\templates\dashboard\analytics.html:44
-#: .\apps\templates\dashboard\defective_rate.html:44
-#: .\apps\templates\dashboard\nut_count.html:44
-msgid "Select Department: "
-msgstr "Sélectionner le département"
-
-#: .\apps\templates\dashboard\analytics.html:46
-#: .\apps\templates\dashboard\analytics.html:63
+#: .\apps\templates\dashboard\analytics.html:61
 #: .\apps\templates\dashboard\defective_rate.html:46
 #: .\apps\templates\dashboard\defective_rate.html:63
 #: .\apps\templates\dashboard\nut_count.html:46
@@ -850,7 +851,7 @@ msgstr "La description"
 
 #: .\apps\templates\dashboard\companies.html:48
 #: .\apps\templates\dashboard\companies.html:171
-#: .\apps\templates\dashboard\profile.html:160
+#: .\apps\templates\dashboard\profile.html:161
 msgid "Phone Number"
 msgstr "Numéro de téléphone"
 
@@ -943,6 +944,11 @@ msgstr "Moyenne du taux de défectuosité par commune"
 msgid "Defective rate average per Departement communes"
 msgstr "Moyenne du taux de défectuosité par communes de département"
 
+#: .\apps\templates\dashboard\defective_rate.html:44
+#: .\apps\templates\dashboard\nut_count.html:44
+msgid "Select Department: "
+msgstr "Sélectionner le département"
+
 #: .\apps\templates\dashboard\login.html:19
 msgid "Sign in with"
 msgstr "Se connecter avec"
@@ -962,7 +968,7 @@ msgstr "Créer un compte"
 
 #: .\apps\templates\dashboard\nurseries.html:14
 #: .\apps\templates\dashboard\nurseries.html:41
-#: .\apps\templates\includes\sidenav.html:125
+#: .\apps\templates\includes\sidenav.html:124
 msgid "Nurseries"
 msgstr "Pépinières"
 
@@ -1015,7 +1021,7 @@ msgid "Nut count average per Departement communes"
 msgstr "Moyenne du nombre de noix par commune de département"
 
 #: .\apps\templates\dashboard\plantations.html:14
-#: .\apps\templates\includes\sidenav.html:98
+#: .\apps\templates\includes\sidenav.html:97
 msgid "Plantations"
 msgstr "Plantations"
 
@@ -1043,11 +1049,11 @@ msgstr "Arrondissement"
 msgid "Area(Ha)"
 msgstr "Superficie(ha)"
 
-#: .\apps\templates\dashboard\profile.html:22
+#: .\apps\templates\dashboard\profile.html:23
 msgid "Hello"
 msgstr "Bonjour"
 
-#: .\apps\templates\dashboard\profile.html:24
+#: .\apps\templates\dashboard\profile.html:25
 msgid ""
 "This is your profile page. You can see the progress you have made with your "
 "work and manage your projects or assigned tasks"
@@ -1055,32 +1061,32 @@ msgstr ""
 "Ceci est votre page de profil. Vous pouvez voir l'avancement de votre "
 "travail et gérer vos projets ou tâches assignées"
 
-#: .\apps\templates\dashboard\profile.html:25
-#: .\apps\templates\dashboard\profile.html:96
+#: .\apps\templates\dashboard\profile.html:26
+#: .\apps\templates\dashboard\profile.html:97
 msgid "Edit profile"
 msgstr "Editer le profil"
 
-#: .\apps\templates\dashboard\profile.html:104
+#: .\apps\templates\dashboard\profile.html:105
 msgid "User information"
 msgstr "Informations de l'utilisateur"
 
-#: .\apps\templates\dashboard\profile.html:110
+#: .\apps\templates\dashboard\profile.html:111
 msgid "First Name"
 msgstr "Prénom"
 
-#: .\apps\templates\dashboard\profile.html:118
+#: .\apps\templates\dashboard\profile.html:119
 msgid "Last Name"
 msgstr "Nom de famille"
 
-#: .\apps\templates\dashboard\profile.html:144
+#: .\apps\templates\dashboard\profile.html:145
 msgid "Contact information"
 msgstr "Informations de contact"
 
-#: .\apps\templates\dashboard\profile.html:150
+#: .\apps\templates\dashboard\profile.html:151
 msgid "Email address"
 msgstr "Adresse e-mail"
 
-#: .\apps\templates\dashboard\profile.html:168
+#: .\apps\templates\dashboard\profile.html:169
 msgid "Organization"
 msgstr "Organisation"
 
@@ -1102,7 +1108,7 @@ msgstr "fort"
 
 #: .\apps\templates\dashboard\shipment.html:16
 #: .\apps\templates\dashboard\shipment.html:43
-#: .\apps\templates\includes\sidenav.html:116
+#: .\apps\templates\includes\sidenav.html:115
 msgid "Shipment"
 msgstr "Expédition"
 
@@ -1208,51 +1214,51 @@ msgstr "Vous avez"
 msgid "notifications"
 msgstr "notifications"
 
-#: .\apps\templates\includes\sidenav.html:18
+#: .\apps\templates\includes\sidenav.html:17
 msgid "Cashew Dashboard"
 msgstr "Dashboard des cajous"
 
-#: .\apps\templates\includes\sidenav.html:42
+#: .\apps\templates\includes\sidenav.html:41
 msgid "Map"
 msgstr "Carte"
 
-#: .\apps\templates\includes\sidenav.html:49
+#: .\apps\templates\includes\sidenav.html:48
 msgid "Profile"
 msgstr "Profil"
 
-#: .\apps\templates\includes\sidenav.html:58
+#: .\apps\templates\includes\sidenav.html:57
 msgid "Registration"
 msgstr "Inscription"
 
-#: .\apps\templates\includes\sidenav.html:68
+#: .\apps\templates\includes\sidenav.html:67
 msgid "New Member"
 msgstr "Nouveau membre"
 
-#: .\apps\templates\includes\sidenav.html:80
+#: .\apps\templates\includes\sidenav.html:79
 msgid "New Organization"
 msgstr "Nouvelle organisation"
 
-#: .\apps\templates\includes\sidenav.html:107
+#: .\apps\templates\includes\sidenav.html:106
 msgid "Yield"
 msgstr "Rendement"
 
-#: .\apps\templates\includes\sidenav.html:132
+#: .\apps\templates\includes\sidenav.html:131
 msgid "Analytics"
 msgstr "Données analytiques"
 
-#: .\apps\templates\includes\sidenav.html:176
+#: .\apps\templates\includes\sidenav.html:175
 msgid "Logout"
 msgstr "Se déconnecter"
 
-#: .\apps\templates\includes\sidenav.html:184
+#: .\apps\templates\includes\sidenav.html:183
 msgid "Resources"
 msgstr "Ressources"
 
-#: .\apps\templates\includes\sidenav.html:194
+#: .\apps\templates\includes\sidenav.html:193
 msgid "About TechnoServe"
 msgstr "À propos de TechnoServe"
 
-#: .\apps\templates\includes\sidenav.html:203
+#: .\apps\templates\includes\sidenav.html:202
 msgid "Visit TechnoServe"
 msgstr "Visitez TechnoServe"
 
@@ -1260,7 +1266,7 @@ msgstr "Visitez TechnoServe"
 msgid "TechnoServe"
 msgstr "Technoserve"
 
-#: .\apps\templates\layouts\base-fullscreen.html:48
+#: .\apps\templates\layouts\base-fullscreen.html:59
 msgid "Cajúlab Presents"
 msgstr "Cajúlab présente"
 

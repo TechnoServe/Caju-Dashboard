@@ -171,7 +171,11 @@ names_sorted = list(set(names_with_duplicate))
 names_sorted = sorted(names_sorted)
 
 DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in names_sorted]
+lower_depselct = _('select department')
+upper_depselct = _('Select Department')
+select0 = (str(lower_depselct), str(upper_depselct))
+DEPARTMENT_CHOICES.insert(0, select0)
 
 
 class DepartmentChoice(forms.Form):
-    department = forms.ChoiceField(label="Select Department", choices=DEPARTMENT_CHOICES)
+    department = forms.ChoiceField(choices=DEPARTMENT_CHOICES)

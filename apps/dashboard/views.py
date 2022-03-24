@@ -20,6 +20,7 @@ from apps.dashboard import models
 from apps.dashboard.models import Plantation
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice
+from django.db.models import Q
 
 
 @login_required(login_url="/")
@@ -141,7 +142,7 @@ def load_roles(request):
 class EditProfilePageView(generic.UpdateView):
     form_class = UserCustomProfileForm
     template_name = 'dashboard/profile.html'
-    success_url = reverse_lazy('map')
+    success_url = reverse_lazy('profile')
 
     def form_invalid(self, form):
         print(form.errors)
@@ -179,7 +180,7 @@ def profile(request):
             custom_form = profile_form.save(False)
             custom_form.user = user_form
             custom_form.save()
-            return redirect('map')
+            return redirect('profile')
         else:
             print(form.errors)
             print(profile_form.errors)
@@ -214,7 +215,26 @@ def tables(request):
 @login_required(login_url="/")
 def yields(request):
     context = {}
-    yields_list = models.BeninYield.objects.filter(status=utils.Status.ACTIVE)
+
+    search_yields = request.GET.get('search')
+    if search_yields:
+        yields_list = models.BeninYield.objects.filter(
+            Q(plantation_name__icontains=search_yields) | Q(plantation_code__icontains=search_yields) | Q(
+                department__icontains=search_yields) | Q(commune__icontains=search_yields) | Q(
+                arrondissement__icontains=search_yields) | Q(village__icontains=search_yields) | Q(
+                owner_first_name__icontains=search_yields) | Q(owner_last_name__icontains=search_yields) | Q(
+                plantation_code__icontains=search_yields) | Q(surface_area__icontains=search_yields) | Q(
+                total_yield_kg__icontains=search_yields) | Q(total_yield_per_ha_kg__icontains=search_yields) | Q(
+                total_yield_per_tree_kg__icontains=search_yields) | Q(sex__icontains=search_yields) | Q(
+                plantation_id__icontains=search_yields) | Q(product_id__icontains=search_yields) | Q(
+                total_number_trees__icontains=search_yields) | Q(total_sick_trees__icontains=search_yields) | Q(
+                total_dead_trees__icontains=search_yields) | Q(total_trees_out_of_prod__icontains=search_yields) | Q(
+                plantation_age__icontains=search_yields) | Q(latitude__icontains=search_yields) | Q(
+                longitude__icontains=search_yields) | Q(altitude__icontains=search_yields) | Q(
+                year__icontains=search_yields), status=utils.Status.ACTIVE)
+
+    else:
+        yields_list = models.BeninYield.objects.filter(status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 
@@ -237,7 +257,20 @@ def yields(request):
 @login_required(login_url="/")
 def plantations(request):
     context = {}
-    plantations_list = models.Plantation.objects.filter(status=utils.Status.ACTIVE)
+    search_plantations = request.GET.get('search')
+    if search_plantations:
+        plantations_list = models.Plantation.objects.filter(
+            Q(plantation_name__icontains=search_plantations) | Q(plantation_code__icontains=search_plantations) | Q(
+                owner_first_name__icontains=search_plantations) | Q(owner_last_name__icontains=search_plantations) | Q(
+                owner_gender__icontains=search_plantations) | Q(total_trees__icontains=search_plantations) | Q(
+                country__icontains=search_plantations) | Q(department__icontains=search_plantations) | Q(
+                commune__icontains=search_plantations) | Q(arrondissement__icontains=search_plantations) | Q(
+                village__icontains=search_plantations) | Q(current_area__icontains=search_plantations) | Q(
+                latitude__icontains=search_plantations) | Q(longitude__icontains=search_plantations) | Q(
+                altitude__icontains=search_plantations), status=utils.Status.ACTIVE)
+
+    else:
+        plantations_list = models.Plantation.objects.filter(status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 
@@ -261,7 +294,20 @@ def plantations(request):
 @login_required(login_url="/")
 def nurseries(request):
     context = {}
-    nurseries_list = models.Nursery.objects.filter(status=utils.Status.ACTIVE)
+
+    search_nurseries = request.GET.get('search')
+    if search_nurseries:
+        nurseries_list = models.Nursery.objects.filter(
+            Q(nursery_name__icontains=search_nurseries) | Q(owner_first_name__icontains=search_nurseries) | Q(
+                owner_last_name__icontains=search_nurseries) | Q(nursery_address__icontains=search_nurseries) | Q(
+                country__icontains=search_nurseries) | Q(commune__icontains=search_nurseries) | Q(
+                current_area__icontains=search_nurseries) | Q(latitude__icontains=search_nurseries) | Q(
+                longitude__icontains=search_nurseries) | Q(altitude__icontains=search_nurseries) | Q(
+                partner__icontains=search_nurseries) | Q(number_of_plants__icontains=search_nurseries),
+            status=utils.Status.ACTIVE)
+
+    else:
+        nurseries_list = models.Nursery.objects.filter(status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 

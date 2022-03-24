@@ -31,7 +31,7 @@
                         <h3 class="mb-0">{% trans "KOR average per" %}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id="0" type="button" class="btn btn-primary">{% trans "Department" %}</button><button id="1" type="button" class="btn btn-primary">{% trans "Commune" %}</button></h3>
                     </div>
                     <div class="chart-container" style="position: relative;">
-                        <canvas id="department_Chart" width="40" height="10"></canvas>
+                        <canvas id="department_Chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -41,13 +41,11 @@
                     <div class="card-header border-0" style="background-color: #f7f7f7">
                         <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
                         <br>
-                        <label for="departments">{% trans "Select Department: " %}</label>
                         &nbsp&nbsp&nbsp{{ Department_choice.department }}
-                        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
-                            <canvas id="dep_commune_Chart" width="40" height="10"></canvas>
+                            <canvas id="dep_commune_Chart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -60,10 +58,10 @@
                         <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
                         <br>
                         {{ form.as_table }}
-                        &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                        &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary" id = "KOR_submit">{% trans "Submit" %}</button>
                     </div>
                     <div class="chart-container" style="position: relative;">
-                        <canvas id="kor_Chart" width="40" height="13"></canvas>
+                        <canvas id="kor_Chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -245,4 +243,12 @@
             });
         });
         </script>
+    <script>
+        document.getElementById("id_department").addEventListener("change", myFunction);
+
+        function myFunction() {
+          var x = document.getElementById("id_department");
+          if(x.value != "Select Department") { x.form.submit(); }
+        }
+    </script>
 {% endblock javascripts %}
