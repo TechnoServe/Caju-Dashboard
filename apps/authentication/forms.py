@@ -117,12 +117,14 @@ class SignUpForm(UserCreationForm):
             attrs={
                 "placeholder": "Username",
                 "class": "form-control",
+                "autocomplete": "off",
             }
         ))
     first_name = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 "placeholder": "First Name",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         ))
@@ -130,6 +132,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Last Name",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         ))
@@ -137,6 +140,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.EmailInput(
             attrs={
                 "placeholder": "Email",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         ))
@@ -144,6 +148,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Phone Number",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         )
@@ -156,6 +161,7 @@ class SignUpForm(UserCreationForm):
             attrs={
                 'class': 'form-control',
                 'style': 'border-color: none;',
+                "autocomplete": "off",
                 'id': 'id_organization',
             }
         )
@@ -168,6 +174,7 @@ class SignUpForm(UserCreationForm):
             attrs={
                 'class': 'form-control',
                 'style': 'border-color: none;',
+                "autocomplete": "off",
                 'id': 'id_role'
             }
         )
@@ -176,6 +183,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Password",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         ))
@@ -183,6 +191,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Confirm Password",
+                "autocomplete": "off",
                 "class": "form-control"
             }
         ))
@@ -376,7 +385,8 @@ class FullSignUpForm(forms.ModelForm):
         if 'organization_name' in self.data:
             try:
                 org_id = int(self.data.get('organization_name'))
-                self.fields['role'].queryset = RemRole.objects.filter(organization=org_id)
+                self.fields['role'].queryset = RemRole.objects.filter(
+                    organization=org_id)
             except (ValueError, TypeError):
                 # invalid input from the client; ignore and use empty queryset
                 pass

@@ -26,6 +26,8 @@ class NurseryLayer:
         nurseries = Nursery.objects.all()
         for i in range(len(nurseries)):
             current_object = nurseries[i]
+            if current_object.latitude == 0 and current_object.longitude == 0:
+                continue
             folium.Marker(location=[current_object.latitude, current_object.longitude],
                           rise_on_hover=True,
                           rise_offset=250,

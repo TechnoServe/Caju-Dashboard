@@ -1,11 +1,11 @@
 {% load static %}
 {% load i18n %}
-<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
+<nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" style="overflow-y:auto" id="sidenav-main">
 
     <!-- Brand -->
     <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{% url 'map' %}">
-            <img src="/apps/static/assets/img/brand/TNS-Labs-Logo-v2.png" alt="Technoserve-Logo." class="navbar-brand-img">
+            <img src="{% static 'assets/img/brand/TNS-Labs-Logo.png' %}" alt="Technoserve-Logo" class="navbar-brand-img">
         </a>
     </div>
 
@@ -198,11 +198,20 @@
                 <li class="nav-item">
                     <a class="nav-link"
                        target="_blank"
+                       href="https://www.tnslabs.org/">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-text">{% trans "Visit TechnoServe Labs" %}</span>
+                    </a>
+                </li>
+
+                {% comment %} <li class="nav-item">
+                    <a class="nav-link"
+                       target="_blank"
                        href="https://www.technoserve.org/">
                         <i class="ni ni-spaceship"></i>
                         <span class="nav-link-text">{% trans "Visit TechnoServe" %}</span>
                     </a>
-                </li>
+                </li> {% endcomment %}
 
                 <!-- <li class="nav-item">
                   <a class="nav-link active active-pro"

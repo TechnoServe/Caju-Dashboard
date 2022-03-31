@@ -41,7 +41,7 @@ template_fr = """
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=1167b1">&nbsp;&nbsp;Entrepot de cajoux</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset=-1&background=008000">&nbsp;&nbsp;Plantation</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1&background=c63e2b">&nbsp;&nbsp;Pépinière</li>
-    <li><img src="/apps/static/assets/img/legend/6.png">&nbsp;&nbsp;Prédictions satellitaire</li>
+    <li><img src="/static/assets/img/legend/6.png">&nbsp;&nbsp;Prédictions satellitaire</li>
   </ul>
 </div>
 </div>
@@ -130,7 +130,7 @@ template_en = """
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=1167b1">&nbsp;&nbsp;Cashew Warehouse</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset=-1&background=008000">&nbsp;&nbsp;Plantation Location</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1&background=3A5F0B">&nbsp;&nbsp;Nursery</li>
-    <li><img src="/apps/static/assets/img/legend/6.png">&nbsp;&nbsp;Satellite Predictions</li>
+    <li><img src="/static/assets/img/legend/6.png">&nbsp;&nbsp;Satellite Predictions</li>
 
   </ul>
 </div>
