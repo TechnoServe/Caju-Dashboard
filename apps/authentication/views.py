@@ -62,54 +62,67 @@ def signin(request):
 def signup(request):
     msg = None
     success = False
+    fullpage = not (request.user.is_staff or request.user.is_superuser)
 
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
+    try:
+        if request.method == 'POST':
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.is_active = False
 
-            email = form.cleaned_data.get("email")
-            phone = form.cleaned_data.get("phone")
-            organization = form.cleaned_data.get("organization")
-            role = form.cleaned_data.get("role")
+                email = form.cleaned_data.get("email")
+                phone = form.cleaned_data.get("phone")
+                organization = form.cleaned_data.get("organization")
+                role = form.cleaned_data.get("role")
 
-            rem_user = RemUser.objects.get(user=user)
-            rem_user.email = email
-            rem_user.phone = phone
-            rem_user.organization = organization
-            rem_user.role = role
-            rem_user.save()
+                current_site = get_current_site(request)
+                mail_subject = gettext(
+                    'Activate your Cashew Remote Sensing account.')
+                message = loader.get_template('authentication/acc_active_email.html').render(
+                    {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': account_activation_token.make_token(user),
+                    }
+                )
+                to_email = form.cleaned_data.get('email')
+                email = EmailMessage(
+                    mail_subject,
+                    message,
+                    from_email='"Caju-Lab Support" <' +
+                    os.getenv("EMAIL_HOST_USER") + '>',
+                    to=[to_email]
+                )
+                email.content_subtype = "html"
 
-            current_site = get_current_site(request)
-            mail_subject = gettext('Activate your Cashew Remote Sensing account.')
-            message = loader.get_template('authentication/acc_active_email.html').render(
-                {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                }
-            )
-            to_email = form.cleaned_data.get('email')
-            email = EmailMessage(
-                mail_subject,
-                message,
-                from_email='"Caju-Lab Support" <' + os.getenv("EMAIL_HOST_USER") + '>',
-                to=[to_email]
-            )
-            email.content_subtype = "html"
+                email.send()
 
-            email.send()
+                msg = gettext(
+                    'Please confirm your email address to complete the registration')
+                success = True
 
-            msg = gettext('Please confirm your email address to complete the registration')
-            success = True
+                user.save()
+
+                rem_user = RemUser.objects.get(user=user)
+                rem_user.email = email
+                rem_user.phone = phone
+                rem_user.organization = organization
+                rem_user.role = role
+                rem_user.save()
+
+            else:
+                msg = gettext('Form is not valid')
         else:
-            msg = gettext('Form is not valid')
-    else:
-        form = SignUpForm()
-    return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": success})
+            form = SignUpForm()
+        return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": success, "fullpage": fullpage})
+
+    except Exception as e:
+        print(e)
+        print(os.getenv("EMAIL_HOST_USER"))
+        msg = gettext('An Error has Occurred')
+        return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": False, "fullpage": fullpage})
 
 
 @login_required(login_url="/")
@@ -135,7 +148,8 @@ def register_org(request):
                 print("")
 
             obj.save()
-            msg = gettext('Organization created - please <a href="/register">register user</a>.')
+            msg = gettext(
+                'Organization created - please <a href="/register">register user</a>.')
             success = True
 
         else:
@@ -317,7 +331,8 @@ def password_reset_confirm(request, uidb64, token):
             form = custom_forms.NewPassword()
         return render(request, 'authentication/new_password.html', {"form": form, "msg": msg, "success": success})
     else:
-        html_template = loader.get_template('authentication/password_change_failed.html')
+        html_template = loader.get_template(
+            'authentication/password_change_failed.html')
         return HttpResponse(html_template.render(context, request))
 
 
@@ -333,8 +348,10 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         # login(request, user)
-        html_template = loader.get_template('authentication/email_confirmed.html')
+        html_template = loader.get_template(
+            'authentication/email_confirmed.html')
         return HttpResponse(html_template.render(context, request))
     else:
-        html_template = loader.get_template('authentication/email_confirm_invalid.html')
+        html_template = loader.get_template(
+            'authentication/email_confirm_invalid.html')
         return HttpResponse(html_template.render(context, request))

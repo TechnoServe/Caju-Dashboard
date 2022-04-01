@@ -1,6 +1,7 @@
 {% extends 'layouts/base-fullscreen.html' %}
 {% load i18n %}
 
+
 {% block title %} Error 403 {% endblock title %}
 
 <!-- Specific CSS goes HERE -->
@@ -16,11 +17,11 @@
             <div class="card-header bg-transparent pb-5">
 
               <div class="text-muted text-center mt-2 mb-3">
-                {% trans "Thank you for your email confirmation." %}      
+                {% trans "Oups! Error 403" %}      
               </div>
 
               <div class="text-center mb-4">
-                {% trans "Now you can" %} <a class="text-primary" href="{% url 'login' %}">{% trans "login" %}</a> {% trans "your account" %}.
+                {% trans "Access denied" %} <a href="{% url 'login' %}">{% trans "Login" %}</a>
               </div>
 
             </div>
@@ -30,7 +31,8 @@
               <a href="/" class="text-light"><small>{% trans "Home" %}</small></a>
             </div>          
             <div class="col-6 text-right">
-              <a target="_blank" href="https://www.technoserve.org/contact-us/" class="text-light"><small>{% trans "Contact Us" %}</small></a>
+              <a target="_blank" 
+                 href="https://appseed.us/support" class="text-light"><small>{% trans "Get Support" %}</small></a>
             </div>
           </div>
         </div>

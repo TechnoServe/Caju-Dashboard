@@ -207,12 +207,12 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-# STATIC_ROOT = os.path.join(CORE_DIR, 'staticfile')
+STATIC_ROOT = os.path.join(CORE_DIR, 'staticfile')
 STATIC_URL = 'apps/static/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    BASE_DIR / "apps/static",
+    os.path.join(CORE_DIR, 'apps/static'),
 )
 
 #############################################################

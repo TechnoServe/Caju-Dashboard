@@ -4,7 +4,7 @@
     <!-- Brand -->
     <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{% url 'map' %}">
-            <img src="{% static 'assets/img/brand/TNS-Labs-Logo-v2.png' %}" alt="Technoserve-Logo." class="navbar-brand-img">
+            <img src="{% static 'assets/img/brand/TNS-Labs-Logo.png' %}" alt="Technoserve-Logo." class="navbar-brand-img">
         </a>
     </div>
 
@@ -197,11 +197,20 @@
                 <li class="nav-item">
                     <a class="nav-link"
                        target="_blank"
+                       href="https://www.tnslabs.org/">
+                        <i class="ni ni-spaceship"></i>
+                        <span class="nav-link-text">{% trans "Visit TechnoServe Labs" %}</span>
+                    </a>
+                </li>
+
+                {% comment %} <li class="nav-item">
+                    <a class="nav-link"
+                       target="_blank"
                        href="https://www.technoserve.org/">
                         <i class="ni ni-spaceship"></i>
                         <span class="nav-link-text">{% trans "Visit TechnoServe" %}</span>
                     </a>
-                </li>
+                </li> {% endcomment %}
 
                 <!-- <li class="nav-item">
                   <a class="nav-link active active-pro"

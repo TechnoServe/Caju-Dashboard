@@ -42,7 +42,7 @@
 
   <div class="main-content">
 
-    {% include "includes/../includes/langnav.html" %}
+    {% include "includes/langnav.html" %}
 
     <!-- Header -->
     <div class="header bg-gradient-primary py-7 py-lg-8">
@@ -50,13 +50,13 @@
         <!-- <div class="header-body text-center mb-7"> -->
           <div class="row justify-content-center">
             <div class="col-lg-5 col-md-6">
-              <h1 class="text" style="color: #8898aa">
-                <a target="_blank"
+              {% comment %} <h1 class="text-primary">
+                <a target="_blank" class="text-primary"
                    href="https://www.tnsbenin.org/english/cajulab-the-drone-cartography-for-intelligent-production-of-cashew-nuts-facing-the-climate">{% trans "Cajúlab Presents" %}</a>
-              </h1>
+              </h1> {% endcomment %}
               <!-- <p class="text-lead text-light">
                 Remote Sensing Dashboard
-                in conjunction with <a target="_blank" class="text-white" href="https://www.technoserve.org/">Technoserve</a>.
+                in conjunction with <a target="_blank" class="text-primary" href="https://www.technoserve.org/">Technoserve</a>.
               </p> -->
             </div>
           </div>
@@ -71,9 +71,11 @@
 
     {% block content %}{% endblock content %}
 
-    {% include "includes/../includes/footer-fullscreen.html" %}
+    {% include "includes/footer-fullscreen.html" %}
 
-  {% include "includes/../includes/scripts.html" %}
+  </div>
+
+  {% include "includes/scripts.html" %}
 
   <!-- Specific JS goes HERE -->
   {% block javascripts %}
