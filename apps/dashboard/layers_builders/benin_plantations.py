@@ -57,9 +57,7 @@ def add_benin_plantation(self, path_link, dept_yield_ha):
     Yield_Per_Hectare = gettext("Yield Per Hectare (kg/ha)")
     Number_of_TreesP = gettext("Number of Trees")
     Yield_per_TreeP = gettext("Yield per Tree (kg/tree)")
-    Average_Surface_AreaP = gettext(
-        "Average Surface Area and Cashew Yield Information for Plantations in Benin Republic")
-
+    Average_Surface_AreaP = gettext("Average Surface Area and Cashew Yield Information for Plantations in Benin Republic")
     Number_of_Farms = gettext("Number of Farms")
     Total_Plantation_Yield = gettext("Total Plantation Yield (kg)")
     Total_Plantation_Area = gettext("Total Plantation Area (ha)")
