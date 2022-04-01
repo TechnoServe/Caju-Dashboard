@@ -44,9 +44,9 @@ idna==3.3
 Jinja2==3.0.3
 kombu==5.2.3
 MarkupSafe==2.1.0
-mysqlclient==2.1.0
+mysqlclient
 numpy==1.22.2
-openpyxl==3.0.9
+openpyxl
 pandas==1.4.1
 paramiko==2.9.2
 pathvalidate==2.5.0
