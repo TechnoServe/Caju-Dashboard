@@ -7,67 +7,73 @@
 {% block title %} Tables {% endblock title %}
 
 {% block content %}
-  <div class="header bg-primary pb-6">
-    <div class="container-fluid">
-      <div class="header-body">
-        <div class="row align-items-center py-4">
-          <div class="col-lg-6 col-7">
-            <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6 class="h2 text-white d-inline-block mb-0">{% trans "Defective rate" %}</h6>
-          </div>
+    <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <button id="collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary"
+                                type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i
+                                class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6
+                            class="h2 text-white d-inline-block mb-0">{% trans "Defective rate" %}</h6>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
     <!-- Page content -->
     <div class="container-fluid mt--6">
         <form method="POST">
             {% csrf_token %}
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <!-- Card header -->
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "Defective rate average per" %}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id="0" type="button" class="btn btn-primary">{% trans "Department" %}</button><button id="1" type="button" class="btn btn-primary">{% trans "Commune" %}</button></h3>
-                    </div>
-                    <div class="chart-container" style="position: relative;">
-                        <canvas id="department_Chart" width="40" height="10"></canvas>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
+                            <h3 class="mb-0">{% trans "Defective rate average per" %}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                                <button id="0" type="button" class="btn btn-primary">{% trans "Department" %}</button>
+                                <button id="1" type="button" class="btn btn-primary">{% trans "Commune" %}</button>
+                            </h3>
+                        </div>
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id="department_Chart" width="40" height="10"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <!-- Card header -->
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "Defective rate average per Departement communes" %}</h3>
-                        <br>
-                        <label for="departments">{% trans "Select Department: " %}</label>
-                        {{ Department_choice.department }}
-                        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
-                    </div>
-                    <div class="card-body border-0">
-                        <div class="chart-container" style="position: relative;">
-                            <canvas id="dep_commune_Chart" width="40" height="10"></canvas>
+                <div class="col-md-6">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
+                            <div style="float: left">
+                                <h3 class="mb-0">{% trans "Defective rate average per Departement communes" %}</h3>
+                                <br>
+                                {{ Department_choice.department }}
+                            </div>
+                        </div>
+                        <div class="card-body border-0">
+                            <div class="chart-container" style="position: relative;">
+                                <canvas id="dep_commune_Chart" width="40" height="10"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "Defective rate Graph against date period" %}</h3>
-                        <br>
-                        {{ form.as_table }}
-                        <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
-                    </div>
-                    <div class="chart-container" style="position: relative;">
-                        <canvas id="defective_rate_Chart" width="40" height="13"></canvas>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
+                            <h3 class="mb-0">{% trans "Defective rate Graph against date period" %}</h3>
+                            <br>
+                            {{ form.as_table }}
+                            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                        </div>
+                        <div class="chart-container" style="position: relative;">
+                            <canvas id="defective_rate_Chart" width="40" height="13"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </form>
     </div>
 
@@ -75,165 +81,184 @@
 
 {% endblock content %}
 
-<!-- Specific JS goes HERE --> 
+<!-- Specific JS goes HERE -->
 {% block javascripts %}
-        <script type="text/javascript">
-            function generateRandomColor(){
-                let maxVal = 0xFFFFFF; // 16777215
-                let randomNumber = Math.random() * maxVal;
-                randomNumber = Math.floor(randomNumber);
-                randomNumber = randomNumber.toString(16);
-                let randColor = randomNumber.padStart(6, 0);
-                return `#${randColor.toUpperCase()}`
-            }
-            var ctx = document.getElementById('department_Chart')
-            var department_labels = {{ department_name|safe }}
-            var department_datas = {{ department_sum_list|safe }}
-            var department_dataset = []
-            for (let i in department_datas) {
-                const r = Math.floor(Math.random() * 255);
-                const g = Math.floor(Math.random() * 255);
-                const b = Math.floor(Math.random() * 255);
-               department_dataset.push('rgba('+r+', '+g+', '+b+', 0.6)');
-            }
-            var department_config = {
-                type: 'polarArea',
-                data: {
-                    labels: department_labels,
-                    datasets: [{
-                            label: 'Defective rate average per Departement',
-                        data: department_datas,
-                        backgroundColor: department_dataset,
-                        }]
-                },
-                options: {
-                    scales: {
-                       r: {
-                           ticks: {
-                               z: 1,
-                               showLabelBackdrop: true,
-                               backdropColor: "rgba(255,255,255,0.5)",
-                               font: {
-                                   weight: 600
-                               }
-                           },
-                           grid: false,
-                       }
+    <script type="text/javascript">
+        function generateRandomColor() {
+            let maxVal = 0xFFFFFF; // 16777215
+            let randomNumber = Math.random() * maxVal;
+            randomNumber = Math.floor(randomNumber);
+            randomNumber = randomNumber.toString(16);
+            let randColor = randomNumber.padStart(6, 0);
+            return `#${randColor.toUpperCase()}`
+        }
+
+        var ctx = document.getElementById('department_Chart')
+        var department_labels =
+        {{ department_name|safe }}
+        var department_datas =
+        {{ department_sum_list|safe }}
+        var department_dataset = []
+        for (let i in department_datas) {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            department_dataset.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.6)');
+        }
+        var department_config = {
+            type: 'polarArea',
+            data: {
+                labels: department_labels,
+                datasets: [{
+                    label: 'Defective rate average per Departement',
+                    data: department_datas,
+                    backgroundColor: department_dataset,
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        ticks: {
+                            z: 1,
+                            showLabelBackdrop: true,
+                            backdropColor: "rgba(255,255,255,0.5)",
+                            font: {
+                                weight: 600
+                            }
+                        },
+                        grid: false,
                     }
                 }
-            };
-
-            var department_Chart = new Chart(ctx, department_config);
-            $("#0").click(function() {
-                var data0 = department_Chart.config.data;
-                data0.datasets[0].data = department_datas;
-                data0.datasets[0].backgroundColor = department_dataset;
-                data0.labels = department_labels;
-                department_Chart.update();
-            });
-            $("#1").click(function() {
-                var labels_commune = {{ commune_name|safe }}
-                var datas_commune = {{ commune_sum_list|safe }}
-                var dataset_commune = []
-                for (let i in datas_commune) {
-                    const r = Math.floor(Math.random() * 255);
-                    const g = Math.floor(Math.random() * 255);
-                    const b = Math.floor(Math.random() * 255);
-                   dataset_commune.push('rgba('+r+', '+g+', '+b+', 0.6)');
-                }
-                var data1 = department_Chart.config.data;
-                data1.datasets[0].data = datas_commune;
-                data1.datasets[0].backgroundColor = dataset_commune;
-                data1.labels = labels_commune;
-                department_Chart.update();
-            });
-
-            var defective_rate_labels = {{ defective_rate_time|safe }}
-            var defective_rate_datas = {{ per_defective_rate|safe }}
-            var defective_rate_color = []
-            for (let i in defective_rate_datas) {
-               var color1 = generateRandomColor();
-               defective_rate_color.push(color1)
             }
-            const data = {
-              labels: defective_rate_labels,
-              datasets: [
-                {
-                  label: "{{ defective_date_period|safe }}",
-                  data: defective_rate_datas,
-                  borderColor: generateRandomColor(),
-                  backgroundColor: 'white',
-                  fill: false,
-                    tension: 0.4
-                }
-              ]
-            };
-            const config = {
-              type: 'line',
-              data: data,
-              options: {
-                  scales: {
-                       x: {
-                           grid: {
-                               display: false
-                           }
-                       }
-                    },
-                plugins: {
-                  filler: {
-                    propagate: false,
-                  },
-                },
-                interaction: {
-                  intersect: false,
-                }
-              },
-            };
-            const defective_rate_Chart = new Chart(
-                document.getElementById('defective_rate_Chart'),
-                config
-            );
-          
-            var labels_dep_commune = {{ dep_commune_names|safe }}
-            var datas_dep_commune = {{ dep_commune_sum_list|safe }}
-            var dataset_dep_commune = []
-            for (let i in datas_dep_commune) {
+        };
+
+        var department_Chart = new Chart(ctx, department_config);
+        $("#0").click(function () {
+            var data0 = department_Chart.config.data;
+            data0.datasets[0].data = department_datas;
+            data0.datasets[0].backgroundColor = department_dataset;
+            data0.labels = department_labels;
+            department_Chart.update();
+        });
+        $("#1").click(function () {
+            var labels_commune =
+            {{ commune_name|safe }}
+            var datas_commune =
+            {{ commune_sum_list|safe }}
+            var dataset_commune = []
+            for (let i in datas_commune) {
                 const r = Math.floor(Math.random() * 255);
                 const g = Math.floor(Math.random() * 255);
                 const b = Math.floor(Math.random() * 255);
-               dataset_dep_commune.push('rgba('+r+', '+g+', '+b+', 0.6)');
+                dataset_commune.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.6)');
             }
-            const dep_commune_data = {
+            var data1 = department_Chart.config.data;
+            data1.datasets[0].data = datas_commune;
+            data1.datasets[0].backgroundColor = dataset_commune;
+            data1.labels = labels_commune;
+            department_Chart.update();
+        });
+
+        var defective_rate_labels =
+        {{ defective_rate_time|safe }}
+        var defective_rate_datas =
+        {{ per_defective_rate|safe }}
+        var defective_rate_color = []
+        for (let i in defective_rate_datas) {
+            var color1 = generateRandomColor();
+            defective_rate_color.push(color1)
+        }
+        const data = {
+            labels: defective_rate_labels,
+            datasets: [
+                {
+                    label: "{{ defective_date_period|safe }}",
+                    data: defective_rate_datas,
+                    borderColor: generateRandomColor(),
+                    backgroundColor: 'white',
+                    fill: false,
+                    tension: 0.4
+                }
+            ]
+        };
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    filler: {
+                        propagate: false,
+                    },
+                },
+                interaction: {
+                    intersect: false,
+                }
+            },
+        };
+        const defective_rate_Chart = new Chart(
+            document.getElementById('defective_rate_Chart'),
+            config
+        );
+
+        var labels_dep_commune =
+        {{ dep_commune_names|safe }}
+        var datas_dep_commune =
+        {{ dep_commune_sum_list|safe }}
+        var dataset_dep_commune = []
+        for (let i in datas_dep_commune) {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+            dataset_dep_commune.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.6)');
+        }
+        const dep_commune_data = {
             labels: labels_dep_commune,
             datasets: [{
-                    label: 'Defective rate average per Departement communes',
+                label: 'Defective rate average per Departement communes',
                 data: datas_dep_commune,
                 backgroundColor: dataset_dep_commune,
                 hoverBorderWidth: "30px",
-                }]
-            };
-            const dep_commune_config = {
-                type: 'polarArea',
-                data: dep_commune_data,
-                options: {
-                    scales: {
-                       r: {
-                           ticks: {
-                               z: 1,
-                               showLabelBackdrop: true,
-                               backdropColor: "rgba(255,255,255,0.5)",
-                               font: {
-                                   weight: 600,
-                               },
-                           },
-                           grid: false,
-                       }
+            }]
+        };
+        const dep_commune_config = {
+            type: 'polarArea',
+            data: dep_commune_data,
+            options: {
+                scales: {
+                    r: {
+                        ticks: {
+                            z: 1,
+                            showLabelBackdrop: true,
+                            backdropColor: "rgba(255,255,255,0.5)",
+                            font: {
+                                weight: 600,
+                            },
+                        },
+                        grid: false,
                     }
                 }
-            };
-            const dep_commune_Chart = new Chart(
-                document.getElementById('dep_commune_Chart'),
-                dep_commune_config
-            );
-        </script>
+            }
+        };
+        const dep_commune_Chart = new Chart(
+            document.getElementById('dep_commune_Chart'),
+            dep_commune_config
+        );
+    </script>
+    <script>
+        document.getElementById("id_department").addEventListener("change", myFunction);
+
+        function myFunction() {
+            var x = document.getElementById("id_department");
+            if (x.value != "Select Department") {
+                x.form.submit();
+            }
+        }
+    </script>
 {% endblock javascripts %}

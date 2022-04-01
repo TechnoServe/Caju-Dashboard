@@ -9,7 +9,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext
 
 from apps.authentication.models import RemUser, RemOrganization
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
@@ -171,11 +171,106 @@ names_sorted = list(set(names_with_duplicate))
 names_sorted = sorted(names_sorted)
 
 DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in names_sorted]
-lower_depselct = _('select department')
-upper_depselct = _('Select Department')
-select0 = (str(lower_depselct), str(upper_depselct))
+select0 = ('select department', _('Select Department'))
 DEPARTMENT_CHOICES.insert(0, select0)
 
 
 class DepartmentChoice(forms.Form):
-    department = forms.ChoiceField(choices=DEPARTMENT_CHOICES)
+    department = forms.ChoiceField(
+        choices=DEPARTMENT_CHOICES,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+nursery_column_search = (
+    ('all', _('All')),
+    ('nursery name', _('NURSERY NAME')),
+    ('owner first name', _('OWNER FIRST NAME')),
+    ('owner last name', _('OWNER LAST NAME')),
+    ('nursery address', _('NURSERY ADDRESS')),
+    ('country', _('COUNTRY')),
+    ('commune', _('COMMUNE')),
+    ('current area', _('CURRENT AREA')),
+    ('latitude', _('LATITUDE')),
+    ('longitude', _('LONGITUDE')),
+    ('altitude', _('ALTITUDE')),
+    ('partner', _('PARTNER')),
+    ('number of plants', _('NUMBER OF PLANTS')),
+)
+
+
+class NurserySearch(forms.Form):
+    column = forms.ChoiceField(
+        choices=nursery_column_search,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+beninyields_column_search = (
+    ('all', _('All')),
+    ('plantation name', _('PLANTATION NAME')),
+    ('total yield kg', _('TOTAL YIELD KG')),
+    ('total yield per ha kg', _('TOTAL YIELD PER HA KG')),
+    ('total yield per tree kg', _('TOTAL YIELD PER TREE KG')),
+    ('product id', _('PRODUCT ID')),
+    ('total number trees', _('TOTAL NUMBER TREES')),
+    ('total sick trees', _('TOTAL SICK TREES')),
+    ('total dead trees', _('TOTAL DEAD TREES')),
+    ('total trees out of prod', _('TOTAL TREES OUT OF PROD')),
+    ('year', _('YEAR')),
+)
+
+
+class BeninYieldSearch(forms.Form):
+    column = forms.ChoiceField(
+        choices=beninyields_column_search,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+plantations_column_search = (
+    ('all', _('All')),
+    ('plantation name', _('PLANTATION NAME')),
+    ('plantation code', _('PLANTATION CODE')),
+    ('owner first name', _('OWNER FIRST NAME')),
+    ('owner last name', _('OWNER LAST NAME')),
+    ('owner gender', _('OWNER GENDER')),
+    ('total trees', _('TOTAL TREES')),
+    ('country', _('COUNTRY')),
+    ('department', _('DEPARTMENT')),
+    ('commune', _('COMMUNE')),
+    ('arrondissement', _('ARRONDISSEMENT')),
+    ('village', _('village')),
+    ('current area', _('CURRENT AREA')),
+    ('latitude', _('LATITUDE')),
+    ('longitude', _('LONGITUDE')),
+    ('altitude', _('ALTITUDE')),
+
+)
+
+
+class PlantationsSearch(forms.Form):
+    column = forms.ChoiceField(
+        choices=plantations_column_search,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-23 15:35+0100\n"
+"POT-Creation-Date: 2022-04-01 08:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,12 +46,12 @@ msgstr "Veuillez confirmer votre adresse e-mail pour terminer l'inscription"
 
 #: .\apps\authentication\views.py:109 .\apps\authentication\views.py:142
 #: .\apps\authentication\views.py:201 .\apps\authentication\views.py:281
-#: .\apps\authentication\views.py:315 .\apps\dashboard\views.py:81
-#: .\apps\dashboard\views.py:126 .\apps\dashboard\views.py:186
+#: .\apps\authentication\views.py:315 .\apps\dashboard\views.py:92
+#: .\apps\dashboard\views.py:137 .\apps\dashboard\views.py:197
 msgid "Form is not valid"
 msgstr "Le formulaire n'est pas valide"
 
-#: .\apps\authentication\views.py:138 .\apps\dashboard\views.py:77
+#: .\apps\authentication\views.py:138 .\apps\dashboard\views.py:88
 msgid "Organization created - please <a href=\"/register\">register user</a>."
 msgstr ""
 "Organisation créée - veuillez <a href=\"/register\">enregistrer "
@@ -121,13 +121,125 @@ msgid "To"
 msgstr "Au"
 
 #: .\apps\dashboard\forms.py:174
-msgid "select department"
-msgstr "Sélectionner le département"
-
-#: .\apps\dashboard\forms.py:175
-#| msgid "Select Department: "
 msgid "Select Department"
 msgstr "Sélectionner le département"
+
+#: .\apps\dashboard\forms.py:192 .\apps\dashboard\forms.py:221
+#: .\apps\dashboard\forms.py:248
+msgid "All"
+msgstr "Tous"
+
+#: .\apps\dashboard\forms.py:193
+msgid "NURSERY NAME"
+msgstr "NOM DE LA PÉPINIÈRE"
+
+#: .\apps\dashboard\forms.py:194 .\apps\dashboard\forms.py:251
+msgid "OWNER FIRST NAME"
+msgstr "PRÉNOM DU PROPRIÉTAIRE"
+
+#: .\apps\dashboard\forms.py:195 .\apps\dashboard\forms.py:252
+msgid "OWNER LAST NAME"
+msgstr "NOM DE FAMILLE DU PROPRIÉTAIRE"
+
+#: .\apps\dashboard\forms.py:196
+msgid "NURSERY ADDRESS"
+msgstr "ADRESSE DE LA PÉPINIÈRE"
+
+#: .\apps\dashboard\forms.py:197 .\apps\dashboard\forms.py:255
+msgid "COUNTRY"
+msgstr "PAYS"
+
+#: .\apps\dashboard\forms.py:198 .\apps\dashboard\forms.py:257
+msgid "COMMUNE"
+msgstr "COMMUNE"
+
+#: .\apps\dashboard\forms.py:199 .\apps\dashboard\forms.py:260
+msgid "CURRENT AREA"
+msgstr "ZONE ACTUELLE"
+
+#: .\apps\dashboard\forms.py:200 .\apps\dashboard\forms.py:261
+msgid "LATITUDE"
+msgstr "LATITUDE"
+
+#: .\apps\dashboard\forms.py:201 .\apps\dashboard\forms.py:262
+msgid "LONGITUDE"
+msgstr "LONGITUDE"
+
+#: .\apps\dashboard\forms.py:202 .\apps\dashboard\forms.py:263
+msgid "ALTITUDE"
+msgstr "ALTITUDE"
+
+#: .\apps\dashboard\forms.py:203
+msgid "PARTNER"
+msgstr "PARTENAIRE"
+
+#: .\apps\dashboard\forms.py:204
+msgid "NUMBER OF PLANTS"
+msgstr "NOMBRE DE PLANTES"
+
+#: .\apps\dashboard\forms.py:222 .\apps\dashboard\forms.py:249
+msgid "PLANTATION NAME"
+msgstr "NOM DE LA PLANTATION"
+
+#: .\apps\dashboard\forms.py:223
+msgid "TOTAL YIELD KG"
+msgstr "RENDEMENT TOTAL KG"
+
+#: .\apps\dashboard\forms.py:224
+msgid "TOTAL YIELD PER HA KG"
+msgstr "RENDEMENT TOTAL PAR HA KG"
+
+#: .\apps\dashboard\forms.py:225
+msgid "TOTAL YIELD PER TREE KG"
+msgstr "RENDEMENT TOTAL PAR ARBRE KG"
+
+#: .\apps\dashboard\forms.py:226
+msgid "PRODUCT ID"
+msgstr "ID PRODUIT"
+
+#: .\apps\dashboard\forms.py:227
+msgid "TOTAL NUMBER TREES"
+msgstr "NOMBRE TOTAL D'ARBRES"
+
+#: .\apps\dashboard\forms.py:228
+msgid "TOTAL SICK TREES"
+msgstr "TOTAL DES ARBRES MALADES"
+
+#: .\apps\dashboard\forms.py:229
+msgid "TOTAL DEAD TREES"
+msgstr "TOTAL DES ARBRES MORTS"
+
+#: .\apps\dashboard\forms.py:230
+msgid "TOTAL TREES OUT OF PROD"
+msgstr "TOTAL DES ARBRES HORS PROD"
+
+#: .\apps\dashboard\forms.py:231
+msgid "YEAR"
+msgstr "ANNÉE"
+
+#: .\apps\dashboard\forms.py:250
+msgid "PLANTATION CODE"
+msgstr "CODE DE LA PLANTATION"
+
+#: .\apps\dashboard\forms.py:253
+msgid "OWNER GENDER"
+msgstr "SEXE DU PROPRIÉTAIRE"
+
+#: .\apps\dashboard\forms.py:254
+msgid "TOTAL TREES"
+msgstr "TOTAL DES ARBRES"
+
+#: .\apps\dashboard\forms.py:256
+msgid "DEPARTMENT"
+msgstr "DÉPARTEMENT"
+
+#: .\apps\dashboard\forms.py:258
+msgid "ARRONDISSEMENT"
+msgstr "ARRONDISSEMENT"
+
+#: .\apps\dashboard\forms.py:259
+msgid "village"
+msgstr "Village"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:90
 #: .\apps\dashboard\layers_builders\benin_commune.py:131
@@ -171,14 +283,16 @@ msgstr "Arbres Actifs"
 #: .\apps\dashboard\layers_builders\benin_commune.py:125
 #: .\apps\dashboard\layers_builders\benin_department.py:122
 #: .\apps\dashboard\layers_builders\benin_republic.py:80
-#: .\apps\templates\dashboard\yield.html:66
+#: .\apps\templates\dashboard\pdf-output.html:111
+#: .\apps\templates\dashboard\yield.html:69
 msgid "Sick Trees"
 msgstr "Arbres Malades"
 
 #: .\apps\dashboard\layers_builders\benin_commune.py:126
 #: .\apps\dashboard\layers_builders\benin_department.py:123
 #: .\apps\dashboard\layers_builders\benin_republic.py:81
-#: .\apps\templates\dashboard\yield.html:67
+#: .\apps\templates\dashboard\pdf-output.html:112
+#: .\apps\templates\dashboard\yield.html:70
 msgid "Dead Trees"
 msgstr "Arbres Morts"
 
@@ -299,7 +413,9 @@ msgid "Plantation ID"
 msgstr "ID de la plantation"
 
 #: .\apps\dashboard\layers_builders\benin_plantations.py:33
-#: .\apps\templates\dashboard\plantations.html:58
+#: .\apps\dashboard\views.py:1197 .\apps\dashboard\views.py:1289
+#: .\apps\templates\dashboard\pdf-output.html:179
+#: .\apps\templates\dashboard\plantations.html:61
 msgid "Village"
 msgstr "Village"
 
@@ -394,7 +510,9 @@ msgid "Nursery Area (ha)"
 msgstr "Superficie de la pépinière (ha)"
 
 #: .\apps\dashboard\layers_builders\nursery_information.py:23
-#: .\apps\templates\dashboard\nurseries.html:59
+#: .\apps\dashboard\views.py:1177 .\apps\dashboard\views.py:1250
+#: .\apps\templates\dashboard\nurseries.html:63
+#: .\apps\templates\dashboard\pdf-output.html:43
 msgid "Number of Plants"
 msgstr "Nombre de plantes"
 
@@ -413,7 +531,7 @@ msgid "KOR"
 msgstr "KOR"
 
 #: .\apps\dashboard\layers_builders\qar_informations.py:10
-#: .\apps\templates\dashboard\nut_count.html:15
+#: .\apps\templates\dashboard\nut_count.html:18
 #: .\apps\templates\includes\sidenav.html:152
 msgid "Nut Count"
 msgstr "Nombre de noix"
@@ -448,18 +566,187 @@ msgstr "Informations sur la pépinière"
 msgid "No Boundary"
 msgstr "Aucune limite"
 
-#: .\apps\dashboard\views.py:310 .\apps\templates\dashboard\analytics.html:58
+#: .\apps\dashboard\views.py:410 .\apps\templates\dashboard\analytics.html:60
 msgid "KOR Graph against date period"
 msgstr "Graphique de KOR par rapport à la période"
 
-#: .\apps\dashboard\views.py:562 .\apps\templates\dashboard\nut_count.html:60
+#: .\apps\dashboard\views.py:662 .\apps\templates\dashboard\nut_count.html:66
 msgid "Nut count Graph against date period"
 msgstr "Moyenne du nombre de noix par rapport à la période"
 
-#: .\apps\dashboard\views.py:815
-#: .\apps\templates\dashboard\defective_rate.html:60
+#: .\apps\dashboard\views.py:915
+#: .\apps\templates\dashboard\defective_rate.html:66
 msgid "Defective rate Graph against date period"
 msgstr "Moyenne du taux de défectuosité par rapport à la période"
+
+#: .\apps\dashboard\views.py:1174 .\apps\dashboard\views.py:1247
+#: .\apps\templates\dashboard\nurseries.html:52
+#: .\apps\templates\dashboard\pdf-output.html:32
+msgid "Nursery Name"
+msgstr "Nom de la Pépinière"
+
+#: .\apps\dashboard\views.py:1174 .\apps\dashboard\views.py:1247
+#: .\apps\templates\dashboard\nurseries.html:53
+#: .\apps\templates\dashboard\pdf-output.html:33
+msgid "Owner First Name"
+msgstr "Prénom du propriétaire"
+
+#: .\apps\dashboard\views.py:1174 .\apps\dashboard\views.py:1247
+#: .\apps\templates\dashboard\nurseries.html:54
+#: .\apps\templates\dashboard\pdf-output.html:34
+msgid "Owner Last Name"
+msgstr "Nom de famille du propriétaire"
+
+#: .\apps\dashboard\views.py:1174 .\apps\dashboard\views.py:1248
+#: .\apps\templates\dashboard\nurseries.html:55
+#: .\apps\templates\dashboard\pdf-output.html:35
+msgid "Nursery Address"
+msgstr "Adresse de la Pépinière"
+
+#: .\apps\dashboard\views.py:1175 .\apps\dashboard\views.py:1197
+#: .\apps\dashboard\views.py:1248 .\apps\dashboard\views.py:1288
+#: .\apps\templates\dashboard\nurseries.html:56
+#: .\apps\templates\dashboard\pdf-output.html:36
+#: .\apps\templates\dashboard\pdf-output.html:175
+#: .\apps\templates\dashboard\plantations.html:57
+msgid "Country"
+msgstr "Pays"
+
+#: .\apps\dashboard\views.py:1175 .\apps\dashboard\views.py:1197
+#: .\apps\dashboard\views.py:1248 .\apps\dashboard\views.py:1288
+#: .\apps\templates\dashboard\analytics.html:31
+#: .\apps\templates\dashboard\defective_rate.html:36
+#: .\apps\templates\dashboard\nurseries.html:57
+#: .\apps\templates\dashboard\nut_count.html:36
+#: .\apps\templates\dashboard\pdf-output.html:37
+#: .\apps\templates\dashboard\pdf-output.html:177
+#: .\apps\templates\dashboard\plantations.html:59
+#: .\apps\templates\dashboard\shipment.html:59
+msgid "Commune"
+msgstr "commune"
+
+#: .\apps\dashboard\views.py:1176 .\apps\dashboard\views.py:1249
+#: .\apps\templates\dashboard\nurseries.html:58
+#: .\apps\templates\dashboard\pdf-output.html:38
+msgid "Current Area"
+msgstr "Zone actuelle"
+
+#: .\apps\dashboard\views.py:1176 .\apps\dashboard\views.py:1198
+#: .\apps\dashboard\views.py:1249 .\apps\dashboard\views.py:1289
+#: .\apps\templates\dashboard\nurseries.html:59
+#: .\apps\templates\dashboard\pdf-output.html:39
+#: .\apps\templates\dashboard\pdf-output.html:181
+#: .\apps\templates\dashboard\plantations.html:63
+msgid "Latitude"
+msgstr "Latitude"
+
+#: .\apps\dashboard\views.py:1176 .\apps\dashboard\views.py:1198
+#: .\apps\dashboard\views.py:1249 .\apps\dashboard\views.py:1290
+#: .\apps\templates\dashboard\nurseries.html:60
+#: .\apps\templates\dashboard\pdf-output.html:40
+#: .\apps\templates\dashboard\pdf-output.html:182
+#: .\apps\templates\dashboard\plantations.html:64
+msgid "Longitude"
+msgstr "Longitude"
+
+#: .\apps\dashboard\views.py:1176 .\apps\dashboard\views.py:1199
+#: .\apps\dashboard\views.py:1249 .\apps\dashboard\views.py:1291
+#: .\apps\templates\dashboard\nurseries.html:61
+#: .\apps\templates\dashboard\pdf-output.html:41
+#: .\apps\templates\dashboard\pdf-output.html:183
+#: .\apps\templates\dashboard\plantations.html:65
+msgid "Altitude"
+msgstr "Altitude"
+
+#: .\apps\dashboard\views.py:1176 .\apps\dashboard\views.py:1250
+#: .\apps\templates\dashboard\companies.html:175
+#: .\apps\templates\dashboard\nurseries.html:62
+#: .\apps\templates\dashboard\pdf-output.html:42
+msgid "Partner"
+msgstr "Partenaire"
+
+#: .\apps\dashboard\views.py:1195 .\apps\dashboard\views.py:1220
+#: .\apps\dashboard\views.py:1285 .\apps\dashboard\views.py:1330
+msgid "Plantation name"
+msgstr "Nom de la plantation"
+
+#: .\apps\dashboard\views.py:1195 .\apps\dashboard\views.py:1285
+msgid "Plantation code"
+msgstr "Code de plantation"
+
+#: .\apps\dashboard\views.py:1195 .\apps\dashboard\views.py:1285
+msgid "Owner first name"
+msgstr "Prénom du propriétaire"
+
+#: .\apps\dashboard\views.py:1196 .\apps\dashboard\views.py:1286
+msgid "Owner last name"
+msgstr "Nom du propriétaire"
+
+#: .\apps\dashboard\views.py:1196 .\apps\dashboard\views.py:1286
+msgid "Owner gender"
+msgstr "Adresse du propriétaire"
+
+#: .\apps\dashboard\views.py:1196 .\apps\dashboard\views.py:1287
+msgid "Total trees"
+msgstr "Nombre total d'arbres"
+
+#: .\apps\dashboard\views.py:1197 .\apps\dashboard\views.py:1288
+#: .\apps\templates\dashboard\analytics.html:31
+#: .\apps\templates\dashboard\defective_rate.html:35
+#: .\apps\templates\dashboard\nut_count.html:35
+#: .\apps\templates\dashboard\pdf-output.html:176
+#: .\apps\templates\dashboard\plantations.html:58
+#: .\apps\templates\dashboard\shipment.html:58
+msgid "Department"
+msgstr "département"
+
+#: .\apps\dashboard\views.py:1197 .\apps\dashboard\views.py:1288
+#: .\apps\templates\dashboard\pdf-output.html:178
+#: .\apps\templates\dashboard\plantations.html:60
+msgid "Arrondissement"
+msgstr "Arrondissement"
+
+#: .\apps\dashboard\views.py:1198 .\apps\dashboard\views.py:1289
+msgid "Current area"
+msgstr "Zone actuelle"
+
+#: .\apps\dashboard\views.py:1220 .\apps\dashboard\views.py:1330
+msgid "Product id"
+msgstr "Identifiant du produit"
+
+#: .\apps\dashboard\views.py:1220 .\apps\dashboard\views.py:1330
+#: .\apps\templates\dashboard\pdf-output.html:106
+#: .\apps\templates\dashboard\yield.html:64
+msgid "Year"
+msgstr "An"
+
+#: .\apps\dashboard\views.py:1220 .\apps\dashboard\views.py:1330
+msgid "Total number trees"
+msgstr "Nombre total d'arbres"
+
+#: .\apps\dashboard\views.py:1221 .\apps\dashboard\views.py:1331
+msgid "Total yield kg"
+msgstr "Rendement Total des Noix de Cajou (kg)"
+
+#: .\apps\dashboard\views.py:1221 .\apps\dashboard\views.py:1332
+msgid "Total yield per ha kg"
+msgstr "Rendement par Arbre (kg/arbre)"
+
+#: .\apps\dashboard\views.py:1222 .\apps\dashboard\views.py:1333
+msgid "Total yield per tree kg"
+msgstr "Rendement par Arbre (kg/arbre)"
+
+#: .\apps\dashboard\views.py:1222 .\apps\dashboard\views.py:1333
+msgid "Total sick trees"
+msgstr "Nombre total d'arbres"
+
+#: .\apps\dashboard\views.py:1222 .\apps\dashboard\views.py:1333
+msgid "Total dead trees"
+msgstr "Nombre total d'arbres"
+
+#: .\apps\dashboard\views.py:1223 .\apps\dashboard\views.py:1334
+msgid "Total trees out of prod"
+msgstr "Total des arbres hors prod"
 
 #: .\apps\templates\authentication\acc_active_email.html:112
 #: .\apps\templates\authentication\password_reset_email.html:112
@@ -804,32 +1091,13 @@ msgstr ""
 msgid "KOR average per"
 msgstr "Moyenne de KOR par"
 
-#: .\apps\templates\dashboard\analytics.html:31
-#: .\apps\templates\dashboard\defective_rate.html:31
-#: .\apps\templates\dashboard\nut_count.html:31
-#: .\apps\templates\dashboard\plantations.html:55
-#: .\apps\templates\dashboard\shipment.html:54
-msgid "Department"
-msgstr "département"
-
-#: .\apps\templates\dashboard\analytics.html:31
-#: .\apps\templates\dashboard\defective_rate.html:31
-#: .\apps\templates\dashboard\nurseries.html:53
-#: .\apps\templates\dashboard\nut_count.html:31
-#: .\apps\templates\dashboard\plantations.html:56
-#: .\apps\templates\dashboard\shipment.html:55
-msgid "Commune"
-msgstr "commune"
-
-#: .\apps\templates\dashboard\analytics.html:42
+#: .\apps\templates\dashboard\analytics.html:43
 msgid "KOR average per Departement communes"
 msgstr "Moyenne de KOR par communes de departement"
 
-#: .\apps\templates\dashboard\analytics.html:61
-#: .\apps\templates\dashboard\defective_rate.html:46
-#: .\apps\templates\dashboard\defective_rate.html:63
-#: .\apps\templates\dashboard\nut_count.html:46
-#: .\apps\templates\dashboard\nut_count.html:63
+#: .\apps\templates\dashboard\analytics.html:63
+#: .\apps\templates\dashboard\defective_rate.html:69
+#: .\apps\templates\dashboard\nut_count.html:69
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -870,23 +1138,23 @@ msgstr "Adresse"
 
 #: .\apps\templates\dashboard\companies.html:106
 #: .\apps\templates\dashboard\companies.html:222
-#: .\apps\templates\dashboard\nurseries.html:152
-#: .\apps\templates\dashboard\plantations.html:162
-#: .\apps\templates\dashboard\shipment.html:126
-#: .\apps\templates\dashboard\yield.html:156
+#: .\apps\templates\dashboard\nurseries.html:132
+#: .\apps\templates\dashboard\plantations.html:165
+#: .\apps\templates\dashboard\shipment.html:130
+#: .\apps\templates\dashboard\yield.html:159
 msgid "Previous"
 msgstr "Précédent"
 
 #: .\apps\templates\dashboard\companies.html:117
 #: .\apps\templates\dashboard\companies.html:233
-#: .\apps\templates\dashboard\nurseries.html:188
-#: .\apps\templates\dashboard\nurseries.html:196
-#: .\apps\templates\dashboard\plantations.html:198
-#: .\apps\templates\dashboard\plantations.html:206
-#: .\apps\templates\dashboard\shipment.html:162
-#: .\apps\templates\dashboard\shipment.html:170
-#: .\apps\templates\dashboard\yield.html:192
-#: .\apps\templates\dashboard\yield.html:200
+#: .\apps\templates\dashboard\nurseries.html:168
+#: .\apps\templates\dashboard\nurseries.html:176
+#: .\apps\templates\dashboard\plantations.html:201
+#: .\apps\templates\dashboard\plantations.html:209
+#: .\apps\templates\dashboard\shipment.html:166
+#: .\apps\templates\dashboard\shipment.html:174
+#: .\apps\templates\dashboard\yield.html:195
+#: .\apps\templates\dashboard\yield.html:203
 msgid "Next"
 msgstr "Suivant"
 
@@ -895,14 +1163,17 @@ msgid "Plantation"
 msgstr "Plantation"
 
 #: .\apps\templates\dashboard\companies.html:167
-#: .\apps\templates\dashboard\plantations.html:48
-#: .\apps\templates\dashboard\shipment.html:50
-#: .\apps\templates\dashboard\yield.html:59
+#: .\apps\templates\dashboard\pdf-output.html:104
+#: .\apps\templates\dashboard\pdf-output.html:169
+#: .\apps\templates\dashboard\plantations.html:51
+#: .\apps\templates\dashboard\shipment.html:54
+#: .\apps\templates\dashboard\yield.html:62
 msgid "Plantation Name"
 msgstr "Nom de la plantation"
 
 #: .\apps\templates\dashboard\companies.html:168
-#: .\apps\templates\dashboard\plantations.html:49
+#: .\apps\templates\dashboard\pdf-output.html:170
+#: .\apps\templates\dashboard\plantations.html:52
 msgid "Plantation Code"
 msgstr "Code de plantation"
 
@@ -923,31 +1194,22 @@ msgid "Owner Address"
 msgstr "Adresse du propriétaire"
 
 #: .\apps\templates\dashboard\companies.html:174
-#: .\apps\templates\dashboard\plantations.html:53
+#: .\apps\templates\dashboard\pdf-output.html:174
+#: .\apps\templates\dashboard\plantations.html:56
 msgid "Total Trees"
 msgstr "Nombre total d'arbres"
 
-#: .\apps\templates\dashboard\companies.html:175
-#: .\apps\templates\dashboard\nurseries.html:58
-msgid "Partner"
-msgstr "Partenaire"
-
-#: .\apps\templates\dashboard\defective_rate.html:15
+#: .\apps\templates\dashboard\defective_rate.html:18
 msgid "Defective rate"
 msgstr "Arbres Actifs"
 
-#: .\apps\templates\dashboard\defective_rate.html:31
+#: .\apps\templates\dashboard\defective_rate.html:34
 msgid "Defective rate average per"
 msgstr "Moyenne du taux de défectuosité par commune"
 
-#: .\apps\templates\dashboard\defective_rate.html:42
+#: .\apps\templates\dashboard\defective_rate.html:49
 msgid "Defective rate average per Departement communes"
 msgstr "Moyenne du taux de défectuosité par communes de département"
-
-#: .\apps\templates\dashboard\defective_rate.html:44
-#: .\apps\templates\dashboard\nut_count.html:44
-msgid "Select Department: "
-msgstr "Sélectionner le département"
 
 #: .\apps\templates\dashboard\login.html:19
 msgid "Sign in with"
@@ -967,87 +1229,110 @@ msgid "Create Account"
 msgstr "Créer un compte"
 
 #: .\apps\templates\dashboard\nurseries.html:14
-#: .\apps\templates\dashboard\nurseries.html:41
+#: .\apps\templates\dashboard\nurseries.html:38
+#: .\apps\templates\dashboard\pdf-output.html:26
 #: .\apps\templates\includes\sidenav.html:124
 msgid "Nurseries"
 msgstr "Pépinières"
 
-#: .\apps\templates\dashboard\nurseries.html:48
-msgid "Nursery Name"
-msgstr "Nom de la Pépinière"
+#: .\apps\templates\dashboard\nurseries.html:18
+#: .\apps\templates\dashboard\nurseries.html:20
+#: .\apps\templates\dashboard\plantations.html:18
+#: .\apps\templates\dashboard\plantations.html:20
+#: .\apps\templates\dashboard\yield.html:18
+#: .\apps\templates\dashboard\yield.html:20
+msgid "Search"
+msgstr "Recherche"
 
-#: .\apps\templates\dashboard\nurseries.html:49
-msgid "Owner First Name"
-msgstr "Prénom du propriétaire"
+#: .\apps\templates\dashboard\nurseries.html:41
+#: .\apps\templates\dashboard\plantations.html:41
+#: .\apps\templates\dashboard\yield.html:52
+msgid "Export Excel"
+msgstr "Exporter Excel"
 
-#: .\apps\templates\dashboard\nurseries.html:50
-msgid "Owner Last Name"
-msgstr "Nom de famille du propriétaire"
+#: .\apps\templates\dashboard\nurseries.html:42
+#: .\apps\templates\dashboard\plantations.html:42
+#: .\apps\templates\dashboard\yield.html:53
+msgid "Export CSV"
+msgstr "Exporter CSV"
 
-#: .\apps\templates\dashboard\nurseries.html:51
-msgid "Nursery Address"
-msgstr "Adresse de la Pépinière"
+#: .\apps\templates\dashboard\nurseries.html:43
+#: .\apps\templates\dashboard\plantations.html:43
+#: .\apps\templates\dashboard\yield.html:54
+msgid "Export PDF"
+msgstr "Exporter PDF"
 
-#: .\apps\templates\dashboard\nurseries.html:52
-#: .\apps\templates\dashboard\plantations.html:54
-msgid "Country"
-msgstr "Pays"
-
-#: .\apps\templates\dashboard\nurseries.html:54
-msgid "Current Area"
-msgstr "Zone actuelle"
-
-#: .\apps\templates\dashboard\nurseries.html:55
-#: .\apps\templates\dashboard\plantations.html:60
-msgid "Latitude"
-msgstr "Latitude"
-
-#: .\apps\templates\dashboard\nurseries.html:56
-#: .\apps\templates\dashboard\plantations.html:61
-msgid "Longitude"
-msgstr "Longitude"
-
-#: .\apps\templates\dashboard\nurseries.html:57
-#: .\apps\templates\dashboard\plantations.html:62
-msgid "Altitude"
-msgstr "Altitude"
-
-#: .\apps\templates\dashboard\nut_count.html:31
+#: .\apps\templates\dashboard\nut_count.html:34
 msgid "Nut count average per"
 msgstr "Moyenne du nombre de noix par commune"
 
-#: .\apps\templates\dashboard\nut_count.html:42
+#: .\apps\templates\dashboard\nut_count.html:49
 msgid "Nut count average per Departement communes"
 msgstr "Moyenne du nombre de noix par commune de département"
+
+#: .\apps\templates\dashboard\pdf-output.html:8
+#: .\apps\templates\includes\sidenav.html:17
+msgid "Cashew Dashboard"
+msgstr "Dashboard des cajous"
+
+#: .\apps\templates\dashboard\pdf-output.html:105
+#: .\apps\templates\dashboard\yield.html:63
+msgid "Product ID"
+msgstr "Identifiant du produit"
+
+#: .\apps\templates\dashboard\pdf-output.html:107
+#: .\apps\templates\dashboard\yield.html:65
+msgid "Total Plants"
+msgstr "Plantes totales"
+
+#: .\apps\templates\dashboard\pdf-output.html:108
+#: .\apps\templates\dashboard\yield.html:66
+msgid "Yields (Kg)"
+msgstr "Rendements (Kg)"
+
+#: .\apps\templates\dashboard\pdf-output.html:109
+#: .\apps\templates\dashboard\yield.html:67
+msgid "Yields/Ha (Kg)"
+msgstr "Rendements/Ha (Kg)"
+
+#: .\apps\templates\dashboard\pdf-output.html:110
+#: .\apps\templates\dashboard\yield.html:68
+msgid "Yields/Tree (Kg)"
+msgstr "Rendements/Arbre (Kg)"
+
+#: .\apps\templates\dashboard\pdf-output.html:113
+#: .\apps\templates\dashboard\yield.html:71
+msgid "Out of Prod. Trees"
+msgstr "Hors prod. Des arbres"
+
+#: .\apps\templates\dashboard\pdf-output.html:171
+#: .\apps\templates\dashboard\plantations.html:53
+msgid "Owner First name"
+msgstr "Prénom du propriétaire"
+
+#: .\apps\templates\dashboard\pdf-output.html:172
+#: .\apps\templates\dashboard\plantations.html:54
+msgid "Owner Last name"
+msgstr "Nom du propriétaire"
+
+#: .\apps\templates\dashboard\pdf-output.html:173
+#: .\apps\templates\dashboard\plantations.html:55
+msgid "Gender"
+msgstr "Le genre"
+
+#: .\apps\templates\dashboard\pdf-output.html:180
+#: .\apps\templates\dashboard\plantations.html:62
+msgid "Area(Ha)"
+msgstr "Superficie(ha)"
 
 #: .\apps\templates\dashboard\plantations.html:14
 #: .\apps\templates\includes\sidenav.html:97
 msgid "Plantations"
 msgstr "Plantations"
 
-#: .\apps\templates\dashboard\plantations.html:41
+#: .\apps\templates\dashboard\plantations.html:38
 msgid "Plantations Data"
 msgstr "Données sur les plantations"
-
-#: .\apps\templates\dashboard\plantations.html:50
-msgid "Owner First name"
-msgstr "Prénom du propriétaire"
-
-#: .\apps\templates\dashboard\plantations.html:51
-msgid "Owner Last name"
-msgstr "Nom du propriétaire"
-
-#: .\apps\templates\dashboard\plantations.html:52
-msgid "Gender"
-msgstr "Le genre"
-
-#: .\apps\templates\dashboard\plantations.html:57
-msgid "Arrondissement"
-msgstr "Arrondissement"
-
-#: .\apps\templates\dashboard\plantations.html:59
-msgid "Area(Ha)"
-msgstr "Superficie(ha)"
 
 #: .\apps\templates\dashboard\profile.html:23
 msgid "Hello"
@@ -1107,58 +1392,30 @@ msgid "strong"
 msgstr "fort"
 
 #: .\apps\templates\dashboard\shipment.html:16
-#: .\apps\templates\dashboard\shipment.html:43
+#: .\apps\templates\dashboard\shipment.html:47
 #: .\apps\templates\includes\sidenav.html:115
 msgid "Shipment"
 msgstr "Expédition"
 
-#: .\apps\templates\dashboard\shipment.html:51
+#: .\apps\templates\dashboard\shipment.html:55
 msgid "Shipment Date"
 msgstr "Date d'expédition"
 
-#: .\apps\templates\dashboard\shipment.html:52
+#: .\apps\templates\dashboard\shipment.html:56
 msgid "Port Number"
 msgstr "Numéro de port"
 
-#: .\apps\templates\dashboard\shipment.html:53
+#: .\apps\templates\dashboard\shipment.html:57
 msgid "Cashew Quantity"
 msgstr "Quantité de noix de cajou"
 
-#: .\apps\templates\dashboard\shipment.html:56
+#: .\apps\templates\dashboard\shipment.html:60
 msgid "Plantation Area"
 msgstr "Zone de plantation"
 
 #: .\apps\templates\dashboard\yield.html:14
 msgid "Yields"
 msgstr "Rendements"
-
-#: .\apps\templates\dashboard\yield.html:60
-msgid "Product ID"
-msgstr "Identifiant du produit"
-
-#: .\apps\templates\dashboard\yield.html:61
-msgid "Year"
-msgstr "An"
-
-#: .\apps\templates\dashboard\yield.html:62
-msgid "Total Plants"
-msgstr "Plantes totales"
-
-#: .\apps\templates\dashboard\yield.html:63
-msgid "Yields (Kg)"
-msgstr "Rendements (Kg)"
-
-#: .\apps\templates\dashboard\yield.html:64
-msgid "Yields/Ha (Kg)"
-msgstr "Rendements/Ha (Kg)"
-
-#: .\apps\templates\dashboard\yield.html:65
-msgid "Yields/Tree (Kg)"
-msgstr "Rendements/Arbre (Kg)"
-
-#: .\apps\templates\dashboard\yield.html:68
-msgid "Out of Prod. Trees"
-msgstr "Hors prod. Des arbres"
 
 #: .\apps\templates\includes\footer.html:9
 msgid "More Dashboards"
@@ -1214,10 +1471,6 @@ msgstr "Vous avez"
 msgid "notifications"
 msgstr "notifications"
 
-#: .\apps\templates\includes\sidenav.html:17
-msgid "Cashew Dashboard"
-msgstr "Dashboard des cajous"
-
 #: .\apps\templates\includes\sidenav.html:41
 msgid "Map"
 msgstr "Carte"
@@ -1266,7 +1519,7 @@ msgstr "Visitez TechnoServe"
 msgid "TechnoServe"
 msgstr "Technoserve"
 
-#: .\apps\templates\layouts\base-fullscreen.html:59
+#: .\apps\templates\layouts\base-fullscreen.html:55
 msgid "Cajúlab Presents"
 msgstr "Cajúlab présente"
 
@@ -1281,6 +1534,47 @@ msgstr "Anglais"
 #: .\cajulab_remote_sensing_dashboard\settings.py:153
 msgid "French"
 msgstr "Français"
+
+#~ msgid "select department"
+#~ msgstr "Sélectionner le département"
+
+#~ msgid "nursery name"
+#~ msgstr "Nom de la Pépinière"
+
+#~ msgid "nursery address"
+#~ msgstr "Adresse de la Pépinière"
+
+#~ msgid "country"
+#~ msgstr "Pays"
+
+#~ msgid "commune"
+#~ msgstr "commune"
+
+#~ msgid "latitude"
+#~ msgstr "Latitude"
+
+#~ msgid "longitude"
+#~ msgstr "Longitude"
+
+#~ msgid "altitude"
+#~ msgstr "Altitude"
+
+#~ msgid "partner"
+#~ msgstr "Partenaire"
+
+#~ msgid "number of plants"
+#~ msgstr "Nombre de plantes"
+
+#~| msgid "Department"
+#~ msgid "department"
+#~ msgstr "département"
+
+#~| msgid "Arrondissement"
+#~ msgid "arrondissement"
+#~ msgstr "Arrondissement"
+
+#~ msgid "Select Department: "
+#~ msgstr "Sélectionner le département"
 
 #~ msgid "Oups! Error 403"
 #~ msgstr "Oups! Erreur 403"

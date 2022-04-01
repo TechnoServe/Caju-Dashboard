@@ -1,6 +1,10 @@
+import os
 import collections
+import csv
 import datetime
+import tempfile
 
+import xlwt
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -8,10 +12,15 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template import loader
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 from django.views import generic
+
+os.add_dll_directory(r"C:\Program Files\GTK3-Runtime Win64\bin")
+from weasyprint import HTML
 
 from apps.authentication import utils
 from apps.authentication.forms import RegisterOrganization, RegisterRole
@@ -19,7 +28,8 @@ from apps.authentication.models import RemOrganization, RemRole, RemUser
 from apps.dashboard import models
 from apps.dashboard.models import Plantation
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
-from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice
+from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice, NurserySearch, \
+    BeninYieldSearch, PlantationsSearch
 from django.db.models import Q
 
 
@@ -189,8 +199,7 @@ def profile(request):
         form = UserBaseProfileForm(instance=request.user)
         profile_form = UserCustomProfileForm(instance=request.user.remuser)
 
-    args = {'form': form, 'profile_form': profile_form, "msg": msg, "success": success}
-    args['segment'] = 'profile'
+    args = {'form': form, 'profile_form': profile_form, "msg": msg, "success": success, 'segment': 'profile'}
     # args.update(csrf(request))
     return render(request, 'dashboard/profile.html', args)
 
@@ -217,21 +226,27 @@ def yields(request):
     context = {}
 
     search_yields = request.GET.get('search')
+    yields_column = request.GET.get('column')
+
     if search_yields:
-        yields_list = models.BeninYield.objects.filter(
-            Q(plantation_name__icontains=search_yields) | Q(plantation_code__icontains=search_yields) | Q(
-                department__icontains=search_yields) | Q(commune__icontains=search_yields) | Q(
-                arrondissement__icontains=search_yields) | Q(village__icontains=search_yields) | Q(
-                owner_first_name__icontains=search_yields) | Q(owner_last_name__icontains=search_yields) | Q(
-                plantation_code__icontains=search_yields) | Q(surface_area__icontains=search_yields) | Q(
-                total_yield_kg__icontains=search_yields) | Q(total_yield_per_ha_kg__icontains=search_yields) | Q(
-                total_yield_per_tree_kg__icontains=search_yields) | Q(sex__icontains=search_yields) | Q(
-                plantation_id__icontains=search_yields) | Q(product_id__icontains=search_yields) | Q(
-                total_number_trees__icontains=search_yields) | Q(total_sick_trees__icontains=search_yields) | Q(
-                total_dead_trees__icontains=search_yields) | Q(total_trees_out_of_prod__icontains=search_yields) | Q(
-                plantation_age__icontains=search_yields) | Q(latitude__icontains=search_yields) | Q(
-                longitude__icontains=search_yields) | Q(altitude__icontains=search_yields) | Q(
-                year__icontains=search_yields), status=utils.Status.ACTIVE)
+        if yields_column != 'all':
+            yields_column = yields_column.replace(" ", "_")
+            params = {
+                '{}__icontains'.format(yields_column): search_yields,
+            }
+            global yields_list
+            yields_list = models.BeninYield.objects.filter(
+                Q(**params), status=utils.Status.ACTIVE)
+
+        else:
+            yields_list = models.BeninYield.objects.filter(
+                Q(plantation_name__icontains=search_yields) | Q(
+                    total_yield_kg__icontains=search_yields) | Q(total_yield_per_ha_kg__icontains=search_yields) | Q(
+                    total_yield_per_tree_kg__icontains=search_yields) | Q(product_id__icontains=search_yields) | Q(
+                    total_number_trees__icontains=search_yields) | Q(total_sick_trees__icontains=search_yields) | Q(
+                    total_dead_trees__icontains=search_yields) | Q(
+                    total_trees_out_of_prod__icontains=search_yields) | Q(
+                    year__icontains=search_yields), status=utils.Status.ACTIVE)
 
     else:
         yields_list = models.BeninYield.objects.filter(status=utils.Status.ACTIVE)
@@ -251,23 +266,45 @@ def yields(request):
     context['yields'] = yields
     context['segment'] = 'yield'
     context['page_range'] = page_range
+    context['form'] = BeninYieldSearch(initial={
+        'column': request.GET.get('column', ''),
+    })
     return render(request, 'dashboard/yield.html', context)
 
 
 @login_required(login_url="/")
 def plantations(request):
     context = {}
+
     search_plantations = request.GET.get('search')
+    plantations_column = request.GET.get('column')
+
     if search_plantations:
-        plantations_list = models.Plantation.objects.filter(
-            Q(plantation_name__icontains=search_plantations) | Q(plantation_code__icontains=search_plantations) | Q(
-                owner_first_name__icontains=search_plantations) | Q(owner_last_name__icontains=search_plantations) | Q(
-                owner_gender__icontains=search_plantations) | Q(total_trees__icontains=search_plantations) | Q(
-                country__icontains=search_plantations) | Q(department__icontains=search_plantations) | Q(
-                commune__icontains=search_plantations) | Q(arrondissement__icontains=search_plantations) | Q(
-                village__icontains=search_plantations) | Q(current_area__icontains=search_plantations) | Q(
-                latitude__icontains=search_plantations) | Q(longitude__icontains=search_plantations) | Q(
-                altitude__icontains=search_plantations), status=utils.Status.ACTIVE)
+        if plantations_column != 'all':
+            plantations_column = plantations_column.replace(" ", "_")
+            if plantations_column == "owner_gender":
+                params = {
+                    '{}__iexact'.format(plantations_column): search_plantations,
+                }
+            else:
+                params = {
+                    '{}__icontains'.format(plantations_column): search_plantations,
+                }
+            global plantations_list
+            plantations_list = models.Plantation.objects.filter(
+                Q(**params), status=utils.Status.ACTIVE)
+
+        else:
+            plantations_list = models.Plantation.objects.filter(
+                Q(plantation_name__icontains=search_plantations) | Q(plantation_code__icontains=search_plantations) | Q(
+                    owner_first_name__icontains=search_plantations) | Q(
+                    owner_last_name__icontains=search_plantations) | Q(
+                    owner_gender__iexact=search_plantations) | Q(total_trees__icontains=search_plantations) | Q(
+                    country__icontains=search_plantations) | Q(department__icontains=search_plantations) | Q(
+                    commune__icontains=search_plantations) | Q(arrondissement__icontains=search_plantations) | Q(
+                    village__icontains=search_plantations) | Q(current_area__icontains=search_plantations) | Q(
+                    latitude__icontains=search_plantations) | Q(longitude__icontains=search_plantations) | Q(
+                    altitude__icontains=search_plantations), status=utils.Status.ACTIVE)
 
     else:
         plantations_list = models.Plantation.objects.filter(status=utils.Status.ACTIVE)
@@ -287,7 +324,9 @@ def plantations(request):
     context['plantations'] = plantations
     context['segment'] = 'plantations'
     context['page_range'] = page_range
-
+    context['form'] = PlantationsSearch(initial={
+        'column': request.GET.get('column', ''),
+    })
     return render(request, 'dashboard/plantations.html', context)
 
 
@@ -296,15 +335,27 @@ def nurseries(request):
     context = {}
 
     search_nurseries = request.GET.get('search')
+    nursery_column = request.GET.get('column')
+
     if search_nurseries:
-        nurseries_list = models.Nursery.objects.filter(
-            Q(nursery_name__icontains=search_nurseries) | Q(owner_first_name__icontains=search_nurseries) | Q(
-                owner_last_name__icontains=search_nurseries) | Q(nursery_address__icontains=search_nurseries) | Q(
-                country__icontains=search_nurseries) | Q(commune__icontains=search_nurseries) | Q(
-                current_area__icontains=search_nurseries) | Q(latitude__icontains=search_nurseries) | Q(
-                longitude__icontains=search_nurseries) | Q(altitude__icontains=search_nurseries) | Q(
-                partner__icontains=search_nurseries) | Q(number_of_plants__icontains=search_nurseries),
-            status=utils.Status.ACTIVE)
+        if nursery_column != 'all':
+            nursery_column = nursery_column.replace(" ", "_")
+            params = {
+                '{}__icontains'.format(nursery_column): search_nurseries,
+            }
+            global nurseries_list
+            nurseries_list = models.Nursery.objects.filter(
+                Q(**params), status=utils.Status.ACTIVE)
+
+        else:
+            nurseries_list = models.Nursery.objects.filter(
+                Q(nursery_name__icontains=search_nurseries) | Q(owner_first_name__icontains=search_nurseries) | Q(
+                    owner_last_name__icontains=search_nurseries) | Q(nursery_address__icontains=search_nurseries) | Q(
+                    country__icontains=search_nurseries) | Q(commune__icontains=search_nurseries) | Q(
+                    current_area__icontains=search_nurseries) | Q(latitude__icontains=search_nurseries) | Q(
+                    longitude__icontains=search_nurseries) | Q(altitude__icontains=search_nurseries) | Q(
+                    partner__icontains=search_nurseries) | Q(number_of_plants__icontains=search_nurseries),
+                status=utils.Status.ACTIVE)
 
     else:
         nurseries_list = models.Nursery.objects.filter(status=utils.Status.ACTIVE)
@@ -324,6 +375,9 @@ def nurseries(request):
     context['nurseries'] = nurseries
     context['segment'] = 'nurseries'
     context['page_range'] = page_range
+    context['form'] = NurserySearch(initial={
+        'column': request.GET.get('column', ''),
+    })
     return render(request, 'dashboard/nurseries.html', context)
 
 
@@ -1107,3 +1161,265 @@ def defective_rate(request):
     __mysql_disconnect__()
     __close_ssh_tunnel__()
     return render(request, 'dashboard/defective_rate.html', context2)
+
+
+def export_csv_nurseries(request):
+    response = HttpResponse(content_type='text/csv')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=pépinières' + str(datetime.datetime.now()) + '.csv'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=nurseries' + str(datetime.datetime.now()) + '.csv'
+    writer = csv.writer(response)
+    writer.writerow(
+        [gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"), gettext("Nursery Address"),
+         gettext("Country"), gettext("Commune"),
+         gettext("Current Area"), gettext("Latitude"), gettext("Longitude"), gettext("Altitude"), gettext("Partner"),
+         gettext("Number of Plants")])
+
+    for nursery0 in nurseries_list:
+        writer.writerow(
+            [nursery0.nursery_name, nursery0.owner_first_name, nursery0.owner_last_name, nursery0.nursery_address,
+             nursery0.country, nursery0.commune,
+             nursery0.current_area, nursery0.latitude, nursery0.longitude, nursery0.altitude, nursery0.partner,
+             nursery0.number_of_plants])
+
+    return response
+
+
+def export_csv_plantations(request):
+    response = HttpResponse(content_type='text/csv')
+
+    response['Content-Disposition'] = 'attachement; filename=plantation' + str(datetime.datetime.now()) + '.csv'
+    writer = csv.writer(response)
+    writer.writerow(
+        [gettext("Plantation name"), gettext("Plantation code"), gettext("Owner first name"),
+         gettext("Owner last name"), gettext("Owner gender"), gettext("Total trees"),
+         gettext("Country"), gettext("Department"), gettext("Commune"), gettext("Arrondissement"), gettext("Village"),
+         gettext("Current area"), gettext("Latitude"), gettext("Longitude"),
+         gettext("Altitude")])
+
+    for plantations0 in plantations_list:
+        writer.writerow(
+            [plantations0.plantation_name, plantations0.plantation_code, plantations0.owner_first_name,
+             plantations0.owner_last_name,
+             plantations0.owner_gender, plantations0.total_trees, plantations0.country,
+             plantations0.department, plantations0.commune, plantations0.arrondissement, plantations0.village,
+             plantations0.current_area, plantations0.latitude, plantations0.longitude, plantations0.altitude])
+
+    return response
+
+
+def export_csv_yields(request):
+    response = HttpResponse(content_type='text/csv')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=rendement' + str(datetime.datetime.now()) + '.csv'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=yield' + str(datetime.datetime.now()) + '.csv'
+    writer = csv.writer(response)
+    writer.writerow(
+        [gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
+         gettext("Total yield kg"), gettext("Total yield per ha kg"),
+         gettext("Total yield per tree kg"), gettext("Total sick trees"), gettext("Total dead trees"),
+         gettext("Total trees out of prod")])
+
+    for yields0 in yields_list:
+        writer.writerow(
+            [yields0.plantation_name, yields0.product_id, yields0.year, yields0.total_number_trees,
+             yields0.total_yield_kg,
+             yields0.total_yield_per_ha_kg, yields0.total_yield_per_tree_kg,
+             yields0.total_sick_trees, yields0.total_dead_trees, yields0.total_trees_out_of_prod])
+
+    return response
+
+
+def export_xls_nurseries(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=pépinières' + str(datetime.datetime.now()) + '.xls'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=nurseries' + str(datetime.datetime.now()) + '.xls'
+    wb = xlwt.Workbook(encoding=' utf-8')
+    ws = wb.add_sheet('Nurseries')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"),
+               gettext("Nursery Address"), gettext("Country"), gettext("Commune"),
+               gettext("Current Area"), gettext("Latitude"), gettext("Longitude"), gettext("Altitude"),
+               gettext("Partner"), gettext("Number of Plants")]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    rows = []
+
+    for nursery0 in nurseries_list:
+        rows.append(
+            (nursery0.nursery_name, nursery0.owner_first_name, nursery0.owner_last_name, nursery0.nursery_address,
+             nursery0.country, nursery0.commune,
+             nursery0.current_area, nursery0.latitude, nursery0.longitude, nursery0.altitude, nursery0.partner,
+             nursery0.number_of_plants))
+
+    for row in rows:
+        row_num += 1
+
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+    wb.save(response)
+
+    return response
+
+
+def export_xls_plantations(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachement; filename=plantations' + str(datetime.datetime.now()) + '.xls'
+    wb = xlwt.Workbook(encoding=' utf-8')
+    ws = wb.add_sheet('Plantations')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [gettext("Plantation name"), gettext("Plantation code"), gettext("Owner first name"),
+               gettext("Owner last name"), gettext("Owner gender"),
+               gettext("Total trees"),
+               gettext("Country"), gettext("Department"), gettext("Commune"), gettext("Arrondissement"),
+               gettext("Village"), gettext("Current area"), gettext("Latitude"),
+               gettext("Longitude"),
+               gettext("Altitude")]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    rows = []
+
+    for plantations0 in plantations_list:
+        rows.append(
+            (plantations0.plantation_name, plantations0.plantation_code, plantations0.owner_first_name,
+             plantations0.owner_last_name,
+             plantations0.owner_gender, plantations0.total_trees, plantations0.country,
+             plantations0.department, plantations0.commune, plantations0.arrondissement, plantations0.village,
+             plantations0.current_area, plantations0.latitude, plantations0.longitude, plantations0.altitude))
+
+    for row in rows:
+        row_num += 1
+
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+    wb.save(response)
+
+    return response
+
+
+def export_xls_yields(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=rendement' + str(datetime.datetime.now()) + '.xls'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=yield' + str(datetime.datetime.now()) + '.xls'
+    wb = xlwt.Workbook(encoding=' utf-8')
+    ws = wb.add_sheet('Nurseries')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
+               gettext("Total yield kg"),
+               gettext("Total yield per ha kg"),
+               gettext("Total yield per tree kg"), gettext("Total sick trees"), gettext("Total dead trees"),
+               gettext("Total trees out of prod")]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    rows = []
+
+    for yields0 in yields_list:
+        rows.append(
+            (yields0.plantation_name, yields0.product_id, yields0.year, yields0.total_number_trees,
+             yields0.total_yield_kg,
+             yields0.total_yield_per_ha_kg, yields0.total_yield_per_tree_kg,
+             yields0.total_sick_trees, yields0.total_dead_trees, yields0.total_trees_out_of_prod))
+
+    for row in rows:
+        row_num += 1
+
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+    wb.save(response)
+
+    return response
+
+
+def export_pdf_nurseries(request):
+    response = HttpResponse(content_type='application/pdf')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'inline; attachement; filename=pépinières' + str(
+            datetime.datetime.now()) + '.pdf'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'inline; attachement; filename=nurseries' + str(
+            datetime.datetime.now()) + '.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    html_string = render_to_string('dashboard/pdf-output.html', {'nurseries': nurseries_list})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response
+
+
+def export_pdf_plantations(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachement; filename=plantations' + str(
+        datetime.datetime.now()) + '.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    html_string = render_to_string('dashboard/pdf-output.html', {'plantations': plantations_list})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response
+
+
+def export_pdf_yields(request):
+    response = HttpResponse(content_type='application/pdf')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'inline; attachement; filename=rendement' + str(
+            datetime.datetime.now()) + '.pdf'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'inline; attachement; filename=yield' + str(
+            datetime.datetime.now()) + '.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    html_string = render_to_string('dashboard/pdf-output.html', {'yields': yields_list})
+    html = HTML(string=html_string)
+
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response

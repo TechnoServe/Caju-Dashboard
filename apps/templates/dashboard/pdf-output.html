@@ -1,0 +1,247 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% trans 'Cashew Dashboard' %}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+
+            @top-center {
+                content: "TechnoServe";
+            }
+
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+            }
+        }
+    </style>
+</head>
+<body>
+<img src="{% static 'assets/img/brand/TNS-Labs-Logo-v2.png' %}" alt="Technoserve-Logo.">
+<h2>{% trans 'Nurseries' %}</h2>
+{% if "/nurseries/" in request.build_absolute_uri %}
+    <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" class="sort" data-sort="name">{% trans "Nursery Name" %}</th>
+                <th scope="col" class="sort">{% trans "Owner First Name" %}</th>
+                <th scope="col" class="sort">{% trans "Owner Last Name" %}</th>
+                <th scope="col" class="sort">{% trans "Nursery Address" %}</th>
+                <th scope="col" class="sort">{% trans "Country" %}</th>
+                <th scope="col" class="sort">{% trans "Commune" %}</th>
+                <th scope="col" class="sort">{% trans "Current Area" %}</th>
+                <th scope="col" class="sort">{% trans "Latitude" %}</th>
+                <th scope="col" class="sort">{% trans "Longitude" %}</th>
+                <th scope="col" class="sort">{% trans "Altitude" %}</th>
+                <th scope="col" class="sort">{% trans "Partner" %}</th>
+                <th scope="col" class="sort">{% trans "Number of Plants" %}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for nursery in nurseries %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">{{ nursery.nursery_name }}</span>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{ nursery.owner_first_name }}
+                    </td>
+                    <td>
+                                    <span class="badge badge-dot mr-4">
+                                        <span class="status">{{ nursery.owner_last_name }}</span>
+                                    </span>
+                    </td>
+                    <td>
+                        {{ nursery.nursery_address }}
+                    </td>
+                    <td>
+                        {{ nursery.country }}
+                    </td>
+                    <td>
+                        {{ nursery.commune }}
+                    </td>
+                    <td>
+                        {{ nursery.current_area }}
+                    </td>
+                    <td>
+                        {{ nursery.latitude }}
+                    </td>
+                    <td>
+                        {{ nursery.longitude }}
+                    </td>
+                    <td>
+                        {{ nursery.altitude }}
+                    </td>
+                    <td>
+                        {{ nursery.partner }}
+                    </td>
+                    <td>
+                        {{ nursery.number_of_plants }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% if "/yield/" in request.build_absolute_uri %}
+    <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" class="sort" data-sort="name">{% trans "Plantation Name" %}</th>
+                <th scope="col" class="sort">{% trans "Product ID" %}</th>
+                <th scope="col" class="sort">{% trans "Year" %}</th>
+                <th scope="col" class="sort">{% trans "Total Plants" %}</th>
+                <th scope="col" class="sort">{% trans "Yields (Kg)" %}</th>
+                <th scope="col" class="sort">{% trans "Yields/Ha (Kg)" %}</th>
+                <th scope="col" class="sort">{% trans "Yields/Tree (Kg)" %}</th>
+                <th scope="col" class="sort">{% trans "Sick Trees" %}</th>
+                <th scope="col" class="sort">{% trans "Dead Trees" %}</th>
+                <th scope="col" class="sort">{% trans "Out of Prod. Trees" %}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for yield in yields %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">{{ yield.plantation_name }}</span>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{ yield.product_id }}
+                    </td>
+                    <td>
+                        {{ yield.year }}
+                    </td>
+                    <td>
+                        {{ yield.total_number_trees }}
+                    </td>
+                    <td>
+                        {{ yield.total_yield_kg }}
+                    </td>
+                    <td>
+                        {{ yield.total_yield_per_ha_kg }}
+                    </td>
+                    <td>
+                        {{ yield.total_yield_per_tree_kg }}
+                    </td>
+                    <td>
+                        {{ yield.total_sick_trees }}
+                    </td>
+                    <td>
+                        {{ yield.total_dead_trees }}
+                    </td>
+                    <td>
+                        {{ yield.total_trees_out_of_prod }}
+                    </td>
+                    <td>
+                        {{ yield.comment }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% if "/plantations/" in request.build_absolute_uri %}
+    <div class="table-responsive">
+        <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" class="sort" data-sort="name">{% trans "Plantation Name" %}</th>
+                <th scope="col" class="sort">{% trans "Plantation Code" %}</th>
+                <th scope="col" class="sort">{% trans "Owner First name" %}</th>
+                <th scope="col" class="sort">{% trans "Owner Last name" %}</th>
+                <th scope="col" class="sort">{% trans "Gender" %}</th>
+                <th scope="col" class="sort">{% trans "Total Trees" %}</th>
+                <th scope="col" class="sort">{% trans "Country" %}</th>
+                <th scope="col" class="sort">{% trans "Department" %}</th>
+                <th scope="col" class="sort">{% trans "Commune" %}</th>
+                <th scope="col" class="sort">{% trans "Arrondissement" %}</th>
+                <th scope="col" class="sort">{% trans "Village" %}</th>
+                <th scope="col" class="sort">{% trans "Area(Ha)" %}</th>
+                <th scope="col" class="sort">{% trans "Latitude" %}</th>
+                <th scope="col" class="sort">{% trans "Longitude" %}</th>
+                <th scope="col" class="sort">{% trans "Altitude" %}</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody class="list">
+            {% for plantation in plantations %}
+                <tr>
+                    <th scope="row">
+                        <div class="media align-items-center">
+                            <div class="media-body">
+                                <span class="name mb-0 text-sm">{{ plantation.plantation_name }}</span>
+                            </div>
+                        </div>
+                    </th>
+                    <td>
+                        {{ plantation.plantation_code }}
+                    </td>
+                    <td>
+                        {{ plantation.owner_first_name }}
+                    </td>
+                    <td>
+                        {{ plantation.owner_last_name }}
+                    </td>
+                    <td>
+                        {{ plantation.owner_gender }}
+                    </td>
+                    <td>
+                        {{ plantation.total_trees }}
+                    </td>
+                    <td>
+                        {{ plantation.country }}
+                    </td>
+                    <td>
+                        {{ plantation.department }}
+                    </td>
+                    <td>
+                        {{ plantation.commune }}
+                    </td>
+                    <td>
+                        {{ plantation.arrondissement }}
+                    </td>
+                    <td>
+                        {{ plantation.village }}
+                    </td>
+                    <td>
+                        {{ plantation.current_area }}
+                    </td>
+                    <td>
+                        {{ plantation.latitude }}
+                    </td>
+                    <td>
+                        {{ plantation.longitude }}
+                    </td>
+                    <td>
+                        {{ plantation.altitude }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+</body>
+</html>

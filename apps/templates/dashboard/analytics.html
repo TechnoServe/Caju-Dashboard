@@ -27,7 +27,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <!-- Card header -->
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                    <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
                         <h3 class="mb-0">{% trans "KOR average per" %}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button id="0" type="button" class="btn btn-primary">{% trans "Department" %}</button><button id="1" type="button" class="btn btn-primary">{% trans "Commune" %}</button></h3>
                     </div>
                     <div class="chart-container" style="position: relative;">
@@ -38,10 +38,12 @@
             <div class="col-md-6">
                 <div class="card">
                     <!-- Card header -->
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
-                        <br>
-                        &nbsp&nbsp&nbsp{{ Department_choice.department }}
+                    <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
+                        <div style="float: left">
+                            <h3 class="mb-0">{% trans "KOR average per Departement communes" %}</h3>
+                            <br>
+                            {{ Department_choice.department }}
+                        </div>
                     </div>
                     <div class="card-body border-0">
                         <div class="chart-container" style="position: relative;">
@@ -54,7 +56,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header border-0" style="background-color: #f7f7f7">
+                    <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
                         <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
                         <br>
                         {{ form.as_table }}
@@ -231,17 +233,6 @@
                 document.getElementById('dep_commune_Chart'),
                 dep_commune_config
             );
-            const capitalize = (s) => {
-              if (typeof s !== 'string') return ''
-              return s.charAt(0).toUpperCase() + s.slice(1)
-            }
-            $(document).ready(function(){
-                $('#id_department').change(function(){
-                     $("#id_department option:selected").text();
-                     var department_selected = $(this).val()
-                     console.log(capitalize(department_selected));
-            });
-        });
         </script>
     <script>
         document.getElementById("id_department").addEventListener("change", myFunction);
