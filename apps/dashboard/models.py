@@ -294,7 +294,7 @@ class Trainer(models.Model):
 
     firstname = models.CharField(max_length=200)
     lastname = models.CharField(max_length=200)
-    institution = models.CharField(max_length=4, choices=institutionchoices, default="other")
+    institution = models.CharField(max_length=9, choices=institutionchoices, default="other")
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(
