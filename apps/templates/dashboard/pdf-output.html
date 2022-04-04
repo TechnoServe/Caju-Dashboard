@@ -22,9 +22,9 @@
     </style>
 </head>
 <body>
-<img src="{% static 'assets/img/brand/TNS-Labs-Logo-v2.png' %}" alt="Technoserve-Logo.">
+<img src="" alt="Technoserve-Logo.">
 <h2>{% trans 'Nurseries' %}</h2>
-{% if "/nurseries/" in request.build_absolute_uri %}
+{% if nurseries %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
@@ -96,7 +96,7 @@
     </div>
 {% endif %}
 
-{% if "/yield/" in request.build_absolute_uri %}
+{% if yields %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">
@@ -120,7 +120,7 @@
                     <th scope="row">
                         <div class="media align-items-center">
                             <div class="media-body">
-                                <span class="name mb-0 text-sm">{{ yield.plantation_name }}</span>
+                                {{ yield.plantation_name }}
                             </div>
                         </div>
                     </th>
@@ -161,7 +161,7 @@
     </div>
 {% endif %}
 
-{% if "/plantations/" in request.build_absolute_uri %}
+{% if plantations %}
     <div class="table-responsive">
         <table class="table align-items-center table-flush">
             <thead class="thead-light">

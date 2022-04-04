@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 
 
@@ -53,7 +54,8 @@ class Nursery(models.Model):
 
 
 class NurseryPlantsHistory(models.Model):
-    nursery_id = models.ForeignKey(Nursery, on_delete=models.CASCADE, null=True)
+    nursery_id = models.ForeignKey(
+        Nursery, on_delete=models.CASCADE, null=True)
     year = models.IntegerField()
     season = models.IntegerField()
     total_plants = models.BigIntegerField()
@@ -106,7 +108,9 @@ class MotherTree(models.Model):
     # owner_phone = PhoneNumberField(null=False, blank=False, unique=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                                  message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone = models.CharField(validators=[phone_regex], max_length=17, blank=True)  # validators should be a list
+    # validators should be a list
+    phone = models.CharField(
+        validators=[phone_regex], max_length=17, blank=True)
     mother_tree_address = models.CharField(max_length=200)
     owner_address = models.CharField(max_length=200)
     country = models.CharField(max_length=200)
@@ -228,7 +232,8 @@ class BeninYield(models.Model):
     total_yield_per_ha_kg = models.FloatField()
     total_yield_per_tree_kg = models.FloatField()
     sex = models.CharField(max_length=200)
-    plantation_id = models.ForeignKey(Plantation, on_delete=models.CASCADE, null=True)
+    plantation_id = models.ForeignKey(
+        Plantation, on_delete=models.CASCADE, null=True)
     product_id = models.CharField(max_length=60)
     total_number_trees = models.FloatField()
     total_sick_trees = models.FloatField()
@@ -278,3 +283,43 @@ class SpecialTuple(models.Model):
 
     def __str__(self):
         return str(self.alteia_id)
+
+
+class Trainer(models.Model):
+    institutionchoices = [
+        ('atda4', 'ATDA4'),
+        ('benincàju', 'BENINCÀJU'),
+        ('other', _('OTHER'))
+    ]
+
+    firstname = models.CharField(max_length=200)
+    lastname = models.CharField(max_length=200)
+    institution = models.CharField(max_length=4, choices=institutionchoices, default="other")
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
+                                 message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone = models.CharField(
+        validators=[phone_regex], max_length=17, blank=True)
+    email = models.EmailField(max_length=254)
+
+    def __str__(self):
+        return str("{0} {1}".format(self.firstname, self.lastname))
+
+
+class TrainingModule(models.Model):
+    module_name = models.CharField(max_length=200)
+    category = models.CharField(max_length=200)
+
+    def __str__(self):
+        return str(self.module_name)
+
+
+class Training(models.Model):
+    module_id = ForeignKey(TrainingModule, on_delete=models.CASCADE, null=True)
+    trainer_id = ForeignKey(Trainer, on_delete=models.CASCADE, null=True)
+    DateTime = models.DateTimeField()
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
+    number_of_participant = models.IntegerField()
+
+    def __str__(self):
+        return str("Training n°: {0}".format(self.id))

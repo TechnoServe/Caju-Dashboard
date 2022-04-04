@@ -18,10 +18,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-
-os.add_dll_directory(r"C:\Program Files\GTK3-Runtime Win64\bin")
 from weasyprint import HTML
-
 from apps.authentication import utils
 from apps.authentication.forms import RegisterOrganization, RegisterRole
 from apps.authentication.models import RemOrganization, RemRole, RemUser
