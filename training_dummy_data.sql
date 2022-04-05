@@ -1,6 +1,3 @@
-#
-# TABLE STRUCTURE FOR: dashboard_trainer
-#
 
 DROP TABLE IF EXISTS `dashboard_trainer`;
 
@@ -42,10 +39,6 @@ INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `
 INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `phone`, `email`) VALUES ('26', 'Darrion', 'Bayer', 'BENINCÀJU', '1-443-033-1710', 'eauer@example.com');
 INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `phone`, `email`) VALUES ('27', 'Glenda', 'Schulist', 'ATDA4', '(748)648-1996x658', 'andres24@example.net');
 
-
-#
-# TABLE STRUCTURE FOR: dashboard_training
-#
 
 DROP TABLE IF EXISTS `dashboard_training`;
 

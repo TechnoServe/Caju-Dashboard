@@ -25,11 +25,11 @@ from apps.dashboard.scripts.get_qar_information import current_qars
 from .map_legend import macro_en, macro_fr
 
 service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(
-    service_account, os.getenv("PRIVATE_KEY"))
+credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 locale.setlocale(locale.LC_ALL, '')
+
 
 def __task1_func__(cashew_map):
     benin_layer = current_benin_republic_layer
@@ -162,7 +162,7 @@ def index(request):
 
     context = {'map': cashew_map, 'segment': 'map'}
     html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request,))
+    return HttpResponse(html_template.render(context, request, ))
 
 
 @login_required(login_url="/")
