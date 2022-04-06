@@ -76,6 +76,10 @@ def signup(request):
                 organization = form.cleaned_data.get("organization")
                 role = form.cleaned_data.get("role")
 
+                user.save()
+
+                rem_user = RemUser.objects.get(user=user)
+
                 current_site = get_current_site(request)
                 mail_subject = gettext(
                     'Activate your Cashew Remote Sensing account.')
@@ -87,7 +91,7 @@ def signup(request):
                         'token': account_activation_token.make_token(user),
                     }
                 )
-                to_email = form.cleaned_data.get('email')
+                to_email = user.email
                 email = EmailMessage(
                     mail_subject,
                     message,
@@ -102,10 +106,6 @@ def signup(request):
                 msg = gettext(
                     'Please confirm your email address to complete the registration')
                 success = True
-
-                user.save()
-
-                rem_user = RemUser.objects.get(user=user)
                 rem_user.email = email
                 rem_user.phone = phone
                 rem_user.organization = organization
@@ -342,7 +342,7 @@ def activate(request, uidb64, token):
         # uid = force_str(urlsafe_base64_decode(uidb64))
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist) as f:
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True

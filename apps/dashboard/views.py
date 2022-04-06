@@ -3,6 +3,7 @@ import collections
 import csv
 import datetime
 import tempfile
+import io
 
 import xlwt
 from django import template
@@ -18,6 +19,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A2, landscape
+from reportlab.platypus import TableStyle, SimpleDocTemplate, Table, Paragraph
 from weasyprint import HTML
 from apps.authentication import utils
 from apps.authentication.forms import RegisterOrganization, RegisterRole
@@ -82,7 +86,8 @@ def register_org(request):
                 print("")
 
             obj.save()
-            msg = gettext('Organization created - please <a href="/register">register user</a>.')
+            msg = gettext(
+                'Organization created - please <a href="/register">register user</a>.')
             success = True
 
         else:
@@ -180,7 +185,8 @@ def profile(request):
 
     if request.method == 'POST':
         form = UserBaseProfileForm(request.POST, instance=request.user)
-        profile_form = UserCustomProfileForm(request.POST, request.FILES, instance=request.user.remuser)
+        profile_form = UserCustomProfileForm(
+            request.POST, request.FILES, instance=request.user.remuser)
 
         if form.is_valid() and profile_form.is_valid():
             user_form = form.save()
@@ -196,7 +202,8 @@ def profile(request):
         form = UserBaseProfileForm(instance=request.user)
         profile_form = UserCustomProfileForm(instance=request.user.remuser)
 
-    args = {'form': form, 'profile_form': profile_form, "msg": msg, "success": success, 'segment': 'profile'}
+    args = {'form': form, 'profile_form': profile_form,
+            "msg": msg, "success": success, 'segment': 'profile'}
     # args.update(csrf(request))
     return render(request, 'dashboard/profile.html', args)
 
@@ -246,7 +253,8 @@ def yields(request):
                     year__icontains=search_yields), status=utils.Status.ACTIVE)
 
     else:
-        yields_list = models.BeninYield.objects.filter(status=utils.Status.ACTIVE)
+        yields_list = models.BeninYield.objects.filter(
+            status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 
@@ -304,7 +312,8 @@ def plantations(request):
                     altitude__icontains=search_plantations), status=utils.Status.ACTIVE)
 
     else:
-        plantations_list = models.Plantation.objects.filter(status=utils.Status.ACTIVE)
+        plantations_list = models.Plantation.objects.filter(
+            status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 
@@ -355,7 +364,8 @@ def nurseries(request):
                 status=utils.Status.ACTIVE)
 
     else:
-        nurseries_list = models.Nursery.objects.filter(status=utils.Status.ACTIVE)
+        nurseries_list = models.Nursery.objects.filter(
+            status=utils.Status.ACTIVE)
 
     page = request.GET.get('page', 1)
 
@@ -424,7 +434,8 @@ def analytics(request):
     y = 0
     while len(names_with_duplicate) > y:
         if "Department" in names_with_duplicate[y]:
-            names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+            names_with_duplicate[y] = names_with_duplicate[y].replace(
+                " Department", "")
         else:
             pass
         y += 1
@@ -452,7 +463,8 @@ def analytics(request):
 
     department_sum_list0 = names_init.items()
     department_sum_list0 = list(department_sum_list0)
-    department_sum_list0 = sorted(department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
+    department_sum_list0 = sorted(
+        department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
 
     department_sum_list = []
     for x in department_sum_list0:
@@ -516,7 +528,8 @@ def analytics(request):
 
             query = (
                 "SELECT kor, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
-            cur.execute(query, (country, department_names_, department_with_department))
+            cur.execute(query, (country, department_names_,
+                                department_with_department))
 
             dep_commune = []
             for location_sub_region in cur:
@@ -528,7 +541,8 @@ def analytics(request):
             for x in dep_commune:
                 dep_commune_with_duplicate.append(x[1])
 
-            dep_comm_occurence = collections.Counter(dep_commune_with_duplicate)
+            dep_comm_occurence = collections.Counter(
+                dep_commune_with_duplicate)
             dep_comm_occurence0 = dep_comm_occurence.items()
             dep_comm_occurence0 = list(dep_comm_occurence0)
 
@@ -594,7 +608,8 @@ def analytics(request):
             i = 0
             month_with_duplicate = []
             while len(date_month_with_duplicate) > i:
-                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                month_with_duplicate.append(
+                    date_month_with_duplicate[i].strftime("%m/%Y"))
                 i += 1
 
             month_sorted = list(set(month_with_duplicate))
@@ -677,7 +692,8 @@ def nut_count(request):
     y = 0
     while len(names_with_duplicate) > y:
         if "Department" in names_with_duplicate[y]:
-            names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+            names_with_duplicate[y] = names_with_duplicate[y].replace(
+                " Department", "")
         else:
             pass
         y += 1
@@ -705,7 +721,8 @@ def nut_count(request):
 
     department_sum_list0 = names_init.items()
     department_sum_list0 = list(department_sum_list0)
-    department_sum_list0 = sorted(department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
+    department_sum_list0 = sorted(
+        department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
 
     department_sum_list = []
     for x in department_sum_list0:
@@ -769,7 +786,8 @@ def nut_count(request):
 
             query = (
                 "SELECT nut_count, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
-            cur.execute(query, (country, department_names_, department_with_department))
+            cur.execute(query, (country, department_names_,
+                                department_with_department))
 
             dep_commune = []
             for location_sub_region in cur:
@@ -781,7 +799,8 @@ def nut_count(request):
             for x in dep_commune:
                 dep_commune_with_duplicate.append(x[1])
 
-            dep_comm_occurence = collections.Counter(dep_commune_with_duplicate)
+            dep_comm_occurence = collections.Counter(
+                dep_commune_with_duplicate)
             dep_comm_occurence0 = dep_comm_occurence.items()
             dep_comm_occurence0 = list(dep_comm_occurence0)
 
@@ -847,7 +866,8 @@ def nut_count(request):
             i = 0
             month_with_duplicate = []
             while len(date_month_with_duplicate) > i:
-                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                month_with_duplicate.append(
+                    date_month_with_duplicate[i].strftime("%m/%Y"))
                 i += 1
 
             month_sorted = list(set(month_with_duplicate))
@@ -930,7 +950,8 @@ def defective_rate(request):
     y = 0
     while len(names_with_duplicate) > y:
         if "Department" in names_with_duplicate[y]:
-            names_with_duplicate[y] = names_with_duplicate[y].replace(" Department", "")
+            names_with_duplicate[y] = names_with_duplicate[y].replace(
+                " Department", "")
         else:
             pass
         y += 1
@@ -958,7 +979,8 @@ def defective_rate(request):
 
     department_sum_list0 = names_init.items()
     department_sum_list0 = list(department_sum_list0)
-    department_sum_list0 = sorted(department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
+    department_sum_list0 = sorted(
+        department_sum_list0, reverse=True, key=lambda kor_: kor_[1])
 
     department_sum_list = []
     for x in department_sum_list0:
@@ -1023,7 +1045,8 @@ def defective_rate(request):
 
             query = (
                 "SELECT defective_rate, location_sub_region, location_region, location_country FROM free_qar_result WHERE location_country=%s AND location_region=%s OR location_region=%s")
-            cur.execute(query, (country, department_names_, department_with_department))
+            cur.execute(query, (country, department_names_,
+                                department_with_department))
 
             dep_commune = []
             for location_sub_region in cur:
@@ -1035,7 +1058,8 @@ def defective_rate(request):
             for x in dep_commune:
                 dep_commune_with_duplicate.append(x[1])
 
-            dep_comm_occurence = collections.Counter(dep_commune_with_duplicate)
+            dep_comm_occurence = collections.Counter(
+                dep_commune_with_duplicate)
             dep_comm_occurence0 = dep_comm_occurence.items()
             dep_comm_occurence0 = list(dep_comm_occurence0)
 
@@ -1101,7 +1125,8 @@ def defective_rate(request):
             i = 0
             month_with_duplicate = []
             while len(date_month_with_duplicate) > i:
-                month_with_duplicate.append(date_month_with_duplicate[i].strftime("%m/%Y"))
+                month_with_duplicate.append(
+                    date_month_with_duplicate[i].strftime("%m/%Y"))
                 i += 1
 
             month_sorted = list(set(month_with_duplicate))
@@ -1163,14 +1188,17 @@ def defective_rate(request):
 def export_csv_nurseries(request):
     response = HttpResponse(content_type='text/csv')
     if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=pépinières' + str(datetime.datetime.now()) + '.csv'
+        response['Content-Disposition'] = 'attachement; filename=pépinières' + \
+                                          str(datetime.datetime.now()) + '.csv'
     elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=nurseries' + str(datetime.datetime.now()) + '.csv'
+        response['Content-Disposition'] = 'attachement; filename=nurseries' + \
+                                          str(datetime.datetime.now()) + '.csv'
     writer = csv.writer(response)
     writer.writerow(
         [gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"), gettext("Nursery Address"),
          gettext("Country"), gettext("Commune"),
-         gettext("Current Area"), gettext("Latitude"), gettext("Longitude"), gettext("Altitude"), gettext("Partner"),
+         gettext("Current Area"), gettext("Latitude"), gettext(
+            "Longitude"), gettext("Altitude"), gettext("Partner"),
          gettext("Number of Plants")])
 
     for nursery0 in nurseries_list:
@@ -1186,12 +1214,15 @@ def export_csv_nurseries(request):
 def export_csv_plantations(request):
     response = HttpResponse(content_type='text/csv')
 
-    response['Content-Disposition'] = 'attachement; filename=plantation' + str(datetime.datetime.now()) + '.csv'
+    response['Content-Disposition'] = 'attachement; filename=plantation' + \
+                                      str(datetime.datetime.now()) + '.csv'
     writer = csv.writer(response)
     writer.writerow(
         [gettext("Plantation name"), gettext("Plantation code"), gettext("Owner first name"),
-         gettext("Owner last name"), gettext("Owner gender"), gettext("Total trees"),
-         gettext("Country"), gettext("Department"), gettext("Commune"), gettext("Arrondissement"), gettext("Village"),
+         gettext("Owner last name"), gettext(
+            "Owner gender"), gettext("Total trees"),
+         gettext("Country"), gettext("Department"), gettext(
+            "Commune"), gettext("Arrondissement"), gettext("Village"),
          gettext("Current area"), gettext("Latitude"), gettext("Longitude"),
          gettext("Altitude")])
 
@@ -1209,14 +1240,17 @@ def export_csv_plantations(request):
 def export_csv_yields(request):
     response = HttpResponse(content_type='text/csv')
     if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=rendement' + str(datetime.datetime.now()) + '.csv'
+        response['Content-Disposition'] = 'attachement; filename=rendement' + \
+                                          str(datetime.datetime.now()) + '.csv'
     elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=yield' + str(datetime.datetime.now()) + '.csv'
+        response['Content-Disposition'] = 'attachement; filename=yield' + \
+                                          str(datetime.datetime.now()) + '.csv'
     writer = csv.writer(response)
     writer.writerow(
         [gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
          gettext("Total yield kg"), gettext("Total yield per ha kg"),
-         gettext("Total yield per tree kg"), gettext("Total sick trees"), gettext("Total dead trees"),
+         gettext("Total yield per tree kg"), gettext(
+            "Total sick trees"), gettext("Total dead trees"),
          gettext("Total trees out of prod")])
 
     for yields0 in yields_list:
@@ -1232,9 +1266,11 @@ def export_csv_yields(request):
 def export_xls_nurseries(request):
     response = HttpResponse(content_type='application/ms-excel')
     if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=pépinières' + str(datetime.datetime.now()) + '.xls'
+        response['Content-Disposition'] = 'attachement; filename=pépinières' + \
+                                          str(datetime.datetime.now()) + '.xls'
     elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=nurseries' + str(datetime.datetime.now()) + '.xls'
+        response['Content-Disposition'] = 'attachement; filename=nurseries' + \
+                                          str(datetime.datetime.now()) + '.xls'
     wb = xlwt.Workbook(encoding=' utf-8')
     ws = wb.add_sheet('Nurseries')
     row_num = 0
@@ -1242,8 +1278,10 @@ def export_xls_nurseries(request):
     font_style.font.bold = True
 
     columns = [gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"),
-               gettext("Nursery Address"), gettext("Country"), gettext("Commune"),
-               gettext("Current Area"), gettext("Latitude"), gettext("Longitude"), gettext("Altitude"),
+               gettext("Nursery Address"), gettext(
+            "Country"), gettext("Commune"),
+               gettext("Current Area"), gettext("Latitude"), gettext(
+            "Longitude"), gettext("Altitude"),
                gettext("Partner"), gettext("Number of Plants")]
 
     for col_num in range(len(columns)):
@@ -1272,7 +1310,8 @@ def export_xls_nurseries(request):
 
 def export_xls_plantations(request):
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachement; filename=plantations' + str(datetime.datetime.now()) + '.xls'
+    response['Content-Disposition'] = 'attachement; filename=plantations' + \
+                                      str(datetime.datetime.now()) + '.xls'
     wb = xlwt.Workbook(encoding=' utf-8')
     ws = wb.add_sheet('Plantations')
     row_num = 0
@@ -1282,8 +1321,10 @@ def export_xls_plantations(request):
     columns = [gettext("Plantation name"), gettext("Plantation code"), gettext("Owner first name"),
                gettext("Owner last name"), gettext("Owner gender"),
                gettext("Total trees"),
-               gettext("Country"), gettext("Department"), gettext("Commune"), gettext("Arrondissement"),
-               gettext("Village"), gettext("Current area"), gettext("Latitude"),
+               gettext("Country"), gettext("Department"), gettext(
+            "Commune"), gettext("Arrondissement"),
+               gettext("Village"), gettext(
+            "Current area"), gettext("Latitude"),
                gettext("Longitude"),
                gettext("Altitude")]
 
@@ -1315,9 +1356,11 @@ def export_xls_plantations(request):
 def export_xls_yields(request):
     response = HttpResponse(content_type='application/ms-excel')
     if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=rendement' + str(datetime.datetime.now()) + '.xls'
+        response['Content-Disposition'] = 'attachement; filename=rendement' + \
+                                          str(datetime.datetime.now()) + '.xls'
     elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'attachement; filename=yield' + str(datetime.datetime.now()) + '.xls'
+        response['Content-Disposition'] = 'attachement; filename=yield' + \
+                                          str(datetime.datetime.now()) + '.xls'
     wb = xlwt.Workbook(encoding=' utf-8')
     ws = wb.add_sheet('Nurseries')
     row_num = 0
@@ -1327,7 +1370,8 @@ def export_xls_yields(request):
     columns = [gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
                gettext("Total yield kg"),
                gettext("Total yield per ha kg"),
-               gettext("Total yield per tree kg"), gettext("Total sick trees"), gettext("Total dead trees"),
+               gettext("Total yield per tree kg"), gettext(
+            "Total sick trees"), gettext("Total dead trees"),
                gettext("Total trees out of prod")]
 
     for col_num in range(len(columns)):
@@ -1364,7 +1408,8 @@ def export_pdf_nurseries(request):
             datetime.datetime.now()) + '.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
 
-    html_string = render_to_string('dashboard/pdf-output.html', {'nurseries': nurseries_list})
+    html_string = render_to_string(
+        'dashboard/pdf-output.html', {'nurseries': nurseries_list})
     html = HTML(string=html_string)
 
     result = html.write_pdf()
@@ -1384,7 +1429,8 @@ def export_pdf_plantations(request):
         datetime.datetime.now()) + '.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
 
-    html_string = render_to_string('dashboard/pdf-output.html', {'plantations': plantations_list})
+    html_string = render_to_string(
+        'dashboard/pdf-output.html', {'plantations': plantations_list})
     html = HTML(string=html_string)
 
     result = html.write_pdf()
@@ -1408,15 +1454,49 @@ def export_pdf_yields(request):
             datetime.datetime.now()) + '.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
 
-    html_string = render_to_string('dashboard/pdf-output.html', {'yields': yields_list})
-    html = HTML(string=html_string)
+    elements = []
 
-    result = html.write_pdf()
+    doc = SimpleDocTemplate(
+        response,
+        rightMargin=72,
+        leftMargin=72,
+        topMargin=30,
+        bottomMargin=72,
+        pagesize=landscape(A2))
 
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'rb')
-        response.write(output.read())
+    data = []
 
+    titles_list = (gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
+                   gettext("Total yield kg"),
+                   gettext("Total yield per ha kg"),
+                   gettext("Total yield per tree kg"), gettext(
+        "Total sick trees"), gettext("Total dead trees"),
+                   gettext("Total trees out of prod"))
+
+    data.append(titles_list)
+
+    for yields0 in yields_list:
+        data.append((yields0.plantation_name, yields0.product_id, yields0.year, yields0.total_number_trees,
+                     yields0.total_yield_kg,
+                     yields0.total_yield_per_ha_kg, yields0.total_yield_per_tree_kg,
+                     yields0.total_sick_trees, yields0.total_dead_trees, yields0.total_trees_out_of_prod))
+
+    table = Table(data)
+    table.setStyle(TableStyle(
+        [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+         ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+         ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+         ('BACKGROUND', (0, 0), (-1, 0), colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
+         ('LEFTPADDING', (0, 0), (-1, 0), 15),
+         ('RIGHTPADDING', (0, 0), (-1, 0), 15),
+         ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
+         ('TOPPADDING', (0, 0), (-1, 0), 15)
+         ]))
+
+    elements.append(Paragraph(gettext("Yields")))
+    elements.append(table)
+    try:
+        doc.build(elements)
+    except Exception as f:
+        print(f)
     return response
