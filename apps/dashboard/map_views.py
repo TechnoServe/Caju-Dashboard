@@ -54,7 +54,7 @@ def __task3_func__(cashew_map):
 def __task4_func__(cashew_map):
     qars = current_qars
     # Adding the qar layer from the class QarLayer
-    marker_cluster = MarkerCluster(name=gettext("QAR Information"))
+    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"))
     qar_layer = QarLayer(marker_cluster, qars).add_qar()
     qar_layer.add_to(cashew_map)
 
