@@ -26,6 +26,9 @@ ssh_host = os.path.join(os.getenv("SSH_HOSTNAME"))
 ssh_user = os.path.join(os.getenv("SSH_USER"))
 ssh_port = 22
 
+with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
+    departments_geojson = geojson.load(f)
+
 
 class QarObject:
     def __init__(self, **entries):
@@ -146,8 +149,6 @@ def __get_department_from_coord__(qars):
         Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in Benin
         Return the name of the department found or 'Unknown' otherwise
         """
-        with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
-            departments_geojson = geojson.load(f)
         point = Point(qars[index].longitude, qars[index].latitude)
         for feature in departments_geojson['features']:
             polygon = shape(feature['geometry'])

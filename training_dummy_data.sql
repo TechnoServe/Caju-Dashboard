@@ -1,6 +1,3 @@
-#
-# TABLE STRUCTURE FOR: dashboard_trainer
-#
 
 DROP TABLE IF EXISTS `dashboard_trainer`;
 

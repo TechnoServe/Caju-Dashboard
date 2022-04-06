@@ -22,14 +22,17 @@ from apps.dashboard.layers_builders.nursery_information import NurseryLayer
 from apps.dashboard.layers_builders.qar_informations import QarLayer
 # Google service account for the GEE geotiff
 from apps.dashboard.scripts.get_qar_information import current_qars
+from .custom_layer_control import CustomLayerControl
+from .layers_builders.training_informations import TrainingLayer
 from .map_legend import macro_en, macro_fr
+from .scripts.get_training_information import current_trainings
 
 service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
-credentials = ee.ServiceAccountCredentials(
-    service_account, os.getenv("PRIVATE_KEY"))
+credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 locale.setlocale(locale.LC_ALL, '')
+
 
 def __task1_func__(cashew_map):
     benin_layer = current_benin_republic_layer
@@ -48,13 +51,20 @@ def __task3_func__(cashew_map):
     benin_commune_layer.add_to(cashew_map)
 
 
-def __task4_func__(cashew_map, base_url):
+def __task4_func__(cashew_map):
     qars = current_qars
     # Adding the qar layer from the class QarLayer
-    marker_cluster = MarkerCluster(name=gettext("QAR Information"))
-    print(base_url)
-    qar_layer = QarLayer(marker_cluster, qars, base_url).add_qar()
+    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"))
+    qar_layer = QarLayer(marker_cluster, qars).add_qar()
     qar_layer.add_to(cashew_map)
+
+
+def __task5_func__(cashew_map):
+    trainings = current_trainings
+    # Adding the qar layer from the class QarLayer
+    marker_cluster = MarkerCluster(name=gettext("Training Information"))
+    training_layer = TrainingLayer(marker_cluster, trainings).add_training()
+    training_layer.add_to(cashew_map)
 
 
 def get_base_map(path_link):
@@ -157,12 +167,12 @@ def index(request):
     cashew_map = get_base_map(path_link=path_link)
 
     # adding folium layer control for the previously added shapefiles
-    cashew_map.add_child(folium.LayerControl())
+    cashew_map.add_child(CustomLayerControl(
+    ))
     cashew_map = cashew_map._repr_html_()
-
     context = {'map': cashew_map, 'segment': 'map'}
     html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request,))
+    return HttpResponse(html_template.render(context, request, ))
 
 
 @login_required(login_url="/")
@@ -191,12 +201,15 @@ def full_map(request):
                 future3 = __loop.run_in_executor(
                     executor, __task3_func__, cashew_map)
                 future4 = __loop.run_in_executor(
-                    executor, __task4_func__, cashew_map, base_url)
+                    executor, __task4_func__, cashew_map)
+                future5 = __loop.run_in_executor(
+                    executor, __task5_func__, cashew_map)
 
                 await future1
                 await future2
                 await future3
                 await future4
+                await future5
 
             except Exception as e:
                 print(e)
@@ -209,7 +222,7 @@ def full_map(request):
         loop.close()
 
         # adding folium layer control for the previously added shapefiles
-        cashew_map.add_child(folium.LayerControl(collapsed=True))
+        cashew_map.add_child(CustomLayerControl(collapsed=False))
         cashew_map = cashew_map._repr_html_()
         data = {'map': cashew_map, 'segment': 'map'}
 
