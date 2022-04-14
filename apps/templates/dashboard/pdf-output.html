@@ -8,7 +8,7 @@
     <title>{% trans 'Cashew Dashboard' %}</title>
     <style>
         @page {
-            size: A4;
+            size: A2 landscape;;
             margin: 2.5cm 1.5cm 3.5cm 1.5cm;
 
             @top-center {
@@ -19,10 +19,31 @@
                 content: "Page " counter(page) " of " counter(pages);
             }
         }
+
+        th {
+            background-color: #14b2b1;
+            padding: 15px;
+        }
+
+        td {
+            padding: 15px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 25%;
+        }
     </style>
 </head>
 <body>
-<img src="" alt="Technoserve-Logo.">
+<img src="https://www.technoserve.org/wp-content/uploads/2021/09/TNS-Logo-RGB_Horizontal_Full-Color.svg" alt="Technoserve-Logo." class="center">
 <h2>{% trans 'Nurseries' %}</h2>
 {% if nurseries %}
     <div class="table-responsive">
@@ -41,7 +62,6 @@
                 <th scope="col" class="sort">{% trans "Altitude" %}</th>
                 <th scope="col" class="sort">{% trans "Partner" %}</th>
                 <th scope="col" class="sort">{% trans "Number of Plants" %}</th>
-                <th scope="col"></th>
             </tr>
             </thead>
             <tbody class="list">
@@ -111,7 +131,6 @@
                 <th scope="col" class="sort">{% trans "Sick Trees" %}</th>
                 <th scope="col" class="sort">{% trans "Dead Trees" %}</th>
                 <th scope="col" class="sort">{% trans "Out of Prod. Trees" %}</th>
-                <th scope="col"></th>
             </tr>
             </thead>
             <tbody class="list">
@@ -181,7 +200,6 @@
                 <th scope="col" class="sort">{% trans "Latitude" %}</th>
                 <th scope="col" class="sort">{% trans "Longitude" %}</th>
                 <th scope="col" class="sort">{% trans "Altitude" %}</th>
-                <th scope="col"></th>
             </tr>
             </thead>
             <tbody class="list">
