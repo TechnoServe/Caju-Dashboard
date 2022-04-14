@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.template import loader
 from django.utils.translation import gettext
-from folium import plugins
+from folium import plugins, LayerControl
 from folium.plugins import MarkerCluster
 
 from apps.dashboard.layers_builders.benin_commune import current_benin_commune_layer
@@ -24,7 +24,7 @@ from apps.dashboard.layers_builders.qar_informations import QarLayer
 from apps.dashboard.scripts.get_qar_information import current_qars
 from .custom_layer_control import CustomLayerControl
 from .layers_builders.training_informations import TrainingLayer
-from .map_legend import macro_en, macro_fr
+from .map_legend import macro_en, macro_fr, macro_toggler
 from .scripts.get_training_information import current_trainings
 
 service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
@@ -167,8 +167,10 @@ def index(request):
     cashew_map = get_base_map(path_link=path_link)
 
     # adding folium layer control for the previously added shapefiles
-    cashew_map.add_child(CustomLayerControl(
+    cashew_map.add_child(LayerControl(
+        collapsed=False
     ))
+    cashew_map.get_root().add_child(macro_toggler)
     cashew_map = cashew_map._repr_html_()
     context = {'map': cashew_map, 'segment': 'map'}
     html_template = loader.get_template('dashboard/index.html')
@@ -184,8 +186,6 @@ def full_map(request):
     start_time = time.time()
 
     try:
-        base_url = "{0}://{1}".format(request.scheme,
-                                      request.get_host(), request.path)
         path_link = request.build_absolute_uri(request.path)
         cashew_map = get_base_map(path_link=path_link)
 
@@ -221,8 +221,8 @@ def full_map(request):
         loop.run_until_complete(__get_context_data__())
         loop.close()
 
-        # adding folium layer control for the previously added shapefiles
         cashew_map.add_child(CustomLayerControl(collapsed=False))
+        cashew_map.get_root().add_child(macro_toggler)
         cashew_map = cashew_map._repr_html_()
         data = {'map': cashew_map, 'segment': 'map'}
 

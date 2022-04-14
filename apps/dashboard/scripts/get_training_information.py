@@ -193,8 +193,6 @@ def get_training_data_from_db():
 
 current_trainings = get_training_data_from_db()
 
-print("current_trainings")
-print(current_trainings)
 
 scheduler = BackgroundScheduler()
 
