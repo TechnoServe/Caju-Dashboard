@@ -1,4 +1,3 @@
-import locale
 import os
 from pathlib import Path
 
@@ -12,6 +11,7 @@ from django.template import loader
 from django.utils.translation import gettext
 
 # Google service account for the GEE geotiff
+from .map_legend import macro_toggler
 from .scripts.alteia_trees_data import download_trees_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -140,6 +140,7 @@ def drone(request, plant_id, coordinate_xy):
         pass
 
     cashew_map.add_child(folium.LayerControl(collapsed=False))
+    cashew_map.get_root().add_child(macro_toggler)
     cashew_map = cashew_map._repr_html_()
     context = {'map': cashew_map, 'segment': 'map'}
 
