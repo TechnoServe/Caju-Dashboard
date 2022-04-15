@@ -1,10 +1,12 @@
 {% load static %}
 {% load i18n %}
+
 <nav class="sidenav navbar navbar-vertical  fixed-left  navbar-expand-xs navbar-light bg-white" id="sidenav-main">
     <!-- Brand -->
     <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{% url 'map' %}">
-            <img src="{% static 'assets/img/brand/TNS-Labs-Logo.png' %}" alt="Technoserve-Logo." class="navbar-brand-img">
+            <img src="{% static 'assets/img/brand/TNS-Labs-Logo.png' %}" alt="Technoserve-Logo."
+                class="navbar-brand-img">
         </a>
     </div>
 
@@ -13,9 +15,10 @@
         <!-- Divider -->
         <hr class="my-3">
         <!-- Heading -->
-        <h6 class="navbar-heading p-0 text-muted">
+        <h6 class="navbar-heading p-0 text-muted" style="text-align: center;">
             <span class="docs-normal">{% trans "Cashew Dashboard" %}</span>
         </h6>
+        <hr class="my-3" style="margin-bottom: 0rem!important;">
         <!-- Navigation -->
 
 
@@ -27,72 +30,72 @@
               <i class="ni ni-tv-2 text-primary"></i>
               <span class="nav-link-text">Dashboard</span>
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if 'icons' in segment %} active {% endif %}" href="/icons.html">
-              <i class="ni ni-planet text-orange"></i>
-              <span class="nav-link-text">Icons</span>
-            </a>
           </li> -->
                 <li class="nav-item">
+                    <h3 style="display: inline-block; padding-right: 1.5rem; padding-left: 1.5rem; margin-bottom: 1.0625rem;">
+                        <span class="docs-normal"> {% trans "WELCOME," %}</span>
+                        <span class="docs-normal" style="font-family: 'Coming Soon', cursive; font-weight: lighter; color: #0eb1af;"> {{ user.username }}</span>
+                    </h3>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {% if 'map' in segment %} active {% endif %}"
-                       style="{% if 'map' in segment %} background-color: #DFF4F4 {% endif %}" href="{% url 'map' %}">
+                        style="{% if 'map' in segment %} background-color: #DFF4F4 {% endif %}" href="{% url 'map' %}">
                         <i class="ni ni-pin-3 text-primary"></i>
                         <span class="nav-link-text">{% trans "Map" %}</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if 'profile' in segment %} active {% endif %}" href="{% url 'profile' %}"
-                       style="{% if 'profile' in segment %} background-color: #DFF4F4 {% endif %}">
+                        style="{% if 'profile' in segment %} background-color: #DFF4F4 {% endif %}">
                         <i class="ni ni-single-02 text-yellow"></i>
                         <span class="nav-link-text">{% trans "Profile" %}</span>
                     </a>
                 </li>
 
                 {% if request.user.is_staff or request.user.is_superuser %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="ni ni-circle-08"></i>
-                            <span class="nav-link-text">{% trans "Registration" %}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-sm  dropdown-menu-left  py-0 overflow-hidden">
-                            <!-- List group -->
-                            <div class="list-group list-group-flush">
-                                <a href="{% url 'register' %}" class="list-group-item list-group-item-action">
-                                    <div class="row align-items-center">
-                                        <div class="col ml--2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h4 class="mb-0 text-sm">{% trans "New Member" %}</h4>
-                                                </div>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="ni ni-circle-08"></i>
+                        <span class="nav-link-text">{% trans "Registration" %}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm  dropdown-menu-left  py-0 overflow-hidden">
+                        <!-- List group -->
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'register' %}" class="list-group-item list-group-item-action">
+                                <div class="row align-items-center">
+                                    <div class="col ml--2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0 text-sm">{% trans "New Member" %}</h4>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                                {% if request.user.is_superuser %}
-                                    <a href="{% url 'register_org' %}" class="list-group-item list-group-item-action">
-                                        <div class="row align-items-center">
-                                            <div class="col ml--2">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <h4 class="mb-0 text-sm">{% trans "New Organization" %}</h4>
-                                                    </div>
-                                                </div>
+                                </div>
+                            </a>
+                            {% if request.user.is_superuser %}
+                            <a href="{% url 'register_org' %}" class="list-group-item list-group-item-action">
+                                <div class="row align-items-center">
+                                    <div class="col ml--2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0 text-sm">{% trans "New Organization" %}</h4>
                                             </div>
                                         </div>
-                                    </a>
-                                {% endif %}
-                            </div>
-                            <!-- View all -->
-                            <!-- <a href="#!" class="dropdown-item text-center text-primary font-weight-bold py-3">View all</a> -->
+                                    </div>
+                                </div>
+                            </a>
+                            {% endif %}
                         </div>
-                    </li>
+                        <!-- View all -->
+                        <!-- <a href="#!" class="dropdown-item text-center text-primary font-weight-bold py-3">View all</a> -->
+                    </div>
+                </li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {% if 'plantations' in segment %} active {% endif %}"
-                       style="{% if 'plantations' in segment %} background-color: #DFF4F4 {% endif %}"
-                       href="{% url 'plantations' %}">
+                        style="{% if 'plantations' in segment %} background-color: #DFF4F4 {% endif %}"
+                        href="{% url 'plantations' %}">
                         <i class="ni ni-air-baloon text-default"></i>
                         <span class="nav-link-text">{% trans "Plantations" %}</span>
                     </a>
@@ -100,8 +103,8 @@
 
                 <li class="nav-item">
                     <a class="nav-link {% if 'yield' in segment %} active {% endif %}"
-                       style="{% if 'yield' in segment %} background-color: #DFF4F4 {% endif %}"
-                       href="{% url 'yield' %}">
+                        style="{% if 'yield' in segment %} background-color: #DFF4F4 {% endif %}"
+                        href="{% url 'yield' %}">
                         <i class="ni ni-chart-bar-32 text-default"></i>
                         <span class="nav-link-text">{% trans "Yield" %}</span>
                     </a>
@@ -109,8 +112,8 @@
 
                 <li class="nav-item">
                     <a class="nav-link {% if 'shipment' in segment %} active {% endif %}"
-                       style="{% if 'shipment' in segment %} background-color: #DFF4F4 {% endif %}"
-                       href="{% url 'shipment' %}">
+                        style="{% if 'shipment' in segment %} background-color: #DFF4F4 {% endif %}"
+                        href="{% url 'shipment' %}">
                         <i class="ni ni-delivery-fast text-default"></i>
                         <span class="nav-link-text">{% trans "Shipment" %}</span>
                     </a>
@@ -118,57 +121,65 @@
 
                 <li class="nav-item">
                     <a class="nav-link {% if 'nurseries' in segment %} active {% endif %}"
-                       style="{% if 'nurseries' in segment %} background-color: #DFF4F4 {% endif %}"
-                       href="{% url 'nurseries' %}">
-                        <i class="ni ni-istanbul text-default"></i>
+                        style="{% if 'nurseries' in segment %} background-color: #DFF4F4 {% endif %}"
+                        href="{% url 'nurseries' %}">
+                        <i class="fa fa-leaf text-default"></i>
                         <span class="nav-link-text">{% trans "Nurseries" %}</span>
                     </a>
                 </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="ni ni-chart-pie-35"></i>
-                            <span class="nav-link-text">{% trans "Analytics" %}</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-sm  dropdown-menu-left  py-0 overflow-hidden">
-                            <!-- List group -->
-                            <div class="list-group list-group-flush">
-                                <a href="{% url 'analytics' %}" class="list-group-item list-group-item-action">
-                                    <div class="row align-items-center">
-                                        <div class="col ml--2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h4 class="mb-0 text-sm">{% trans "KOR" %}</h4>
-                                                </div>
+                <li class="nav-item">
+                    <a class="nav-link {% if 'training' in segment %} active {% endif %}"
+                        style="{% if 'training' in segment %} background-color: #DFF4F4 {% endif %}"
+                        href="{% url 'training' %}">
+                        <i class="ni ni-support-16 text-default"></i>
+                        <span class="nav-link-text">{% trans "Training" %}</span>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        <i class="ni ni-chart-pie-35"></i>
+                        <span class="nav-link-text">{% trans "Analytics" %}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-sm  dropdown-menu-left  py-0 overflow-hidden">
+                        <!-- List group -->
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'analytics' %}" class="list-group-item list-group-item-action">
+                                <div class="row align-items-center">
+                                    <div class="col ml--2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0 text-sm">{% trans "KOR" %}</h4>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                                <a href="{% url 'nut_count' %}" class="list-group-item list-group-item-action">
-                                    <div class="row align-items-center">
-                                        <div class="col ml--2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h4 class="mb-0 text-sm">{% trans "Nut Count" %}</h4>
-                                                </div>
+                                </div>
+                            </a>
+                            <a href="{% url 'nut_count' %}" class="list-group-item list-group-item-action">
+                                <div class="row align-items-center">
+                                    <div class="col ml--2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0 text-sm">{% trans "Nut Count" %}</h4>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                                <a href="{% url 'defective_rate' %}" class="list-group-item list-group-item-action">
-                                    <div class="row align-items-center">
-                                        <div class="col ml--2">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h4 class="mb-0 text-sm">{% trans "Defective Rate" %}</h4>
-                                                </div>
+                                </div>
+                            </a>
+                            <a href="{% url 'defective_rate' %}" class="list-group-item list-group-item-action">
+                                <div class="row align-items-center">
+                                    <div class="col ml--2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0 text-sm">{% trans "Defective Rate" %}</h4>
                                             </div>
                                         </div>
                                     </div>
-                                </a>
-                            </div>
+                                </div>
+                            </a>
                         </div>
-                    </li>
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">
                         <i class="ni ni-user-run text-red"></i>
@@ -186,27 +197,21 @@
             <ul class="navbar-nav mb-md-3">
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       target="_blank"
-                       href="https://www.technoserve.org/about-us/">
+                    <a class="nav-link" target="_blank" href="https://www.technoserve.org/about-us/">
                         <i class="ni ni-archive-2"></i>
                         <span class="nav-link-text">{% trans "About TechnoServe" %}</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link"
-                       target="_blank"
-                       href="https://www.tnslabs.org/">
+                    <a class="nav-link" target="_blank" href="https://www.tnslabs.org/">
                         <i class="ni ni-spaceship"></i>
                         <span class="nav-link-text">{% trans "Visit TechnoServe Labs" %}</span>
                     </a>
                 </li>
 
                 {% comment %} <li class="nav-item">
-                    <a class="nav-link"
-                       target="_blank"
-                       href="https://www.technoserve.org/">
+                    <a class="nav-link" target="_blank" href="https://www.technoserve.org/">
                         <i class="ni ni-spaceship"></i>
                         <span class="nav-link-text">{% trans "Visit TechnoServe" %}</span>
                     </a>

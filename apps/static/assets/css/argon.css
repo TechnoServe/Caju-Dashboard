@@ -22216,16 +22216,9 @@ textarea[resize='horizontal']
         display: none;
     }
 }
-.sidenav .navbar-brand,
-.sidenav .navbar-heading
-{
-    padding: 1.5rem;
-}
 
 .sidenav-header
 {
-    height: 78px;
-
     text-align: center;
 }
 

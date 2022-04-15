@@ -20,11 +20,11 @@ Add your path to your pkey perm file
 """
 mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
-sql_hostname = os.path.join(os.getenv("SQL_HOSTNAME_TRAINING"))
-sql_username = os.path.join(os.getenv("SQL_USERNAME_TRAINING"))
-sql_password = os.path.join(os.getenv("SQL_PASSWORD_TRAINING"))
-sql_main_database = os.path.join(os.getenv("SQL_DATABASE_TRAINING"))
-sql_port = 3306
+sql_hostname = os.path.join(os.getenv("HOST"))
+sql_username = os.path.join(os.getenv("USER"))
+sql_password = os.path.join(os.getenv("PASSWORD"))
+sql_main_database = os.path.join(os.getenv("NAME"))
+sql_port = 3307
 
 
 class TrainingObject:
@@ -89,7 +89,7 @@ def __get_department_from_coord__(latitude, longitude):
 def __get_module__(cursor, module_id):
     cursor.execute("SELECT"
                    " module_name, category"
-                   " FROM db_name.dashboard_trainingmodule WHERE id = %s;", module_id)
+                   " FROM dashboard_trainingmodule WHERE id = %s;", module_id)
 
     # Get all the rows for that query
     modules_items = cursor.fetchall()
@@ -111,7 +111,7 @@ def __get_module__(cursor, module_id):
 def __get_trainer__(cursor, trainer_id):
     cursor.execute("SELECT"
                    " firstname, lastname, institution"
-                   " FROM db_name.dashboard_trainer WHERE id = %s;", trainer_id)
+                   " FROM dashboard_trainer WHERE id = %s;", trainer_id)
 
     # Get all the rows for that query
     trainers_items = cursor.fetchall()
@@ -148,7 +148,7 @@ def __get_items__(cur):
     cur.execute('SELECT'
                 ' latitude, longitude,'
                 ' number_of_participant, module_id_id, trainer_id_id, datetime'
-                ' FROM db_name.dashboard_training;')
+                ' FROM dashboard_training;')
 
     # Get all the rows for that query
     training_items = cur.fetchall()
@@ -192,9 +192,6 @@ def get_training_data_from_db():
 
 
 current_trainings = get_training_data_from_db()
-
-print("current_trainings")
-print(current_trainings)
 
 scheduler = BackgroundScheduler()
 

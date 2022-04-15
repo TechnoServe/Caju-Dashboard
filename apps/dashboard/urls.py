@@ -27,6 +27,13 @@ search_patterns_yields = [
     path('export_pdf/', views.export_pdf_yields, name='export_pdf_yields'),
 ]
 
+search_patterns_training = [
+    path('', views.training, name='training'),
+    path('export_xls/', views.export_xls_training, name='export_xls_training'),
+    path('export_csv/', views.export_csv_training, name='export_csv_training'),
+    path('export_pdf/', views.export_pdf_training, name='export_pdf_training'),
+]
+
 urlpatterns = [
 
     path('', map_views.index, name='map'),
@@ -37,6 +44,7 @@ urlpatterns = [
     path('plantations/', include(search_patterns_plantations)),
     path('yield/', include(search_patterns_yields)),
     path('nurseries/', include(search_patterns_nurseries)),
+    path('training/', include(search_patterns_training)),
     path('shipment/', views.shipment, name='shipment'),
     path("register_org/", views.register_org, name="register_org"),
     path("register_role/", views.register_role, name="register_role"),

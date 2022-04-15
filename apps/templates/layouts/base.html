@@ -31,12 +31,21 @@
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/argon.css' %}" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Coming+Soon&display=swap" rel="stylesheet"> 
     <script src="https://kit.fontawesome.com/2f0439ef64.js" crossorigin="anonymous"></script>
 
     <!-- Specific CSS goes HERE -->
     {% block stylesheets %}{% endblock stylesheets %}
 
     <style>
+        @font-face {
+            font-family: Southeast;
+            src: url("/static/assets/fonts/Southeast/Southeast.woff") format("woff");
+        }
+
         html {
             font-family: sans-serif;
             line-height: 1.15;

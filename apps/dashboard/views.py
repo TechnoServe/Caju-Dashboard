@@ -4,6 +4,7 @@ import csv
 import datetime
 import tempfile
 import io
+from django.forms import ValidationError
 
 import xlwt
 from django import template
@@ -30,7 +31,7 @@ from apps.dashboard import models
 from apps.dashboard.models import Plantation
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice, NurserySearch, \
-    BeninYieldSearch, PlantationsSearch
+    BeninYieldSearch, PlantationsSearch, TrainingSearch, TrainingDateForm, TrainingTimeForm
 from django.db.models import Q
 
 
@@ -337,7 +338,7 @@ def plantations(request):
 
 
 @login_required(login_url="/")
-def nurseries(request):
+def nurseries(request):      
     context = {}
 
     search_nurseries = request.GET.get('search')
@@ -387,6 +388,123 @@ def nurseries(request):
     })
     return render(request, 'dashboard/nurseries.html', context)
 
+
+@login_required(login_url="/")
+def training(request):
+    context = {}
+
+    search_training = request.GET.get('search')
+    training_column = request.GET.get('column')
+
+    if search_training:
+        if training_column == 'module name':
+            training_column = training_column.replace(" ", "_")
+            params = {
+                '{}__icontains'.format(training_column): search_training,
+            }
+            module_list = models.TrainingModule.objects.filter(Q(**params))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in module_list:
+                    if str(item.module_id) == str(element.id):
+                        training_list.append(item)
+        
+        elif training_column == 'trainer first name':
+            trainer_firstname_list = models.Trainer.objects.filter(Q(firstname__icontains=search_training))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in trainer_firstname_list:
+                    if str(item.trainer_id) == str(element.id):
+                        training_list.append(item)
+
+        elif training_column == 'trainer last name':
+            trainer_lastname_list = models.Trainer.objects.filter(Q(lastname__icontains=search_training))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in trainer_lastname_list:
+                    if str(item.trainer_id) == str(element.id):
+                        training_list.append(item)
+
+        elif training_column == 'number of participant':
+            training_column = training_column.replace(" ", "_")
+            params = {
+                '{}__icontains'.format(training_column): search_training,
+            }
+            training_list = models.Training.objects.filter(Q(**params))
+
+        else:
+            module_list = models.TrainingModule.objects.filter(Q(module_name__icontains=search_training))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in module_list:
+                    if str(item.module_id) == str(element.id):
+                        training_list.append(item)
+            trainer_firstname_list = models.Trainer.objects.filter(Q(firstname__icontains=search_training))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in trainer_firstname_list:
+                    if str(item.trainer_id) == str(element.id):
+                        training_list.append(item)
+            trainer_lastname_list = models.Trainer.objects.filter(Q(lastname__icontains=search_training))
+            training_object = models.Training.objects.all()
+            training_list = []
+            for item in training_object:
+                for element in trainer_lastname_list:
+                    if str(item.trainer_id) == str(element.id):
+                        training_list.append(item)
+            training_list = models.Training.objects.filter(Q(number_of_participant__icontains=search_training))                                                            
+
+    if request.method == "POST":
+        date_form = TrainingDateForm(data=request.POST or None)
+        time_form = TrainingTimeForm(data=request.POST or None)
+        if date_form.is_valid():
+            training_date = date_form.cleaned_data.get("training_date")
+            training_object_list = models.Training.objects.all()
+            training_list = []
+            for item in training_object_list:
+                if str(training_date) == str(item.DateTime.strftime("%Y-%m-%d")):
+                    training_list.append(item)
+        
+        elif time_form.is_valid():
+            training_time = time_form.cleaned_data.get("training_time")
+            training_time = training_time.strftime("%H:%M")
+            training_object_list = models.Training.objects.all()
+            training_list = []
+            for item in training_object_list:
+                if str(training_time) == str(item.DateTime.strftime("%H:%M")):
+                    training_list.append(item)
+
+    else:
+        training_list = models.Training.objects.all()
+        date_form = TrainingDateForm()
+        time_form = TrainingTimeForm()
+
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(training_list, 10)
+
+    page_range = paginator.get_elided_page_range(number=page)
+    try:
+        trainings = paginator.page(page)
+    except PageNotAnInteger:
+        trainings = paginator.page(1)
+    except EmptyPage:
+        trainings = paginator.page(paginator.num_pages)
+
+    context['trainings'] = trainings
+    context['segment'] = 'trainings'
+    context['page_range'] = page_range
+    context['date_form'] = date_form
+    context['time_form'] = time_form
+    context['form'] = TrainingSearch(initial={
+        'column': request.GET.get('column', ''),
+    })
+    return render(request, 'dashboard/training.html', context)
 
 @login_required(login_url="/")
 def shipment(request):
@@ -1263,6 +1381,10 @@ def export_csv_yields(request):
     return response
 
 
+def export_csv_training(request):
+    pass
+
+
 def export_xls_nurseries(request):
     response = HttpResponse(content_type='application/ms-excel')
     if "/fr/" in request.build_absolute_uri():
@@ -1398,6 +1520,10 @@ def export_xls_yields(request):
     return response
 
 
+def export_xls_training(request):
+    pass
+
+
 def export_pdf_nurseries(request):
     response = HttpResponse(content_type='application/pdf')
     if "/fr/" in request.build_absolute_uri():
@@ -1500,3 +1626,7 @@ def export_pdf_yields(request):
     except Exception as f:
         print(f)
     return response
+
+
+def export_pdf_training(request):
+    pass

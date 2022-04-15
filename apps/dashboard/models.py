@@ -302,7 +302,7 @@ class Trainer(models.Model):
     email = models.EmailField(max_length=254)
 
     def __str__(self):
-        return str("{0} {1}".format(self.firstname, self.lastname))
+        return str(self.id)
 
 
 class TrainingModule(models.Model):
@@ -310,7 +310,7 @@ class TrainingModule(models.Model):
     category = models.CharField(max_length=200)
 
     def __str__(self):
-        return str(self.module_name)
+        return str(self.id)
 
 
 class Training(models.Model):
@@ -322,4 +322,4 @@ class Training(models.Model):
     number_of_participant = models.IntegerField()
 
     def __str__(self):
-        return str("Training n°: {0}".format(self.id))
+        return str(self.id)

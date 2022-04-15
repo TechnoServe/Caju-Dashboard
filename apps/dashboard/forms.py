@@ -3,12 +3,12 @@
 Copyright (c) 2019 - present AppSeed.us
 """
 import datetime
-from datetime import date
+from datetime import date, time
 
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm
+from django.forms import ModelForm, TimeInput
 from django.utils.translation import gettext_lazy as _, gettext
 
 from apps.authentication.models import RemUser, RemOrganization
@@ -272,5 +272,57 @@ class PlantationsSearch(forms.Form):
                 'class': 'form-control',
                 'style': 'border-color: none;',
             }
+        )
+    )
+
+
+training_column_search = (
+    ('all', _('All')),
+    ('module name', _('MODULE NAME')),
+    ('trainer first name', _('TRAINER FIRST NAME')),
+    ('trainer last name', _('TRAINER LAST NAME')),
+    ('date', _('DATE')),
+    ('time', _('TIME')),
+    ('number of participant', _('NUMBER OF PARTICIPANT')),
+)
+
+
+class TrainingSearch(forms.Form):
+    column = forms.ChoiceField(
+        choices=training_column_search,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+class TrainingDateForm(forms.Form):
+    training_date = forms.DateField(
+        initial=dates, 
+        widget=DateInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+times = str(time(hour=current_time.hour, minute=current_time.minute))
+
+
+class TrainingTimeForm(forms.Form):
+    training_time = forms.TimeField(
+        initial=times, 
+        widget=TimeInput(
+            format='%H:%M',
+            attrs={
+                'type': 'time',
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }            
         )
     )

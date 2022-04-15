@@ -1,0 +1,218 @@
+{% extends 'layouts/base.html' %}
+{% load i18n %}
+
+{% block stylesheets %}
+<style>
+    #id_training_date, #id_training_time, #post_form {
+        display: none;
+    }
+</style>
+{% endblock stylesheets %}
+
+{% block title %} Tables {% endblock title %}
+
+{% block content %}
+
+  <div class="header bg-primary pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div>
+            <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6 class="h2 text-white d-inline-block mb-0">{% trans "Training" %}</h6>
+          </div>
+          <div style="margin-left: auto">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'training' %}" style="display: inline">
+                <input class="form-control mr-sm-2" type="search" id="simple_search" placeholder={% trans "Search" %} aria-label="search" name="search">
+                {% csrf_token %}
+                {{ date_form.training_date }}
+                {{ time_form.training_time }}
+                {{ form.column }}
+                &nbsp&nbsp<button class="btn btn-outline-success my-2 my-sm-0" id="get_button" type="submit">{% trans "Search" %}</button>
+                &nbsp&nbsp<button class="btn btn-outline-success my-2 my-sm-0" formmethod="post" id="post_button" type="submit" style="display: none;">{% trans "Search" %}</button>            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6">
+        <!-- Dark table -->
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Card header -->
+                    <div class="card-header border-0">
+                        <div style="float: left">
+                        <h3 class="mb-0">{% trans "Training" %}</h3>
+                        </div>
+                        <div style="float: right">
+                        <a href="{% url 'export_xls_training' %}" class="btn btn-primary">{% trans "Export Excel" %}</a>
+                        <a href="{% url 'export_csv_training' %}" class="btn btn-primary">{% trans "Export CSV" %}</a>
+                        <a href="{% url 'export_pdf_training' %}" class="btn btn-primary">{% trans "Export PDF" %}</a>
+                        </div>
+
+                    </div>
+                    <!-- Light table -->
+                    <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                        <th scope="col" class="sort" >{% trans "Module Name" %}</th>
+                        <th scope="col" class="sort" >{% trans "Trainer First Name" %}</th>
+                        <th scope="col" class="sort" >{% trans "Trainer Last Name" %}</th>
+                        <th scope="col" class="sort" >{% trans "Date" %}</th>
+                        <th scope="col" class="sort" >{% trans "Time" %}</th>
+                        <th scope="col" class="sort" >{% trans "Number of Participant" %}</th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        {% for training in trainings %}
+                            <tr>
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <div class="media-body">
+                                            <span class="name mb-0 text-sm">{{ training.module_id.module_name }}</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td >
+                                    {{ training.trainer_id.firstname }}
+                                </td>
+                                <td>
+                                    <span class="badge badge-dot mr-4">
+                                        <span class="status">{{ training.trainer_id.lastname }}</span>
+                                    </span>
+                                </td>
+                                <td >
+                                    {{ training.DateTime.date }}
+                                </td>
+                                <td >
+                                    {{ training.DateTime.time }}
+                                </td>
+                                <td >
+                                    {{ training.number_of_participant }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                    </div>
+                    <div class="card-footer py-4">
+                        <nav aria-label="...">
+                            <ul class="pagination" justify-content-end mb-0">
+                            {% if trainings.has_other_pages %}
+                                    {% if trainings.has_previous %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ trainings.previous_page_number }}">
+                                                <i class="fas fa-angle-left"></i>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">
+                                                <i class="fas fa-angle-left"></i>
+                                                <span class="sr-only">
+                                                    {% trans "Previous" %}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    {% for i in page_range|default_if_none:trainings.paginator.get_elided_page_range %}
+                                        {% if trainings.number == i %}
+                                            <li class="page-item">
+                                                
+                                                <a class="page-link" href="#">{{ i }}</a>
+                                                <span class="sr-only">
+                                                    (current)
+                                                </span>
+                                            </li>
+                                        {% else %}
+
+                                            {% if i == trainings.paginator.ELLIPSIS %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="#">
+                                                        {{ i }}
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="page-item active">
+                                                    <a class="page-link" href="?page={{ i }}">
+                                                        {{ i }}
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if trainings.has_next %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="?page={{ trainings.next_page_number }}">
+                                                <i class="fas fa-angle-right"></i>
+                                                <span class="sr-only">
+                                                    {% trans "Next" %}
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#">
+                                                <i class="fas fa-angle-right"></i>
+                                                <span class="sr-only">{% trans "Next" %}</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                            {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        $("#id_column").change(function() {
+            var x = $("#id_column option:selected").text();
+            if(x == "DATE") { 
+                $("#post_button").show();
+                $("#get_button").hide();
+                $("#id_training_date").show();
+                $("#simple_search").hide();
+                $("#id_training_time").hide(); 
+            }
+            else if(x == "TIME" || x == "HEURE") { 
+                $("#post_button").show();
+                $("#get_button").hide();
+                $("#id_training_date").hide();
+                $("#simple_search").hide();
+                $("#id_training_time").show(); 
+            }
+            else { 
+                $("#post_button").hide();
+                $("#get_button").show();
+                $("#id_training_date").hide();
+                $("#simple_search").show();
+                $("#id_training_time").hide(); 
+            }
+        });
+    });
+    const button = document.getElementById('post_button');
+    if (document.getElementById('post_button').style.display != 'none') {
+        console.log('bonjour1')
+    }
+
+    button.addEventListener('click', myFunction);
+    function myFunction() {
+        console.log(document.getElementById('id_training_time').style.display);
+    };
+
+</script>
+{% endblock javascripts %}
