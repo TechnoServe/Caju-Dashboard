@@ -31,7 +31,6 @@ def __build_popup__(current_object):
             <h5 style="font-family: 'Trebuchet MS', sans-serif">
                 {time}: <i>{current_object.datetime}</i>
             </h5>
-            <a href="https://www.technoserve.org/our-work/agriculture/cashew/?_ga=2.159985149.1109250972.1626437600-1387218312.1616379774"target="_blank">click link to website</a>
             <img src="https://www.tnsbenin.org/uploads/1/0/9/8/109816790/p-pi_orig.png" width="200" height="133">
             </div>
         '''
