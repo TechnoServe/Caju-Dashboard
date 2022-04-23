@@ -11,7 +11,7 @@ from django.template import loader
 from django.utils.translation import gettext
 
 # Google service account for the GEE geotiff
-from .map_legend import macro_toggler
+from .layer_control_modifier import macro_toggler
 from .scripts.alteia_trees_data import download_trees_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
