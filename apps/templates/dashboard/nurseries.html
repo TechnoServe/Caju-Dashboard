@@ -38,9 +38,9 @@
                         <h3 class="mb-0">{% trans "Nurseries" %}</h3>
                         </div>
                         <div style="float: right">
-                        <a href="{% url 'export_xls_nurseries' %}" class="btn btn-primary">{% trans "Export Excel" %}</a>
-                        <a href="{% url 'export_csv_nurseries' %}" class="btn btn-primary">{% trans "Export CSV" %}</a>
-                        <a href="{% url 'export_pdf_nurseries' %}" class="btn btn-primary">{% trans "Export PDF" %}</a>
+                        <a href="{% url 'export_xls_nurseries' %}" target="_blank" class="btn btn-primary">{% trans "Export Excel" %}</a>
+                        <a href="{% url 'export_csv_nurseries' %}" target="_blank" class="btn btn-primary">{% trans "Export CSV" %}</a>
+                        <a href="{% url 'export_pdf_nurseries' %}" target="_blank" class="btn btn-primary">{% trans "Export PDF" %}</a>
                         </div>
 
                     </div>
@@ -61,7 +61,6 @@
                         <th scope="col" class="sort" >{% trans "Altitude" %}</th>
                         <th scope="col" class="sort" >{% trans "Partner" %}</th>
                         <th scope="col" class="sort" >{% trans "Number of Plants" %}</th>
-                        <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody class="list">

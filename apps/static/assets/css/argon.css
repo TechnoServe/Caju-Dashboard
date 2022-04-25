@@ -23756,6 +23756,7 @@ textarea[resize='horizontal']
 .table.align-items-center th
 {
     vertical-align: middle;
+    text-align: center;
 }
 
 .table .thead-dark th

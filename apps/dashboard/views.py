@@ -4,10 +4,15 @@ import csv
 import datetime
 import tempfile
 import io
+from pathlib import Path
 from django.forms import ValidationError
+from numpy import absolute
 
 import xlwt
+from PIL import Image as pil_image
+import glob
 from django import template
+from django.templatetags.static import static
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
@@ -21,8 +26,11 @@ from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A2, landscape
-from reportlab.platypus import TableStyle, SimpleDocTemplate, Table, Paragraph
+from reportlab.lib.pagesizes import A2, A4, landscape
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import TableStyle, SimpleDocTemplate, Table, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
 from weasyprint import HTML
 from apps.authentication import utils
 from apps.authentication.forms import RegisterOrganization, RegisterRole
@@ -33,6 +41,9 @@ from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_s
 from .forms import UserCustomProfileForm, UserBaseProfileForm, KorDateForm, DepartmentChoice, NurserySearch, \
     BeninYieldSearch, PlantationsSearch, TrainingSearch, TrainingDateForm, TrainingTimeForm
 from django.db.models import Q
+
+
+CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 @login_required(login_url="/")
@@ -226,6 +237,7 @@ def tables(request):
     return render(request, 'dashboard/companies.html', context)
 
 
+yields_list = models.BeninYield.objects.filter(status=utils.Status.ACTIVE)
 @login_required(login_url="/")
 def yields(request):
     context = {}
@@ -239,7 +251,6 @@ def yields(request):
             params = {
                 '{}__icontains'.format(yields_column): search_yields,
             }
-            global yields_list
             yields_list = models.BeninYield.objects.filter(
                 Q(**params), status=utils.Status.ACTIVE)
 
@@ -278,6 +289,7 @@ def yields(request):
     return render(request, 'dashboard/yield.html', context)
 
 
+plantations_list = models.Plantation.objects.filter(status=utils.Status.ACTIVE)
 @login_required(login_url="/")
 def plantations(request):
     context = {}
@@ -296,7 +308,6 @@ def plantations(request):
                 params = {
                     '{}__icontains'.format(plantations_column): search_plantations,
                 }
-            global plantations_list
             plantations_list = models.Plantation.objects.filter(
                 Q(**params), status=utils.Status.ACTIVE)
 
@@ -337,8 +348,9 @@ def plantations(request):
     return render(request, 'dashboard/plantations.html', context)
 
 
+nurseries_list = models.Nursery.objects.filter(status=utils.Status.ACTIVE)
 @login_required(login_url="/")
-def nurseries(request):      
+def nurseries(request):
     context = {}
 
     search_nurseries = request.GET.get('search')
@@ -350,7 +362,6 @@ def nurseries(request):
             params = {
                 '{}__icontains'.format(nursery_column): search_nurseries,
             }
-            global nurseries_list
             nurseries_list = models.Nursery.objects.filter(
                 Q(**params), status=utils.Status.ACTIVE)
 
@@ -389,6 +400,7 @@ def nurseries(request):
     return render(request, 'dashboard/nurseries.html', context)
 
 
+training_list = models.Training.objects.all()
 @login_required(login_url="/")
 def training(request):
     context = {}
@@ -397,6 +409,9 @@ def training(request):
     training_column = request.GET.get('column')
 
     if search_training:
+        training_list = None
+        date_form = TrainingDateForm()
+        time_form = TrainingTimeForm()
         if training_column == 'module name':
             training_column = training_column.replace(" ", "_")
             params = {
@@ -409,9 +424,10 @@ def training(request):
                 for element in module_list:
                     if str(item.module_id) == str(element.id):
                         training_list.append(item)
-        
+
         elif training_column == 'trainer first name':
-            trainer_firstname_list = models.Trainer.objects.filter(Q(firstname__icontains=search_training))
+            trainer_firstname_list = models.Trainer.objects.filter(
+                Q(firstname__icontains=search_training))
             training_object = models.Training.objects.all()
             training_list = []
             for item in training_object:
@@ -420,7 +436,8 @@ def training(request):
                         training_list.append(item)
 
         elif training_column == 'trainer last name':
-            trainer_lastname_list = models.Trainer.objects.filter(Q(lastname__icontains=search_training))
+            trainer_lastname_list = models.Trainer.objects.filter(
+                Q(lastname__icontains=search_training))
             training_object = models.Training.objects.all()
             training_list = []
             for item in training_object:
@@ -436,30 +453,34 @@ def training(request):
             training_list = models.Training.objects.filter(Q(**params))
 
         else:
-            module_list = models.TrainingModule.objects.filter(Q(module_name__icontains=search_training))
+            module_list = models.TrainingModule.objects.filter(
+                Q(module_name__icontains=search_training))
             training_object = models.Training.objects.all()
             training_list = []
             for item in training_object:
                 for element in module_list:
                     if str(item.module_id) == str(element.id):
                         training_list.append(item)
-            trainer_firstname_list = models.Trainer.objects.filter(Q(firstname__icontains=search_training))
+            trainer_firstname_list = models.Trainer.objects.filter(
+                Q(firstname__icontains=search_training))
             training_object = models.Training.objects.all()
-            training_list = []
             for item in training_object:
                 for element in trainer_firstname_list:
                     if str(item.trainer_id) == str(element.id):
                         training_list.append(item)
-            trainer_lastname_list = models.Trainer.objects.filter(Q(lastname__icontains=search_training))
+            trainer_lastname_list = models.Trainer.objects.filter(
+                Q(lastname__icontains=search_training))
             training_object = models.Training.objects.all()
-            training_list = []
             for item in training_object:
                 for element in trainer_lastname_list:
                     if str(item.trainer_id) == str(element.id):
                         training_list.append(item)
-            training_list = models.Training.objects.filter(Q(number_of_participant__icontains=search_training))                                                            
+            training_list_beta = models.Training.objects.filter(
+                Q(number_of_participant__icontains=search_training))
+            for item in training_list_beta:
+                training_list.append(item)
 
-    if request.method == "POST":
+    elif request.method == "POST":
         date_form = TrainingDateForm(data=request.POST or None)
         time_form = TrainingTimeForm(data=request.POST or None)
         if date_form.is_valid():
@@ -469,7 +490,7 @@ def training(request):
             for item in training_object_list:
                 if str(training_date) == str(item.DateTime.strftime("%Y-%m-%d")):
                     training_list.append(item)
-        
+
         elif time_form.is_valid():
             training_time = time_form.cleaned_data.get("training_time")
             training_time = training_time.strftime("%H:%M")
@@ -505,6 +526,7 @@ def training(request):
         'column': request.GET.get('column', ''),
     })
     return render(request, 'dashboard/training.html', context)
+
 
 @login_required(login_url="/")
 def shipment(request):
@@ -1382,7 +1404,24 @@ def export_csv_yields(request):
 
 
 def export_csv_training(request):
-    pass
+    response = HttpResponse(content_type='text/csv')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=formation' + \
+                                          str(datetime.datetime.now()) + '.csv'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=training' + \
+                                          str(datetime.datetime.now()) + '.csv'
+    writer = csv.writer(response)
+    writer.writerow(
+        [gettext("Module Name"), gettext("Trainer First Name"), gettext("Trainer Last Name"), gettext("Date"),
+         gettext("Hour"), gettext("Number of Participant")])
+
+    for training in training_list:
+        writer.writerow(
+            [training.module_id.module_name, training.trainer_id.firstname, training.trainer_id.lastname, training.DateTime.strftime("%Y-%m-%d"),
+             training.DateTime.strftime("%H:%M"), training.number_of_participant])
+
+    return response
 
 
 def export_xls_nurseries(request):
@@ -1401,10 +1440,10 @@ def export_xls_nurseries(request):
 
     columns = [gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"),
                gettext("Nursery Address"), gettext(
-            "Country"), gettext("Commune"),
-               gettext("Current Area"), gettext("Latitude"), gettext(
-            "Longitude"), gettext("Altitude"),
-               gettext("Partner"), gettext("Number of Plants")]
+        "Country"), gettext("Commune"),
+        gettext("Current Area"), gettext("Latitude"), gettext(
+        "Longitude"), gettext("Altitude"),
+        gettext("Partner"), gettext("Number of Plants")]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -1444,11 +1483,11 @@ def export_xls_plantations(request):
                gettext("Owner last name"), gettext("Owner gender"),
                gettext("Total trees"),
                gettext("Country"), gettext("Department"), gettext(
-            "Commune"), gettext("Arrondissement"),
-               gettext("Village"), gettext(
-            "Current area"), gettext("Latitude"),
-               gettext("Longitude"),
-               gettext("Altitude")]
+        "Commune"), gettext("Arrondissement"),
+        gettext("Village"), gettext(
+        "Current area"), gettext("Latitude"),
+        gettext("Longitude"),
+        gettext("Altitude")]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -1493,8 +1532,8 @@ def export_xls_yields(request):
                gettext("Total yield kg"),
                gettext("Total yield per ha kg"),
                gettext("Total yield per tree kg"), gettext(
-            "Total sick trees"), gettext("Total dead trees"),
-               gettext("Total trees out of prod")]
+        "Total sick trees"), gettext("Total dead trees"),
+        gettext("Total trees out of prod")]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -1521,112 +1560,473 @@ def export_xls_yields(request):
 
 
 def export_xls_training(request):
-    pass
+    response = HttpResponse(content_type='application/ms-excel')
+    if "/fr/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=formations' + \
+                                          str(datetime.datetime.now()) + '.xls'
+    elif "/en/" in request.build_absolute_uri():
+        response['Content-Disposition'] = 'attachement; filename=trainings' + \
+                                          str(datetime.datetime.now()) + '.xls'
+    wb = xlwt.Workbook(encoding=' utf-8')
+    ws = wb.add_sheet('Trainings')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = [gettext("Module Name"), gettext("Trainer First Name"), gettext("Trainer Last Name"), gettext("Date"),
+               gettext("Hour"), gettext("Number of Participant")]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+
+    rows = []
+
+    for training in training_list:
+        rows.append(
+            (training.module_id.module_name, training.trainer_id.firstname, training.trainer_id.lastname, training.DateTime.strftime("%Y-%m-%d"),
+             training.DateTime.strftime("%H:%M"), training.number_of_participant))
+
+    for row in rows:
+        row_num += 1
+
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+    wb.save(response)
+
+    return response
 
 
 def export_pdf_nurseries(request):
     response = HttpResponse(content_type='application/pdf')
-    if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'inline; attachement; filename=pépinières' + str(
-            datetime.datetime.now()) + '.pdf'
-    elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'inline; attachement; filename=nurseries' + str(
-            datetime.datetime.now()) + '.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
+    try:
+        if "/fr/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=pépinières' + str(
+                datetime.datetime.now()) + '.pdf'
+        elif "/en/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=nurseries' + str(
+                datetime.datetime.now()) + '.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'    
 
-    html_string = render_to_string(
-        'dashboard/pdf-output.html', {'nurseries': nurseries_list})
-    html = HTML(string=html_string)
+        elements = []
 
-    result = html.write_pdf()
+        TechnoserveLabs_reportlab_logo = Image(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Labs-Logov3.jpg"))
+        TechnoserveLabs_reportlab_logo.hAlign = 'LEFT'
 
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'rb')
-        response.write(output.read())
+        elements.append(TechnoserveLabs_reportlab_logo)
 
+        BeninCaju_reportlab_logo = Image(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Labs-Logo.jpg"), 6.29*inch)
+        BeninCaju_reportlab_logo.hAlign = 'RIGHT'
+
+        elements.append(BeninCaju_reportlab_logo)
+        elements.append(Spacer(1, 12))
+
+        sample_style_sheet = getSampleStyleSheet()
+        title_style = sample_style_sheet['Heading1']
+        title_style.alignment = 1
+        table_name = None
+        if "/fr/" in request.build_absolute_uri():
+            table_name = "Pépinières"
+            paragraph_1 = Paragraph(table_name, title_style)
+        elif "/en/" in request.build_absolute_uri():
+            table_name = "Nurseries"
+            paragraph_1 = Paragraph(table_name, title_style)
+
+        elements.append(paragraph_1)
+        elements.append(Spacer(1, 12))
+
+        doc = SimpleDocTemplate(
+            response,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=30,
+            bottomMargin=72,
+            pagesize=landscape(A2))
+
+        data = []
+
+        titles_list = (gettext("Nursery Name"), gettext("Owner First Name"), gettext("Owner Last Name"),
+                    gettext("Nursery Address"), gettext(
+            "Country"), gettext("Commune"),
+            gettext("Current Area"), gettext("Latitude"), gettext(
+            "Longitude"), gettext("Altitude"),
+            gettext("Partner"), gettext("Number of Plants"))
+
+        data.append(titles_list)
+
+        for nursery0 in nurseries_list:
+            data.append((nursery0.nursery_name, nursery0.owner_first_name, nursery0.owner_last_name, nursery0.nursery_address,
+                        nursery0.country, nursery0.commune,
+                        nursery0.current_area, nursery0.latitude, nursery0.longitude, nursery0.altitude, nursery0.partner,
+                        nursery0.number_of_plants))
+
+        table = Table(data)
+        table.setStyle(TableStyle(
+            [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+            ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0),
+            colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
+            ('LEFTPADDING', (0, 0), (-1, 0), 15),
+            ('RIGHTPADDING', (0, 0), (-1, 0), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
+            ('TOPPADDING', (0, 0), (-1, 0), 15)
+            ]))
+
+        elements.append(table)
+
+        def add_page_number(canvas, doc):
+            canvas.saveState()
+            canvas.setFont('Times-Roman', 15)
+            page_footer_text = table_name
+            canvas.drawCentredString(
+                1.85*inch,
+                0.65*inch,
+                page_footer_text
+            )
+            canvas.setLineWidth(0.008*inch)
+            # For Windows users in dev env
+            canvas.drawInlineImage(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For linux user in dev env
+            #canvas.drawInlineImage(os.path.join(CORE_DIR, "static/assets/img/brand/TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For prod env
+            #canvas.drawInlineImage(static("assets/img/brand/TNS-Logo.jpg")), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            canvas.line(0.5*inch, 0.5*inch, 22.9*inch, 0.5*inch)    
+            page_number_text = "%d" % (doc.page)
+            canvas.drawCentredString(
+                22.15*inch,
+                0.25*inch,
+                page_number_text
+            )
+
+            canvas.restoreState()
+    except Exception as r:
+        print(r)
+    try:
+        doc.build(elements, onFirstPage=add_page_number,
+                  onLaterPages=add_page_number,)
+    except Exception as f:
+        print(f)
     return response
 
 
 def export_pdf_plantations(request):
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; attachement; filename=plantations' + str(
-        datetime.datetime.now()) + '.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
+    try:
+        if "/fr/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=plantations' + str(
+                datetime.datetime.now()) + '.pdf'
+        elif "/en/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=plantations' + str(
+                datetime.datetime.now()) + '.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
 
-    html_string = render_to_string(
-        'dashboard/pdf-output.html', {'plantations': plantations_list})
-    html = HTML(string=html_string)
+        elements = []
 
-    result = html.write_pdf()
+        sample_style_sheet = getSampleStyleSheet()
+        title_style = sample_style_sheet['Heading1']
+        title_style.alignment = 1
+        table_name = None
+        if "/fr/" in request.build_absolute_uri():
+            table_name = "Plantations"
+            paragraph_1 = Paragraph(table_name, title_style)
+        elif "/en/" in request.build_absolute_uri():
+            table_name = "Plantations"
+            paragraph_1 = Paragraph(table_name, title_style)
 
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'rb')
-        response.write(output.read())
+        elements.append(paragraph_1)
+        elements.append(Spacer(1, 12))
 
+        doc = SimpleDocTemplate(
+            response,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=30,
+            bottomMargin=72,
+            pagesize=landscape(A2))
+
+        data = []
+
+        titles_list = (gettext("Plantation name"), gettext("Plantation code"), gettext("Owner first name"),
+                    gettext("Owner last name"), gettext("Owner gender"),
+                    gettext("Total trees"),
+                    gettext("Country"), gettext("Department"), gettext(
+            "Commune"), gettext("Arrondissement"),
+            gettext("Village"), gettext(
+            "Current area"), gettext("Latitude"),
+            gettext("Longitude"),
+            gettext("Altitude"))
+
+        data.append(titles_list)
+
+        for plantations0 in plantations_list:
+            data.append((plantations0.plantation_name, plantations0.plantation_code, plantations0.owner_first_name,
+                        plantations0.owner_last_name,
+                        plantations0.owner_gender, plantations0.total_trees, plantations0.country,
+                        plantations0.department, plantations0.commune, plantations0.arrondissement, plantations0.village,
+                        plantations0.current_area, plantations0.latitude, plantations0.longitude, plantations0.altitude))
+
+        table = Table(data)
+        table.setStyle(TableStyle(
+            [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+            ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0),
+            colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
+            ('LEFTPADDING', (0, 0), (-1, 0), 15),
+            ('RIGHTPADDING', (0, 0), (-1, 0), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
+            ('TOPPADDING', (0, 0), (-1, 0), 15)
+            ]))
+
+        elements.append(table)
+
+        def add_page_number(canvas, doc):
+            canvas.saveState()
+            canvas.setFont('Times-Roman', 15)
+            page_footer_text = table_name
+            canvas.drawCentredString(
+                1.85*inch,
+                0.65*inch,
+                page_footer_text
+            )
+            canvas.setLineWidth(0.008*inch) 
+            # For Windows users in dev env
+            canvas.drawInlineImage(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For linux user in dev env
+            #canvas.drawInlineImage(os.path.join(CORE_DIR, "static/assets/img/brand/TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For prod env
+            #canvas.drawInlineImage(static("assets/img/brand/TNS-Logo.jpg")), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            canvas.line(0.5*inch, 0.5*inch, 22.9*inch, 0.5*inch)    
+            page_number_text = "%d" % (doc.page)
+            canvas.drawCentredString(
+                22.15*inch,
+                0.25*inch,
+                page_number_text
+            )
+
+            canvas.restoreState()
+    
+    except Exception as r:
+        print(r)
+
+    try:
+        doc.build(elements, onFirstPage=add_page_number,
+                  onLaterPages=add_page_number,)
+    except Exception as f:
+        print(f)
     return response
 
 
 def export_pdf_yields(request):
     response = HttpResponse(content_type='application/pdf')
-    if "/fr/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'inline; attachement; filename=rendement' + str(
-            datetime.datetime.now()) + '.pdf'
-    elif "/en/" in request.build_absolute_uri():
-        response['Content-Disposition'] = 'inline; attachement; filename=yield' + str(
-            datetime.datetime.now()) + '.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-
-    elements = []
-
-    doc = SimpleDocTemplate(
-        response,
-        rightMargin=72,
-        leftMargin=72,
-        topMargin=30,
-        bottomMargin=72,
-        pagesize=landscape(A2))
-
-    data = []
-
-    titles_list = (gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
-                   gettext("Total yield kg"),
-                   gettext("Total yield per ha kg"),
-                   gettext("Total yield per tree kg"), gettext(
-        "Total sick trees"), gettext("Total dead trees"),
-                   gettext("Total trees out of prod"))
-
-    data.append(titles_list)
-
-    for yields0 in yields_list:
-        data.append((yields0.plantation_name, yields0.product_id, yields0.year, yields0.total_number_trees,
-                     yields0.total_yield_kg,
-                     yields0.total_yield_per_ha_kg, yields0.total_yield_per_tree_kg,
-                     yields0.total_sick_trees, yields0.total_dead_trees, yields0.total_trees_out_of_prod))
-
-    table = Table(data)
-    table.setStyle(TableStyle(
-        [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-         ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-         ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
-         ('BACKGROUND', (0, 0), (-1, 0), colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
-         ('LEFTPADDING', (0, 0), (-1, 0), 15),
-         ('RIGHTPADDING', (0, 0), (-1, 0), 15),
-         ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
-         ('TOPPADDING', (0, 0), (-1, 0), 15)
-         ]))
-
-    elements.append(Paragraph(gettext("Yields")))
-    elements.append(table)
     try:
-        doc.build(elements)
+        if "/fr/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=rendement' + str(
+                datetime.datetime.now()) + '.pdf'
+        elif "/en/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=yield' + str(
+                datetime.datetime.now()) + '.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+
+        elements = []
+
+        sample_style_sheet = getSampleStyleSheet()
+        title_style = sample_style_sheet['Heading1']
+        title_style.alignment = 1
+        table_name = None
+        if "/fr/" in request.build_absolute_uri():
+            table_name = "Rendement"
+            paragraph_1 = Paragraph(table_name, title_style)
+        elif "/en/" in request.build_absolute_uri():
+            table_name = "Yield"
+            paragraph_1 = Paragraph(table_name, title_style)
+
+        elements.append(paragraph_1)
+        elements.append(Spacer(1, 12))
+
+        doc = SimpleDocTemplate(
+            response,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=30,
+            bottomMargin=72,
+            pagesize=landscape(A2))
+
+        data = []
+
+        titles_list = (gettext("Plantation name"), gettext("Product id"), gettext("Year"), gettext("Total number trees"),
+                    gettext("Total yield kg"),
+                    gettext("Total yield per ha kg"),
+                    gettext("Total yield per tree kg"), gettext(
+            "Total sick trees"), gettext("Total dead trees"),
+            gettext("Total trees out of prod"))
+
+        data.append(titles_list)
+
+        for yields0 in yields_list:
+            data.append((yields0.plantation_name, yields0.product_id, yields0.year, yields0.total_number_trees,
+                        yields0.total_yield_kg,
+                        yields0.total_yield_per_ha_kg, yields0.total_yield_per_tree_kg,
+                        yields0.total_sick_trees, yields0.total_dead_trees, yields0.total_trees_out_of_prod))
+
+        table = Table(data)
+        table.setStyle(TableStyle(
+            [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+            ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0),
+            colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
+            ('LEFTPADDING', (0, 0), (-1, 0), 15),
+            ('RIGHTPADDING', (0, 0), (-1, 0), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
+            ('TOPPADDING', (0, 0), (-1, 0), 15)
+            ]))
+
+        elements.append(table)
+
+        def add_page_number(canvas, doc):
+            canvas.saveState()
+            canvas.setFont('Times-Roman', 15)
+            page_footer_text = table_name
+            canvas.drawCentredString(
+                1.85*inch,
+                0.65*inch,
+                page_footer_text
+            )
+            canvas.setLineWidth(0.008*inch) 
+            # For Windows users in dev env
+            canvas.drawInlineImage(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For linux user in dev env
+            #canvas.drawInlineImage(os.path.join(CORE_DIR, "static/assets/img/brand/TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For prod env
+            #canvas.drawInlineImage(static("assets/img/brand/TNS-Logo.jpg")), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            canvas.line(0.5*inch, 0.5*inch, 22.9*inch, 0.5*inch)    
+            page_number_text = "%d" % (doc.page)
+            canvas.drawCentredString(
+                22.15*inch,
+                0.25*inch,
+                page_number_text
+            )
+
+            canvas.restoreState()
+
+    except Exception as r:
+        print(r)
+
+    try:
+        doc.build(elements, onFirstPage=add_page_number,
+                  onLaterPages=add_page_number,)
     except Exception as f:
         print(f)
     return response
 
 
 def export_pdf_training(request):
-    pass
+    response = HttpResponse(content_type='application/pdf')
+    try:
+        if "/fr/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=formations' + str(
+                datetime.datetime.now()) + '.pdf'
+        elif "/en/" in request.build_absolute_uri():
+            response['Content-Disposition'] = 'inline; attachement; filename=training' + str(
+                datetime.datetime.now()) + '.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+
+        elements = []
+
+        sample_style_sheet = getSampleStyleSheet()
+        title_style = sample_style_sheet['Heading1']
+        title_style.alignment = 1
+        table_name = None
+        if "/fr/" in request.build_absolute_uri():
+            table_name = "Formations"
+            paragraph_1 = Paragraph(table_name, title_style)
+        elif "/en/" in request.build_absolute_uri():
+            table_name = "Training"
+            paragraph_1 = Paragraph(table_name, title_style)
+
+        elements.append(paragraph_1)
+        elements.append(Spacer(1, 12))
+
+        doc = SimpleDocTemplate(
+            response,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=30,
+            bottomMargin=72,
+            pagesize=A4)
+
+        data = []
+
+        titles_list = (gettext("Module Name"), gettext("Trainer First Name"), gettext("Trainer Last Name"), gettext("Date"),
+                    gettext("Hour"), gettext("Number of Participant"))
+
+        data.append(titles_list)
+
+        for training in training_list:
+            data.append((training.module_id.module_name, training.trainer_id.firstname, training.trainer_id.lastname, training.DateTime.strftime("%Y-%m-%d"),
+                        training.DateTime.strftime("%H:%M"), training.number_of_participant))
+
+        table = Table(data)
+        table.setStyle(TableStyle(
+            [('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+            ('VALIGN', (0, 0), (-1, 0), 'MIDDLE'),
+            ('BACKGROUND', (0, 0), (-1, 0),
+            colors.Color(green=(178 / 255), red=(20 / 255), blue=(177 / 255))),
+            ('LEFTPADDING', (0, 0), (-1, 0), 15),
+            ('RIGHTPADDING', (0, 0), (-1, 0), 15),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 15),
+            ('TOPPADDING', (0, 0), (-1, 0), 15)
+            ]))
+
+        elements.append(table)
+
+        def add_page_number(canvas, doc):
+            canvas.saveState()
+            canvas.setFont('Times-Roman', 10)
+            page_footer_text = table_name
+            canvas.drawCentredString(
+                1.7*inch,
+                0.65*inch,
+                page_footer_text
+            )
+            canvas.setLineWidth(0.008*inch)
+            # For Windows users in dev env
+            canvas.drawInlineImage(os.path.join(CORE_DIR, "static\\assets\\img\\brand\\TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For linux user in dev env
+            #canvas.drawInlineImage(os.path.join(CORE_DIR, "static/assets/img/brand/TNS-Logo.jpg"), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            # For prod env
+            #canvas.drawInlineImage(static("assets/img/brand/TNS-Logo.jpg")), inch, 0.60*inch, 0.307*inch, 0.307*inch)
+
+            canvas.line(0.5*inch, 0.5*inch, 7.8*inch, 0.5*inch)    
+            page_number_text = "%d" % (doc.page)
+            canvas.drawCentredString(
+                7.05*inch,
+                0.25*inch,
+                page_number_text
+            )
+
+            canvas.restoreState()
+
+    except Exception as r:
+        print(r)
+    try:
+        doc.build(elements, onFirstPage=add_page_number,
+                  onLaterPages=add_page_number,)
+    except Exception as f:
+        print(f)
+    return response

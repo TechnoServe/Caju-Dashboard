@@ -78,29 +78,7 @@
 
 <!-- Specific JS goes HERE -->
 {% block javascripts %}
-    <script src="/apps/static/assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="/apps/static/assets/vendor/chart.js/dist/Chart.extension.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: "full_map",
-                async: true,
-                dataType: "json",
-                contentType: "application/javascript; charset=utf8",
-                complete: function (data) {
-                    let full_map = data.responseJSON['map'];
-                    $("div.child1").replaceWith(full_map);
-                    setTimeout(
-                        function () {
-                            $('div.child2').fadeOut('', function () {
-                                $('div.child2').replaceWith();
-                            });
-                        }, 250);
-                },
-            });
-        });
-    </script>
+    <script src="{% static 'assets/vendor/chart.js/dist/Chart.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/chart.js/dist/Chart.extension.js' %}"></script>
 {% endblock javascripts %}
+
