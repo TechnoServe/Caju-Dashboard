@@ -1,10 +1,9 @@
 from django.urls import path, include
 
+from . import drone_views
+from . import map_views
 from . import views
 from .views import analytics, nut_count, defective_rate
-from . import map_views
-from . import drone_views
-
 
 search_patterns_plantations = [
     path('', views.plantations, name='plantations'),
@@ -37,9 +36,8 @@ search_patterns_training = [
 urlpatterns = [
 
     path('', map_views.index, name='map'),
-    path('full_map/', map_views.full_map, name='full_map'),
     # path('drone/<plant_id>/<coordinate_xy>/<bounds>/', map_views.drone, name='drone'),
-    path('full_map/drone/<plant_id>/<coordinate_xy>/', drone_views.drone, name='drone'),
+    path('drone/<plant_id>/<coordinate_xy>/', drone_views.drone, name='drone'),
     path('tables/', views.tables, name='tables'),
     path('plantations/', include(search_patterns_plantations)),
     path('yield/', include(search_patterns_yields)),

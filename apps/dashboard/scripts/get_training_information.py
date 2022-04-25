@@ -1,16 +1,11 @@
-import asyncio
-import logging
 import os
 
 import geojson
 import paramiko
 import pymysql
-import sshtunnel
 from apscheduler.schedulers.background import BackgroundScheduler
-from shapely.geometry import shape, Point
-
 from apscheduler.triggers.interval import IntervalTrigger
-from sshtunnel import SSHTunnelForwarder
+from shapely.geometry import shape, Point
 
 with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
     departments_geojson = geojson.load(f)
@@ -20,10 +15,10 @@ Add your path to your pkey perm file
 """
 mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
-sql_hostname = os.path.join(os.getenv("HOST"))
-sql_username = os.path.join(os.getenv("USER"))
-sql_password = os.path.join(os.getenv("PASSWORD"))
-sql_main_database = os.path.join(os.getenv("NAME"))
+sql_hostname = os.path.join(os.getenv("SQL_HOSTNAME_TRAINING"))
+sql_username = os.path.join(os.getenv("SQL_USERNAME_TRAINING"))
+sql_password = os.path.join(os.getenv("SQL_PASSWORD_TRAINING"))
+sql_main_database = os.path.join(os.getenv("SQL_DATABASE_TRAINING"))
 sql_port = 3307
 
 
@@ -73,7 +68,8 @@ def __get_department_from_coord__(latitude, longitude):
     def ___location_finder__():
         """
         Read geolocalization data from 'ben_adm1.json' file
-        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in Benin
+        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in
+        Benin
         Return the name of the department found or 'Unknown' otherwise
         """
         point = Point(longitude, latitude)

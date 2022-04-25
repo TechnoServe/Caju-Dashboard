@@ -8,6 +8,10 @@ cnqa.sql
 venv
 *.db
 .env
+my_db.db
+cajulab_remote_sensing_dashboard/settings.py
+staticfiles/cashew_map_en.html
+staticfiles/cashew_map_fr.html
 static/plantation_data/
 privatekey.json
 media/plantation_data/

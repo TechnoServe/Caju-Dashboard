@@ -38,11 +38,16 @@ template_fr = """
 <div class='legend-title'>Legende</div>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=1167b1">&nbsp;&nbsp;Entrepot de cajoux</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset=-1&background=008000">&nbsp;&nbsp;Plantation</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1&background=c63e2b">&nbsp;&nbsp;Pépinière</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=DBA800">&nbsp;&nbsp;Lieu d'Apprentissage</li>
-    <li>&nbsp;<img src="https://i.ibb.co/J3L37CV/Picture3.png" width="17" height="24">&nbsp;&nbsp;&nbsp;Prédictions satellitaire</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1
+    &background=1167b1">&nbsp;&nbsp;Entrepot de cajoux</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset
+    =-1&background=008000">&nbsp;&nbsp;Plantation</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1
+    &background=c63e2b">&nbsp;&nbsp;Pépinière</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1
+    &background=DBA800">&nbsp;&nbsp;Lieu d'Apprentissage</li>
+    <li>&nbsp;<img src="https://i.ibb.co/J3L37CV/Picture3.png" width="17" height="24">&nbsp;&nbsp;&nbsp;Prédictions 
+    satellitaire</li>
   </ul>
 </div>
 </div>
@@ -127,11 +132,16 @@ template_en = """
 <div class='legend-title'>Legend</div>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=1167b1">&nbsp;&nbsp;Cashew Warehouse</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset=-1&background=008000">&nbsp;&nbsp;Plantation Location</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1&background=c63e2b">&nbsp;&nbsp;Nursery</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1&background=DBA800">&nbsp;&nbsp;Training Location</li>
-    <li>&nbsp;<img src="https://i.ibb.co/J3L37CV/Picture3.png" width="17" height="24">&nbsp;&nbsp;&nbsp;Satellite predictions</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1
+    &background=1167b1">&nbsp;&nbsp;Cashew Warehouse</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-globe-africa&size=25&hoffset=0&voffset
+    =-1&background=008000">&nbsp;&nbsp;Plantation Location</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-leaf&size=25&hoffset=0&voffset=-1
+    &background=c63e2b">&nbsp;&nbsp;Nursery</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=25&hoffset=0&voffset=-1
+    &background=DBA800">&nbsp;&nbsp;Training Location</li>
+    <li>&nbsp;<img src="https://i.ibb.co/J3L37CV/Picture3.png" width="17" height="24">&nbsp;&nbsp;&nbsp;Satellite 
+    predictions</li>
 
   </ul>
 </div>
@@ -180,79 +190,8 @@ template_en = """
 </style>
 {% endmacro %}"""
 
-LayerControlToggler = """
-{% macro html(this, kwargs) %}
-
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        
-        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
-        <script>
-    
-            document.addEventListener("DOMContentLoaded", function(event) { 
-                const layerControl = document.querySelector(".folium-map");
-                leaflet_control_container = layerControl.childNodes[1];
-
-                leaflet_top_right = leaflet_control_container.childNodes[1];
-
-                leaflet_control_layers = leaflet_top_right.childNodes[1];
-                
-                clone = leaflet_top_right.childNodes[1].cloneNode(true);
-                clone.setAttribute("id", "layerControlTogglerId");
-                clone.className = "leaflet-control-layers leaflet-control-layers-collapsed leaflet-control"
-                clone.removeChild(clone.lastChild);
-                
-                clone.addEventListener("click", function() {
-                    const layerControl = document.querySelector(".folium-map");
-                    leaflet_control_container = layerControl.childNodes[1];
-                    leaflet_top_right = leaflet_control_container.childNodes[1];
-                    layerController = leaflet_top_right.childNodes[2];
-                    if(!event.detail || event.detail == 1){
-                        if (layerController.getAttribute('hidden') !== null) {
-                            layerController.removeAttribute("hidden", "");
-                        } else {
-                            layerController.setAttribute("hidden", "");
-                        }
-                    }
-                });
-
-                // Swap position
-                const afterNode2 = clone.nextElementSibling;
-                const parent = clone.parentNode;
-                leaflet_control_layers.replaceWith(clone);
-                leaflet_top_right.insertBefore(leaflet_control_layers, afterNode2);
-
-                leaflet_control_layers.setAttribute("hidden", "");
-                console.log(clone);
-            });
-        </script>
-        <style>
-            #btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                z-index: 1000;
-                background: white;
-                border: none;
-            }
-        </style>
-    </head>
-    <body>
-    </body>
-</html>
-{% endmacro %}"""
-
 macro_fr = MacroElement()
 macro_fr._template = Template(template_fr)
 
 macro_en = MacroElement()
 macro_en._template = Template(template_en)
-
-macro_toggler = MacroElement()
-macro_toggler._template = Template(LayerControlToggler)
