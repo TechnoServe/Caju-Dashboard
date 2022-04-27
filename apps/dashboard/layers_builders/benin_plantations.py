@@ -1,5 +1,4 @@
 import os
-from math import log10, floor
 
 import ee
 import folium
@@ -8,7 +7,9 @@ from area import area
 from celery import shared_task
 from django.utils.translation import gettext
 from folium.plugins import MarkerCluster
+from math import log10, floor
 from shapely.geometry import shape, Point
+
 from apps.dashboard.models import AlteiaData
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import SpecialTuple
@@ -47,15 +48,16 @@ class BeninPlantationStatsObject:
         self.__dict__.update(entries)
 
 
-def highlight_function(feature):
+def __highlight_function(feature):
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
 
 
-def get_department_name(code, coordinates):
+def __get_department_name(code, coordinates):
     def ___location_finder__():
         """
         Read geolocalization data from 'ben_adm1.json' file
-        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in Benin
+        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a department in
+        Benin
         Return the name of the department found or 'Unknown' otherwise
         """
         point = Point(coordinates[1], coordinates[0])
@@ -86,13 +88,13 @@ def get_department_name(code, coordinates):
     return name
 
 
-def get_satellite_estimation_data(feature, dept_yield_ha, code, code_2, coordinate_xy):
+def __get_satellite_estimation_data(feature, dept_yield_ha, code, code_2, coordinate_xy):
     plantation_size = area(feature['geometry']) / 10000
     plantation_size = round(plantation_size, 1)
 
     tree_ha_pred_plant = round(
         round(AlteiaData.objects.filter(plantation_code=code)[0].cashew_tree_cover / 10000, 2), 1)
-    department_name = get_department_name(code_2, coordinate_xy)
+    department_name = __get_department_name(code_2, coordinate_xy)
 
     yield_pred_plant = int(tree_ha_pred_plant * dept_yield_ha[department_name])
     try:
@@ -116,7 +118,7 @@ def get_satellite_estimation_data(feature, dept_yield_ha, code, code_2, coordina
     }
 
 
-def get_tns_survey_data(code_2):
+def __get_tns_survey_data(code_2):
     benin_yield = BeninYield.objects.filter(plantation_code=code_2)[0]
     surface_area_p = round(benin_yield.surface_area, 1)
     total_yield_p = int(round(benin_yield.total_yield_kg))
@@ -145,7 +147,7 @@ def get_tns_survey_data(code_2):
     }
 
 
-def check_if_plantation_has_drone_image(code):
+def __check_if_plantation_has_drone_image(code):
     try:
         if code in drones_images_ids:
             return True
@@ -183,11 +185,11 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
     code_2 = ""
     try:
         code_2 = SpecialTuple.objects.filter(alteia_id=code)[0].plantation_id
-        survey_data = get_tns_survey_data(code_2)
+        survey_data = __get_tns_survey_data(code_2)
     except Exception:
         has_survey_data = False
-    satellite_data = get_satellite_estimation_data(feature, dept_yield_ha, code, code_2, coordinate_xy)
-    has_drone_image = check_if_plantation_has_drone_image(code)
+    satellite_data = __get_satellite_estimation_data(feature, dept_yield_ha, code, code_2, coordinate_xy)
+    has_drone_image = __check_if_plantation_has_drone_image(code)
     drone_image_button = f'''
     <div style= "text-align: center">
         <button class="btn" style="border: none;
@@ -213,7 +215,8 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
             <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900
+            &display=swap" />
             <link rel="stylesheet" href="css/mdb.min.css" />
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -442,6 +445,24 @@ def __build_stats(temp_geojson_a):
     return BeninPlantationStatsObject(**statistics_dict)
 
 
+def __get_good_shapfiles_codes(temp_geojson_a):
+    polygons = []
+    good_codes = []
+    for feature in temp_geojson_a.data['features']:
+        code = feature["properties"]["Plantation code"]
+        current_polygon = shape(feature['geometry'])
+        intersect = False
+        for polygon in polygons:
+            if current_polygon.intersects(polygon):
+                intersect = True
+                break
+        if intersect is False:
+            polygons.append(current_polygon)
+            good_codes.append(code)
+
+    return good_codes
+
+
 @shared_task(bind=True)
 def add_benin_plantation(self, path_link, dept_yield_ha):
     benin_plantation_layer = folium.FeatureGroup(
@@ -451,12 +472,16 @@ def add_benin_plantation(self, path_link, dept_yield_ha):
     plantation_cluster = MarkerCluster(name=gettext("Benin Plantations"))
     temp_geojson_a = folium.GeoJson(data=alteia_json,
                                     name='Alteia Plantation Data 2',
-                                    highlight_function=highlight_function)
+                                    highlight_function=__highlight_function)
+    not_overlapping_plantation_codes = __get_good_shapfiles_codes(temp_geojson_a)
     statistics_obj = __build_stats(temp_geojson_a)
     nb = 0
     nb_failed = 0
     for feature in temp_geojson_a.data['features']:
         code = feature["properties"]["Plantation code"]
+        if code not in not_overlapping_plantation_codes:
+            nb_failed += 1
+            continue
         # items = len(SpecialTuple.objects.filter(alteia_id=code))
         try:
             temp_layer_a = folium.GeoJson(feature, zoom_on_click=True)

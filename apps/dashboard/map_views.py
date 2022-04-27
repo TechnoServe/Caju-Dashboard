@@ -1,3 +1,4 @@
+import json
 import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -8,35 +9,44 @@ from django.template import loader
 
 from apps.dashboard.scripts.build_cashew_map import full_map
 
-
-@login_required(login_url="/")
-def index(request):
-    start_time = time.time()
-    filename = "staticfiles/cashew_map_en.html"
-    path_link = request.build_absolute_uri(request.path)
-    if "/fr/" in path_link.__str__():
-        filename = "staticfiles/cashew_map_fr.html"
-
-    with open(filename, errors="ignore") as f:
-        cashew_map = f.read()
-
-    context = {'map': cashew_map, 'segment': 'map'}
-    html_template = loader.get_template('dashboard/index.html')
-    print("TOTAL LOADING TIME--- %s seconds ---" %
-          (time.time() - start_time))
-    return HttpResponse(html_template.render(context, request))
-
-
-full_map("en")
-full_map("fr")
+cashew_map_html_en = full_map("en")
+cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
 
 
 @scheduler.scheduled_job(IntervalTrigger(days=1))
-def update_qars():
-    full_map("en")
-    full_map("fr")
+def update_cashew_map():
+    global cashew_map_html_en
+    cashew_map_html_en = full_map("en")
+    global cashew_map_html_fr
+    cashew_map_html_fr = full_map("fr")
 
 
 scheduler.start()
+
+
+@login_required(login_url="/")
+def index(request):
+    start_time = time.time()
+    filename = "staticfiles/cashew_map_en.html"
+    cashew_map = None
+    path_link = request.build_absolute_uri(request.path)
+
+    if "/fr/" in path_link.__str__():
+        filename = "staticfiles/cashew_map_fr.html"
+        cashew_map = cashew_map_html_fr
+    elif "/en/" in path_link.__str__():
+        filename = "staticfiles/cashew_map_en.html"
+        cashew_map = cashew_map_html_en
+
+    if cashew_map is None:
+        with open(filename, errors="ignore") as f:
+            cashew_map = f.read()
+
+    context = {'map': json.dumps(cashew_map), 'segment': 'map'}
+    html_template = loader.get_template('dashboard/index.html')
+    render = html_template.render(context, request)
+    print("TOTAL LOADING TIME--- %s seconds ---" %
+          (time.time() - start_time))
+    return HttpResponse(render)
