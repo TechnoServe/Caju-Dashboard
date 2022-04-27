@@ -38,9 +38,9 @@
                         <h3 class="mb-0">{% trans "Plantations Data" %}</h3>
                         </div>
                         <div style="float: right">
-                            <a href="{% url 'export_xls_plantations' %}" class="btn btn-primary">{% trans "Export Excel" %}</a>
-                            <a href="{% url 'export_csv_plantations' %}" class="btn btn-primary">{% trans "Export CSV" %}</a>
-                            <a href="{% url 'export_pdf_plantations' %}" class="btn btn-primary">{% trans "Export PDF" %}</a>
+                            <a href="{% url 'export_xls_plantations' %}" target="_blank" class="btn btn-primary">{% trans "Export Excel" %}</a>
+                            <a href="{% url 'export_csv_plantations' %}" target="_blank" class="btn btn-primary">{% trans "Export CSV" %}</a>
+                            <a href="{% url 'export_pdf_plantations' %}" target="_blank" class="btn btn-primary">{% trans "Export PDF" %}</a>
                         </div>
                     </div>
                     <!-- Light table -->
@@ -63,7 +63,6 @@
                                     <th scope="col" class="sort" >{% trans "Latitude" %}</th>
                                     <th scope="col" class="sort" >{% trans "Longitude" %}</th>
                                     <th scope="col" class="sort" >{% trans "Altitude" %}</th>
-                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody class="list">

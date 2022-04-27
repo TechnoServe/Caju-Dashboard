@@ -3,8 +3,12 @@
 
 {% block stylesheets %}
 <style>
-    #id_training_date, #id_training_time, #post_form {
+    #date_form, #time_form, #date_form_btn, #time_form_btn {
         display: none;
+    }
+
+    #simple_search_input {
+        margin-right: 0rem !important;
     }
 </style>
 {% endblock stylesheets %}
@@ -21,14 +25,23 @@
             <button id = "collap_button" class="pr-3 sidenav-toggler sidenav-toggler-dark btn btn-primary" type="button" data-action="sidenav-pin" data-target="#sidenav-main"><i class="fas fa-bars"></i></button>&nbsp;&nbsp;&nbsp;<h6 class="h2 text-white d-inline-block mb-0">{% trans "Training" %}</h6>
           </div>
           <div style="margin-left: auto">
-            <form class="form-inline my-2 my-lg-0" action="{% url 'training' %}" style="display: inline">
-                <input class="form-control mr-sm-2" type="search" id="simple_search" placeholder={% trans "Search" %} aria-label="search" name="search">
+            <form id="simple_search" class="form-inline my-2 my-lg-0" action="{% url 'training' %}" style="display: inline">
+                <input id="simple_search_input" class="form-control mr-sm-2" type="search" placeholder={% trans "Search" %} aria-label="search" name="search">
+                {{ form.column }}
+            </form>
+            <form id="date_form" method="post" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
                 {% csrf_token %}
                 {{ date_form.training_date }}
+                {{ form.column }}
+            </form>
+            <form method="post" id="time_form" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
+                {% csrf_token %}
                 {{ time_form.training_time }}
                 {{ form.column }}
-                &nbsp&nbsp<button class="btn btn-outline-success my-2 my-sm-0" id="get_button" type="submit">{% trans "Search" %}</button>
-                &nbsp&nbsp<button class="btn btn-outline-success my-2 my-sm-0" formmethod="post" id="post_button" type="submit" style="display: none;">{% trans "Search" %}</button>            </form>
+            </form>
+            <button id="simple_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="simple_search">{% trans "Search" %}</button>
+            <button id="date_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="date_form" type="submit">{% trans "Search" %}</button>
+            <button id="time_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="time_form" type="submit">{% trans "Search" %}</button>
           </div>
         </div>
       </div>
@@ -48,9 +61,9 @@
                         <h3 class="mb-0">{% trans "Training" %}</h3>
                         </div>
                         <div style="float: right">
-                        <a href="{% url 'export_xls_training' %}" class="btn btn-primary">{% trans "Export Excel" %}</a>
-                        <a href="{% url 'export_csv_training' %}" class="btn btn-primary">{% trans "Export CSV" %}</a>
-                        <a href="{% url 'export_pdf_training' %}" class="btn btn-primary">{% trans "Export PDF" %}</a>
+                        <a href="{% url 'export_xls_training' %}" target="_blank" class="btn btn-primary">{% trans "Export Excel" %}</a>
+                        <a href="{% url 'export_csv_training' %}" target="_blank" class="btn btn-primary">{% trans "Export CSV" %}</a>
+                        <a href="{% url 'export_pdf_training' %}" target="_blank" class="btn btn-primary">{% trans "Export PDF" %}</a>
                         </div>
 
                     </div>
@@ -65,7 +78,6 @@
                         <th scope="col" class="sort" >{% trans "Date" %}</th>
                         <th scope="col" class="sort" >{% trans "Time" %}</th>
                         <th scope="col" class="sort" >{% trans "Number of Participant" %}</th>
-                        <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody class="list">
@@ -176,43 +188,3 @@
 {% endblock content %}
 
 <!-- Specific JS goes HERE --> 
-{% block javascripts %}
-<script>
-    $(document).ready(function() {
-        $("#id_column").change(function() {
-            var x = $("#id_column option:selected").text();
-            if(x == "DATE") { 
-                $("#post_button").show();
-                $("#get_button").hide();
-                $("#id_training_date").show();
-                $("#simple_search").hide();
-                $("#id_training_time").hide(); 
-            }
-            else if(x == "TIME" || x == "HEURE") { 
-                $("#post_button").show();
-                $("#get_button").hide();
-                $("#id_training_date").hide();
-                $("#simple_search").hide();
-                $("#id_training_time").show(); 
-            }
-            else { 
-                $("#post_button").hide();
-                $("#get_button").show();
-                $("#id_training_date").hide();
-                $("#simple_search").show();
-                $("#id_training_time").hide(); 
-            }
-        });
-    });
-    const button = document.getElementById('post_button');
-    if (document.getElementById('post_button').style.display != 'none') {
-        console.log('bonjour1')
-    }
-
-    button.addEventListener('click', myFunction);
-    function myFunction() {
-        console.log(document.getElementById('id_training_time').style.display);
-    };
-
-</script>
-{% endblock javascripts %}
