@@ -206,8 +206,10 @@ def full_map(lang):
         cashew_map.get_root().add_child(macro_toggler)
         cashew_map = cashew_map._repr_html_()
         with open(("staticfiles/cashew_map_" + lang + ".html"), 'w') as f:
-            cashew_map = f.write(cashew_map)
+            f.write(cashew_map)
         print("TOTAL LOADING TIME--- %s seconds ---" %
               (time.time() - start_time))
+        return cashew_map
     except Exception:
+        return None
         pass
