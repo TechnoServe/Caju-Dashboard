@@ -27,7 +27,7 @@ def index(request):
     return HttpResponse(html_template.render(context, request))
 
 
-full_map("en")
+"""full_map("en")
 full_map("fr")
 
 scheduler = BackgroundScheduler()
@@ -40,3 +40,4 @@ def update_qars():
 
 
 scheduler.start()
+"""

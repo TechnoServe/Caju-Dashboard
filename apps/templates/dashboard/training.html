@@ -28,6 +28,8 @@
             <form id="simple_search" class="form-inline my-2 my-lg-0" action="{% url 'training' %}" style="display: inline">
                 <input id="simple_search_input" class="form-control mr-sm-2" type="search" placeholder={% trans "Search" %} aria-label="search" name="search">
                 {{ form.column }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "From" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "To" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field1 }}
             </form>
             <form id="date_form" method="post" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
                 {% csrf_token %}

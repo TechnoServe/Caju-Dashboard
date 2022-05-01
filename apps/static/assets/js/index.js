@@ -1,3 +1,4 @@
+//Global script
 $(document).ready(function () {
     if ($(window).width() < 1200) {
         $('#sidenav-tog0').on('click', function () {
@@ -27,32 +28,7 @@ $(document).ready(function () {
         });
     }
 });
-
-const URL = document.URL
-var lastfive = URL.substr(URL.length - 11)
-
-if (lastfive.includes("/dashboard/")) {
-    $(document).ready(function () {
-        $.ajax({
-            type: "GET",
-            url: "full_map",
-            async: true,
-            dataType: "json",
-            contentType: "application/javascript; charset=utf8",
-            complete: function (data) {
-                let full_map = data.responseJSON['map'];
-                $("div.child1").replaceWith(full_map);
-                setTimeout(
-                    function () {
-                        $('div.child2').fadeOut('', function () {
-                            $('div.child2').replaceWith();
-                        });
-                    }, 250);
-            },
-        });
-    });
-};
-
+// Training.html script
 if (document.URL.includes("/training/")) {
     $(document).ready(function () {
         var list_column_form = $("[id='id_column']");
@@ -156,3 +132,5 @@ if (document.URL.includes("/training/")) {
         });        
     })
 }
+
+// Plantations.html script

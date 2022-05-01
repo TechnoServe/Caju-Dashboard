@@ -15,10 +15,10 @@ Add your path to your pkey perm file
 """
 mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
-sql_hostname = os.path.join(os.getenv("SQL_HOSTNAME_TRAINING"))
-sql_username = os.path.join(os.getenv("SQL_USERNAME_TRAINING"))
-sql_password = os.path.join(os.getenv("SQL_PASSWORD_TRAINING"))
-sql_main_database = os.path.join(os.getenv("SQL_DATABASE_TRAINING"))
+sql_hostname = os.path.join(os.getenv("HOST"))
+sql_username = os.path.join(os.getenv("USER"))
+sql_password = os.path.join(os.getenv("PASSWORD"))
+sql_main_database = os.path.join(os.getenv("NAME"))
 sql_port = 3307
 
 

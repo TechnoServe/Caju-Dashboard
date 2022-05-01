@@ -38,7 +38,6 @@ urlpatterns = [
     path('', map_views.index, name='map'),
     # path('drone/<plant_id>/<coordinate_xy>/<bounds>/', map_views.drone, name='drone'),
     path('drone/<plant_id>/<coordinate_xy>/', drone_views.drone, name='drone'),
-    path('tables/', views.tables, name='tables'),
     path('plantations/', include(search_patterns_plantations)),
     path('yield/', include(search_patterns_yields)),
     path('nurseries/', include(search_patterns_nurseries)),

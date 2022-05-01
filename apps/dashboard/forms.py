@@ -136,8 +136,28 @@ dates = str(date.today())
 
 
 class KorDateForm(forms.Form):
-    my_date_field = forms.DateField(label=_("From"), initial=dates0, widget=DateInput)
-    my_date_field1 = forms.DateField(label=_("To"), initial=dates, widget=DateInput)
+    my_date_field = forms.DateField(
+        label=_("From"),
+        required=False,
+        initial=dates0,
+        widget=DateInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+    my_date_field1 = forms.DateField(
+        label=_("To"),
+        required=False,
+        initial=dates, 
+        widget=DateInput(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
 
 
 __open_ssh_tunnel__()
