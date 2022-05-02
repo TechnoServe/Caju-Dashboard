@@ -77,6 +77,7 @@ def __get_department_from_coord__(latitude, longitude):
             polygon = shape(feature['geometry'])
             if polygon.contains(point):
                 return feature["properties"]["NAME_1"]
+
         return "Unknown"
 
     return ___location_finder__()
@@ -161,6 +162,9 @@ def __get_items__(cur):
         }
         for item in training_items
     ]
+
+    items = [item for item in items if item["department"] != "Unknown"]
+
     return [
         TrainingObject(**item)
         for item in items

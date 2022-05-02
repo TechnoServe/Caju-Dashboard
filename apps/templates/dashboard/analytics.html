@@ -1,12 +1,10 @@
-
-
 {% extends 'layouts/base.html' %}
 {% load i18n %}
 
 
 {% block title %} Tables {% endblock title %}
 
-{% block content %}
+{% block content %} 
   <div class="header bg-primary pb-6">
     <div class="container-fluid">
       <div class="header-body">
@@ -57,10 +55,19 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header align-items-center border-0" style="background-color: #f7f7f7">
-                        <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
-                        <br>
-                        {{ form.as_table }}
-                        &nbsp&nbsp&nbsp<button type="submit" class="btn btn-primary" id = "KOR_submit">{% trans "Submit" %}</button>
+                        <form class="form-inline my-2 my-lg-0" action="{% url 'analytics' %}" style="display: inline">
+                            <h3 class="mb-0">{% trans "KOR Graph against date period" %}</h3>
+                            <br>
+                            <table>
+                                <tr>
+                                  <td style="padding:0 10px 0 0;"><span style="color: black; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "From" %}</span></td>
+                                  <td>{{ form.my_date_field }}</td>
+                                  <td style="padding:0 10px 0 10px;" style="padding:0 10px 0 0;"><span style="color: black; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "To" %}</span></td>
+                                  <td>{{ form.my_date_field1 }}</td>
+                                  <td style="padding:0 0 0 10px;"><button type="submit" class="btn btn-primary" id = "KOR_submit">{% trans "Submit" %}</button></td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="kor_Chart"></canvas>
