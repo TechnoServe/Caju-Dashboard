@@ -1,7 +1,6 @@
 import asyncio
 import locale
 import os
-import socket
 import time
 from concurrent.futures import ThreadPoolExecutor
 
@@ -157,10 +156,6 @@ def get_base_map(path_link):
         pass
 
     return cashew_map
-
-
-print(socket.gethostname())
-print(socket.gethostbyname(socket.gethostname()))
 
 
 def full_map(lang):
