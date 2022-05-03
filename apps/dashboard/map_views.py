@@ -1,5 +1,4 @@
 import json
-import os
 import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -10,21 +9,12 @@ from django.template import loader
 
 from apps.dashboard.scripts.build_cashew_map import full_map
 
-# For dev env
-if not os.path.exists("staticfiles/cashew_map_en.html") and not os.path.exists("staticfiles/cashew_map_fr.html"):
-    cashew_map_html_en = full_map("en")
-    cashew_map_html_fr = full_map("fr")
-else:
-    pass
-
-# For prod env
-#cashew_map_html_en = full_map("en")
-#cashew_map_html_fr = full_map("fr")
+cashew_map_html_en = full_map("en")
+cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
 
 
-""" Prod env
 @scheduler.scheduled_job(IntervalTrigger(days=1))
 def update_cashew_map():
     global cashew_map_html_en
@@ -34,7 +24,7 @@ def update_cashew_map():
 
 
 scheduler.start()
-"""
+
 
 @login_required(login_url="/")
 def index(request):
@@ -45,12 +35,10 @@ def index(request):
 
     if "/fr/" in path_link.__str__():
         filename = "staticfiles/cashew_map_fr.html"
-        # For prod env
-        #cashew_map = cashew_map_html_fr
+        cashew_map = cashew_map_html_fr
     elif "/en/" in path_link.__str__():
         filename = "staticfiles/cashew_map_en.html"
-        # For prod env
-        #cashew_map = cashew_map_html_en
+        cashew_map = cashew_map_html_en
 
     if cashew_map is None:
         with open(filename, errors="ignore") as f:

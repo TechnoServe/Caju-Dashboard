@@ -60,7 +60,7 @@ def __task4_func__(cashew_map):
 def __task5_func__(cashew_map):
     trainings = current_trainings
     # Adding the qar layer from the class QarLayer
-    marker_cluster = MarkerCluster(name=gettext("Training Information"))
+    marker_cluster = MarkerCluster(name=gettext("Training Information"), show=False)
     training_layer = TrainingLayer(marker_cluster, trainings).add_training()
     training_layer.add_to(cashew_map)
 
