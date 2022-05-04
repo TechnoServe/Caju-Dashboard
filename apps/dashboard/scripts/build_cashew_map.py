@@ -162,6 +162,9 @@ def full_map(lang):
     start_time = time.time()
 
     try:
+        server_url = os.getenv("SERVER_URL")
+        if server_url[-1] is not "/":
+            server_url += "/"
         path_link = os.getenv("SERVER_URL") + lang + "/dashboard/"
         cashew_map = get_base_map(path_link=path_link)
 
