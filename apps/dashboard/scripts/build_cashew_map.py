@@ -165,7 +165,7 @@ def full_map(lang):
         server_url = os.getenv("SERVER_URL")
         if server_url[-1] is not "/":
             server_url += "/"
-        path_link = os.getenv("SERVER_URL") + lang + "/dashboard/"
+        path_link = server_url + lang + "/dashboard/"
         cashew_map = get_base_map(path_link=path_link)
 
         async def __get_context_data__():
