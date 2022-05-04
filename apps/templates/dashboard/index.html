@@ -177,7 +177,6 @@
             console.log(`Document Loading took ${endTime - startTime} milliseconds`)
             let map_data = {{ map | safe }};
             {#$('div.child1').replaceWith(map_data);#}
-            console.log(map_data)
             $('div.child1').empty().append(map_data);
             setTimeout(function () {
                 $('div.child2').fadeOut('', function () {
@@ -187,4 +186,3 @@
         });
     </script>
 {% endblock javascripts %}
-

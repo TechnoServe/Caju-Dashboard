@@ -3,14 +3,19 @@ import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
 
 from apps.dashboard.scripts.build_cashew_map import full_map
 
-cashew_map_html_en = full_map("en")
-cashew_map_html_fr = full_map("fr")
+cashew_map_html_en = None
+cashew_map_html_fr = None
+
+if settings.DEBUG is False:
+    cashew_map_html_en = full_map("en")
+    cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
 

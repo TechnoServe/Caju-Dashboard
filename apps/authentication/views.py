@@ -5,28 +5,26 @@ Copyright (c) 2021 - present Technoserve x Damilola
 
 import datetime
 import logging
+import os
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
-from .forms import *
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.translation import gettext
-from .forms import SignUpForm, LoginForm
-from django.db.models.signals import post_save
 
 from . import forms as custom_forms
+from .forms import *
+from .forms import SignUpForm, LoginForm
 from .models import RemUser
 from .utils import account_activation_token
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +94,7 @@ def signup(request):
                     mail_subject,
                     message,
                     from_email='"Caju-Lab Support" <' +
-                    os.getenv("EMAIL_HOST_USER") + '>',
+                               os.getenv("EMAIL_HOST_USER") + '>',
                     to=[to_email]
                 )
                 email.content_subtype = "html"
@@ -116,13 +114,14 @@ def signup(request):
                 msg = gettext('Form is not valid')
         else:
             form = SignUpForm()
-        return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": success, "fullpage": fullpage})
+        return render(request, 'authentication/register.html',
+                      {"form": form, "msg": msg, "success": success, "fullpage": fullpage})
 
     except Exception as e:
         print(e)
-        print(os.getenv("EMAIL_HOST_USER"))
         msg = gettext('An Error has Occurred')
-        return render(request, 'authentication/register.html', {"form": form, "msg": msg, "success": False, "fullpage": fullpage})
+        return render(request, 'authentication/register.html',
+                      {"form": form, "msg": msg, "success": False, "fullpage": fullpage})
 
 
 @login_required(login_url="/")
@@ -144,9 +143,8 @@ def register_org(request):
                     obj.updated_date = datetime.datetime.now()
 
                     # return redirect("/login/")
-            except:
-                print("")
-
+            except Exception:
+                pass
             obj.save()
             msg = gettext(
                 'Organization created - please <a href="/register">register user</a>.')
@@ -287,7 +285,8 @@ def forgot_password(request):
 
             msg = gettext("We have emailed you instructions for setting your password. \
                         If an account exists with the email you have entered, you should receive them shortly.\
-                        If you do not receive an email, please make sure you've entered the address you registered with correctly, \
+                        If you do not receive an email, please make sure you've entered the address you registered "
+                          "with correctly, \
                         and check your spam folder.")
             success = True
             # return HttpResponse('Please confirm your email address to complete the registration')

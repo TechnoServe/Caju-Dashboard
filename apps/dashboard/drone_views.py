@@ -12,7 +12,6 @@ from django.template import loader
 from django.utils.translation import gettext
 
 # Google service account for the GEE geotiff
-from .layer_control_modifier import macro_toggler
 from .scripts.alteia_trees_data import download_trees_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -57,7 +56,7 @@ def drone(request, plant_id, coordinate_xy):
             attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
             name=gettext('Satellite Prediction'),
             overlay=True,
-            show=True,
+            show=False,
             control=True
         ).add_to(cashew_map)
 
@@ -71,7 +70,7 @@ def drone(request, plant_id, coordinate_xy):
         folium.GeoJson(
             data=feature,
             name=gettext('Plantation Shape'),
-            show=False,
+            show=True,
             zoom_on_click=True
         ).add_to(cashew_map)
 
@@ -91,6 +90,7 @@ def drone(request, plant_id, coordinate_xy):
             data=feature_geojson,
             zoom_on_click=True, embed=False,
             name=gettext('Tree Tops Density'),
+            show=False,
             marker=folium.Circle(
                 color="#FFFFFF", opacity=0.9, weight=1,
                 fill=True, fill_color="#FF0000", fill_opacity=1,
@@ -141,7 +141,6 @@ def drone(request, plant_id, coordinate_xy):
         pass
 
     cashew_map.add_child(folium.LayerControl(collapsed=False))
-    cashew_map.get_root().add_child(macro_toggler)
     cashew_map = cashew_map._repr_html_()
     context = {"map": json.dumps(cashew_map), "segment": "map"}
     html_template = loader.get_template("dashboard/index.html")
