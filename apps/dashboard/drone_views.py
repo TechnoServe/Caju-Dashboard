@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 
@@ -142,7 +143,7 @@ def drone(request, plant_id, coordinate_xy):
     cashew_map.add_child(folium.LayerControl(collapsed=False))
     cashew_map.get_root().add_child(macro_toggler)
     cashew_map = cashew_map._repr_html_()
-    context = {'map': cashew_map, 'segment': 'map'}
-
-    html_template = loader.get_template('dashboard/index.html')
-    return HttpResponse(html_template.render(context, request))
+    context = {"map": json.dumps(cashew_map), "segment": "map"}
+    html_template = loader.get_template("dashboard/index.html")
+    render = html_template.render(context, request)
+    return HttpResponse(render)
