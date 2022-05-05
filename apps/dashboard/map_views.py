@@ -11,7 +11,7 @@ from apps.dashboard.scripts.build_cashew_map import full_map
 
 # cashew_map_html_en = None
 # cashew_map_html_fr = None
-
+#
 # if settings.DEBUG is False:
 cashew_map_html_en = full_map("en")
 cashew_map_html_fr = full_map("fr")

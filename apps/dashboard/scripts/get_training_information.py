@@ -10,6 +10,9 @@ from shapely.geometry import shape, Point
 with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
     departments_geojson = geojson.load(f)
 
+with open("staticfiles/json/ben_adm2.json", errors="ignore") as f:
+    communes_geojson = geojson.load(f)
+
 """
 Add your path to your pkey perm file
 """
@@ -19,7 +22,7 @@ sql_hostname = os.path.join(os.getenv("HOST"))
 sql_username = os.path.join(os.getenv("USER"))
 sql_password = os.path.join(os.getenv("PASSWORD"))
 sql_main_database = os.path.join(os.getenv("NAME"))
-sql_port = 3307
+sql_port = int(os.path.join(os.getenv("PORT")))
 
 
 class TrainingObject:
@@ -31,6 +34,7 @@ class TrainingObject:
         self.module = None
         self.trainer = None
         self.department = None
+        self.commune = None
         self.__dict__.update(entries)
 
     def dump(self):
@@ -42,6 +46,7 @@ class TrainingObject:
             'module': self.module,
             'trainer': self.trainer,
             'department': self.department,
+            'commune': self.commune,
         }
 
 
@@ -77,6 +82,25 @@ def __get_department_from_coord__(latitude, longitude):
             polygon = shape(feature['geometry'])
             if polygon.contains(point):
                 return feature["properties"]["NAME_1"]
+
+        return "Unknown"
+
+    return ___location_finder__()
+
+
+def __get_commune_from_coord__(latitude, longitude):
+    def ___location_finder__():
+        """
+        Read geolocalization data from 'ben_adm1.json' file
+        Check whenever a Point defined by the longitude and latitude passed in parameter belongs to a commune in
+        Benin
+        Return the name of the commune found or 'Unknown' otherwise
+        """
+        point = Point(longitude, latitude)
+        for feature in communes_geojson['features']:
+            polygon = shape(feature['geometry'])
+            if polygon.contains(point):
+                return feature["properties"]["NAME_2"]
 
         return "Unknown"
 
@@ -156,6 +180,7 @@ def __get_items__(cur):
             'longitude': item[1],
             'number_of_participant': item[2],
             'department': __get_department_from_coord__(latitude=item[0], longitude=item[1]),
+            'commune': __get_commune_from_coord__(latitude=item[0], longitude=item[1]),
             'module': __get_module__(cursor=cur, module_id=item[3]),
             'trainer': __get_trainer__(cursor=cur, trainer_id=item[4]),
             'datetime': item[5],
@@ -163,7 +188,7 @@ def __get_items__(cur):
         for item in training_items
     ]
 
-    items = [item for item in items if item["department"] != "Unknown"]
+    items = [item for item in items if item["department"] != "Unknown" and item["commune"] != "Unknown"]
 
     return [
         TrainingObject(**item)
@@ -192,7 +217,6 @@ def get_training_data_from_db():
 
 
 current_trainings = get_training_data_from_db()
-
 scheduler = BackgroundScheduler()
 
 

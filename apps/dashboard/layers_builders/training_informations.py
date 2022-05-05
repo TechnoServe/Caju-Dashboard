@@ -4,7 +4,8 @@ from django.utils.translation import gettext
 
 def __build_popup__(current_object):
     # variables for translation
-    training_region = gettext('Region')
+    training_region = gettext('Department')
+    training_commune = gettext('Commune')
     trainer = gettext("Trainer")
     trainer_org = gettext("Organization")
     module_title = gettext("Topic")
@@ -18,11 +19,18 @@ def __build_popup__(current_object):
                 {training_region}: <b>{current_object.department}</b>
             </h4> 
             <h5 style="font-family: 'Trebuchet MS', sans-serif">
+                {training_commune}: <b>{current_object.commune}</b>
+            </h5> 
+            <h5 style="font-family: 'Trebuchet MS', sans-serif">
                 {trainer}: <i>{current_object.trainer['firstname'] + " " + current_object.trainer['lastname']}</i>
+            </h5>
+            <h5 style="font-family: 'Trebuchet MS', sans-serif">
                 {trainer_org}: <i>{current_object.trainer['institution']}</i>
             </h5>
             <h5 style="font-family: 'Trebuchet MS', sans-serif">
                 {module_title}: <i>{current_object.module["title"]}</i>
+            </h5>
+            <h5 style="font-family: 'Trebuchet MS', sans-serif">
                 {module_category}: <i>{current_object.module['category']}</i>
             </h5>
             <h5 style="font-family: 'Trebuchet MS', sans-serif">
@@ -43,7 +51,8 @@ class TrainingLayer:
 
     def add_training(self):
         # Loop through every nursery owner and add to the nursery marker popups
-        iconurl = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=50&hoffset=0&voffset=-1&background=DBA800"
+        iconurl = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-warehouse&size=50&hoffset=0&voffset=-1" \
+                  "&background=DBA800"
         for i in range(len(self.trainings)):
             current_object = self.trainings[i]
             icon = folium.features.CustomIcon(
