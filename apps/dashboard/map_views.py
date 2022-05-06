@@ -12,7 +12,7 @@ from django.conf import settings
 from apps.dashboard.scripts.build_cashew_map import full_map
 
 # For dev env
-if settings.DEBUG is False:
+if settings.DEBUG is True:
     if not os.path.exists("staticfiles/cashew_map_en.html") and not os.path.exists("staticfiles/cashew_map_fr.html"):
         cashew_map_html_en = full_map("en")
         cashew_map_html_fr = full_map("fr")
@@ -20,7 +20,7 @@ if settings.DEBUG is False:
         pass
 
 # For prod env
-if settings.DEBUG is True:
+if settings.DEBUG is False:
     cashew_map_html_en = full_map("en")
     cashew_map_html_fr = full_map("fr")
 
@@ -28,7 +28,7 @@ scheduler = BackgroundScheduler()
 
 
 # Prod env
-if settings.DEBUG is True:
+if settings.DEBUG is False:
     @scheduler.scheduled_job(IntervalTrigger(days=1))
     def update_cashew_map():
         global cashew_map_html_en
@@ -49,12 +49,12 @@ def index(request):
     if "/fr/" in path_link.__str__():
         filename = "staticfiles/cashew_map_fr.html"
         # For prod env
-        if settings.DEBUG is True:
+        if settings.DEBUG is False:
             cashew_map = cashew_map_html_fr
     elif "/en/" in path_link.__str__():
         filename = "staticfiles/cashew_map_en.html"
         # For prod env
-        if settings.DEBUG is True:
+        if settings.DEBUG is False:
             cashew_map = cashew_map_html_en
 
     if cashew_map is None:
