@@ -320,6 +320,8 @@ class Training(models.Model):
     longitude = models.FloatField(null=True)
     latitude = models.FloatField(null=True)
     number_of_participant = models.IntegerField()
+    department = models.CharField(max_length=200, default='')
+    commune = models.CharField(max_length=200, default='')
 
     def __str__(self):
         return str(self.id)

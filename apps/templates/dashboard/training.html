@@ -3,7 +3,7 @@
 
 {% block stylesheets %}
 <style>
-    #date_form, #time_form, #date_form_btn, #time_form_btn {
+    #department_form, #commune_form, #department_form_btn, #commune_form_btn {
         display: none;
     }
 
@@ -31,19 +31,21 @@
                 &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "From" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field }}
                 &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "To" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field1 }}
             </form>
-            <form id="date_form" method="post" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
-                {% csrf_token %}
-                {{ date_form.training_date }}
+            <form id="department_form" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
+                {{ department_form.department }}
                 {{ form.column }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "From" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "To" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field1 }}
             </form>
-            <form method="post" id="time_form" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
-                {% csrf_token %}
-                {{ time_form.training_time }}
+            <form id="commune_form" class="form-inline my-2 my-lg-0" action="{% url 'training' %}">
+                {{ commune_form.commune }}
                 {{ form.column }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "From" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field }}
+                &nbsp&nbsp<span style="color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7;">{% trans "To" %}</span>&nbsp&nbsp{{ date_duration_get_form.my_date_field1 }}
             </form>
             <button id="simple_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="simple_search">{% trans "Search" %}</button>
-            <button id="date_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="date_form" type="submit">{% trans "Search" %}</button>
-            <button id="time_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="time_form" type="submit">{% trans "Search" %}</button>
+            <button id="department_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="department_form" type="submit">{% trans "Search" %}</button>
+            <button id="commune_form_btn" class="btn btn-outline-success my-2 my-sm-0" form="commune_form" type="submit">{% trans "Search" %}</button>
           </div>
         </div>
       </div>
@@ -83,6 +85,8 @@
                         <th scope="col" class="sort" >{% trans "Date" %}</th>
                         <th scope="col" class="sort" >{% trans "Time" %}</th>
                         <th scope="col" class="sort" >{% trans "Number of Participant" %}</th>
+                        <th scope="col" class="sort" >{% trans "Department" %}</th>
+                        <th scope="col" class="sort" >{% trans "Commune" %}</th>
                         </tr>
                     </thead>
                     <tbody class="list">
@@ -111,6 +115,12 @@
                                 </td>
                                 <td >
                                     {{ training.number_of_participant }}
+                                </td>
+                                <td >
+                                    {{ training.department }}
+                                </td>
+                                <td >
+                                    {{ training.commune }}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -2,6 +2,7 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
+import collections
 import datetime
 from datetime import date, time
 
@@ -12,6 +13,7 @@ from django.forms import ModelForm, TimeInput
 from django.utils.translation import gettext_lazy as _, gettext
 
 from apps.authentication.models import RemUser, RemOrganization
+from . import models
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 
 ACTIVE = 1
@@ -150,7 +152,7 @@ class KorDateForm(forms.Form):
     my_date_field1 = forms.DateField(
         label=_("To"),
         required=False,
-        initial=dates, 
+        initial=dates,
         widget=DateInput(
             attrs={
                 'class': 'form-control',
@@ -163,7 +165,7 @@ class KorDateForm(forms.Form):
 __open_ssh_tunnel__()
 cur = __mysql_connect__().cursor()
 country = "Benin"
-query = "SELECT kor,location_region,location_country FROM free_qar_result WHERE location_country=%s"
+query = "SELECT kor,location_region,location_sub_region,location_country FROM free_qar_result WHERE location_country=%s"
 cur.execute(query, (country,))
 __mysql_disconnect__()
 __close_ssh_tunnel__()
@@ -172,6 +174,10 @@ infos = []
 for kor in cur:
     for location_region in cur:
         infos.append(location_region)
+
+infos_commune = []
+for location_sub_region in cur:
+    infos_commune.append(location_sub_region)
 
 infos1 = sorted(infos, key=lambda name: name[1])
 
@@ -194,10 +200,35 @@ DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in nam
 select0 = ('select department', _('Select Department'))
 DEPARTMENT_CHOICES.insert(0, select0)
 
+# DEPARTMENT_CHOICES = models.Training.objects.values_list('department', flat=True)
+# DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
+# DEPARTMENT_CHOICES = set(DEPARTMENT_CHOICES)
+# DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
+COMMUNE_CHOICE = models.Training.objects.values_list('commune', flat=True)
+COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
+COMMUNE_CHOICE = set(COMMUNE_CHOICE)
+COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
+
+COMMUNE_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in COMMUNE_CHOICE]
+select1 = ('select commune', _('Select Commune'))
+COMMUNE_CHOICES.insert(0, select1)
+
 
 class DepartmentChoice(forms.Form):
     department = forms.ChoiceField(
         choices=DEPARTMENT_CHOICES,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'style': 'border-color: none;',
+            }
+        )
+    )
+
+
+class CommuneChoice(forms.Form):
+    commune = forms.ChoiceField(
+        choices=COMMUNE_CHOICES,
         widget=forms.Select(
             attrs={
                 'class': 'form-control',
@@ -301,9 +332,9 @@ training_column_search = (
     ('module name', _('MODULE NAME')),
     ('trainer first name', _('TRAINER FIRST NAME')),
     ('trainer last name', _('TRAINER LAST NAME')),
-    ('date', _('DATE')),
-    ('time', _('TIME')),
     ('number of participant', _('NUMBER OF PARTICIPANT')),
+    ('department', _('DEPARTMENT')),
+    ('commune', _('COMMUNE')),
 )
 
 
@@ -321,7 +352,7 @@ class TrainingSearch(forms.Form):
 
 class TrainingDateForm(forms.Form):
     training_date = forms.DateField(
-        initial=dates, 
+        initial=dates,
         widget=DateInput(
             attrs={
                 'class': 'form-control',
@@ -336,13 +367,13 @@ times = str(time(hour=current_time.hour, minute=current_time.minute))
 
 class TrainingTimeForm(forms.Form):
     training_time = forms.TimeField(
-        initial=times, 
+        initial=times,
         widget=TimeInput(
             format='%H:%M',
             attrs={
                 'type': 'time',
                 'class': 'form-control',
                 'style': 'border-color: none;',
-            }            
+            }
         )
     )

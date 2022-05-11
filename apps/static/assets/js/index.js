@@ -28,6 +28,7 @@ $(document).ready(function () {
         });
     }
 });
+
 // Training.html script
 if (document.URL.includes("/training/")) {
     $(document).ready(function () {
@@ -39,98 +40,96 @@ if (document.URL.includes("/training/")) {
             var x = $("#id_column option:selected").text();
             var i = $("#id_column").val();
 
-            if (x == "DATE") {
-                $("#id_column0").val("date");
-                $("#date_form").css("display", "inline");
-                $("#time_form").hide();
+            if (x == "DEPARTMENT" || x == "DÉPARTEMENT") {
+                $("#id_column0").val("department");
+                $("#department_form").css("display", "inline");
+                $("#commune_form").hide();
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").show();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").show();
+                $("#commune_form_btn").hide();
             }
-            else if (x == "TIME") {
-                $("#id_column1").val("time");
-                $("#date_form").hide();
-                $("#time_form").css("display", "inline");
+            else if (x == "COMMUNE") {
+                $("#id_column1").val("commune");
+                $("#department_form").hide();
+                $("#commune_form").css("display", "inline");
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").show();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").show();
             }
             else {
                 $("#id_column").val(i);
-                $("#date_form").hide();
-                $("#time_form").hide();
+                $("#department_form").hide();
+                $("#commune_form").hide();
                 $("#simple_search").show();
                 $("#simple_form_btn").show();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").hide();
             }
         });
         $("#id_column0").change(function () {
             var y = $("#id_column0 option:selected").text();
             var j = $("#id_column0").val();
-            if (y == "DATE") {
-                $("#id_column0").val("date");
-                $("#date_form").css("display", "inline");
-                $("#time_form").hide();
+            if (y == "DEPARTMENT" || y == "DÉPARTEMENT") {
+                $("#id_column0").val("department");
+                $("#department_form").css("display", "inline");
+                $("#commune_form").hide();
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").show();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").show();
+                $("#commune_form_btn").hide();
             }
-            else if (y == "TIME") {
-                $("#id_column1").val("time");
-                $("#date_form").hide();
-                $("#time_form").css("display", "inline");
+            else if (y == "COMMUNE") {
+                $("#id_column1").val("commune");
+                $("#department_form").hide();
+                $("#commune_form").css("display", "inline");
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").show();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").show();
             }
             else {
                 $("#id_column").val(j);
-                $("#date_form").hide();
-                $("#time_form").hide();
+                $("#department_form").hide();
+                $("#commune_form").hide();
                 $("#simple_search").show();
                 $("#simple_form_btn").show();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").hide();
             }
         });
         $("#id_column1").change(function () {
             var z = $("#id_column1 option:selected").text();
             var k = $("#id_column1").val();
 
-            if (z == "DATE") {
-                $("#id_column0").val("date");
-                $("#date_form").css("display", "inline");
-                $("#time_form").hide();
+            if (z == "DEPARTMENT" || z == "DÉPARTEMENT") {
+                $("#id_column0").val("department");
+                $("#department_form").css("display", "inline");
+                $("#commune_form").hide();
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").show();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").show();
+                $("#commune_form_btn").hide();
             }
-            else if (z == "TIME") {
-                $("#id_column1").val("time");
-                $("#date_form").hide();
-                $("#time_form").css("display", "inline");
+            else if (z == "COMMUNE") {
+                $("#id_column1").val("commune");
+                $("#department_form").hide();
+                $("#commune_form").css("display", "inline");
                 $("#simple_search").hide();
                 $("#simple_form_btn").hide();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").show();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").show();
             }
             else {
                 $("#id_column").val(k);
-                $("#date_form").hide();
-                $("#time_form").hide();
+                $("#department_form").hide();
+                $("#commune_form").hide();
                 $("#simple_search").show();
                 $("#simple_form_btn").show();
-                $("#date_form_btn").hide();
-                $("#time_form_btn").hide();
+                $("#department_form_btn").hide();
+                $("#commune_form_btn").hide();
             }
-        });        
+        });
     })
 }
-
-// Plantations.html script
