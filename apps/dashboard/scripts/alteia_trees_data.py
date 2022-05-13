@@ -9,8 +9,8 @@ from apscheduler.triggers.interval import IntervalTrigger
 
 alteia_sdk = alteia.SDK(
     url="https://app.alteia.com/",
-    user="sdahissiho@contractor.tns.org",
-    password="9tMNaztVkL4MqQ$"
+    user="ucodjia@contractor.tns.org",
+    password="LDUj:NJMn27UNGn"
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent

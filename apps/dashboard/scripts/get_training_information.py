@@ -73,41 +73,41 @@ def mysql_disconnect(conn):
 
 
 # Delete the data outside of Benin and add department and commune to models
-# connection = mysql_connect()
-# cur = connection.cursor()
-# cur.execute("SELECT latitude, longitude, id FROM dashboard_training;")
-#
-# # Get all the rows for that query
-# training0_items = cur.fetchall()
-# # Convert the result into a list of dictionaries (useful later)
-# items = [
-#     {
-#         'latitude': item[0],
-#         'longitude': item[1],
-#         'training_id': item[2]
-#     }
-#     for item in training0_items
-# ]
-#
-# good_datas = []
-# for item in items:
-#     item_id = item['training_id']
-#     for feature in departments_geojson['features'] and communes_geojson['features']:
-#         polygon = shape(feature['geometry'])
-#         if polygon.contains(Point(item['longitude'], item['latitude'])):
-#             good_datas.append({"id": item_id, "department": feature["properties"]["NAME_1"],
-#                                "commune": feature["properties"]["NAME_2"]})
-#
-# for item in good_datas:
-#     models.Training.objects.filter(id=item['id']).update(department=item['department'], commune=item['commune'])
-#
-# good_datas_id = [item['id'] for item in good_datas]
-# bad_datas = [item['training_id'] for item in items if item['training_id'] not in good_datas_id]
-#
-# for item in bad_datas:
-#     models.Training.objects.filter(id=item).delete()
-#
-# mysql_disconnect(connection)
+connection = mysql_connect()
+cur = connection.cursor()
+cur.execute("SELECT latitude, longitude, id FROM dashboard_training;")
+
+# Get all the rows for that query
+training0_items = cur.fetchall()
+# Convert the result into a list of dictionaries (useful later)
+items = [
+    {
+        'latitude': item[0],
+        'longitude': item[1],
+        'training_id': item[2]
+    }
+    for item in training0_items
+]
+
+good_datas = []
+for item in items:
+    item_id = item['training_id']
+    for feature in departments_geojson['features'] and communes_geojson['features']:
+        polygon = shape(feature['geometry'])
+        if polygon.contains(Point(item['longitude'], item['latitude'])):
+            good_datas.append({"id": item_id, "department": feature["properties"]["NAME_1"],
+                               "commune": feature["properties"]["NAME_2"]})
+
+for item in good_datas:
+    models.Training.objects.filter(id=item['id']).update(department=item['department'], commune=item['commune'])
+
+good_datas_id = [item['id'] for item in good_datas]
+bad_datas = [item['training_id'] for item in items if item['training_id'] not in good_datas_id]
+
+for item in bad_datas:
+    models.Training.objects.filter(id=item).delete()
+
+mysql_disconnect(connection)
 
 
 def __get_department_from_coord__(latitude, longitude):
