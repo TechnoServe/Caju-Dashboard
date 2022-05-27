@@ -42,12 +42,12 @@ from .forms import (
     UserCustomProfileForm,
     UserBaseProfileForm,
     KorDateForm,
-    # DepartmentChoice,
+    DepartmentChoice,
     NurserySearch,
     BeninYieldSearch,
     PlantationsSearch,
     TrainingSearch,
-    # CommuneChoice,
+    CommuneChoice,
 )
 
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

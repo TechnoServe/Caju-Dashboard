@@ -1,0 +1,1006 @@
+{
+    "Benin": {
+        "Alibori": {
+            "Banikoara": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 168333.53514046158,
+                "rank": 13,
+                "total area": 434013.36015578866,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Gogounou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 234724.13422573317,
+                "rank": 14,
+                "total area": 490311.9012281315,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kandi": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 129646.21679431062,
+                "rank": 15,
+                "total area": 351332.50485650945,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Karimama": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 926880.9427925957,
+                "rank": 16,
+                "total area": 587948.4097741166,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Malanville": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 155467.68533871506,
+                "rank": 17,
+                "total area": 328926.98873254657,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Segbana": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 76875.10461244528,
+                "rank": 18,
+                "total area": 431666.83525290916,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 1691927.6189042614,
+                "rank": 5,
+                "total area": 2624200.000000002,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Atakora": {
+            "Boukoumbé": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 19,
+                "total area": 116529.7175364412,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Cobly": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 20,
+                "total area": 92214.76337927069,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kouandé": {
+                "cashew tree cover": 0.9870803938802084,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 869.1004422135265,
+                "rank": 22,
+                "total area": 318922.50050171104,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kérou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 206465.45473982347,
+                "rank": 21,
+                "total area": 380512.4809233226,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Matéri": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 49419.23830071095,
+                "rank": 23,
+                "total area": 168614.20227844364,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Natitingou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 24,
+                "total area": 136685.50658247957,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Péhunco": {
+                "cashew tree cover": 0.7038312684780944,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 30627.92629597442,
+                "rank": 25,
+                "total area": 204916.0175331258,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Tanguiéta": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 652197.5787782825,
+                "rank": 26,
+                "total area": 531750.104502648,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Toucountouna": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 27,
+                "total area": 99754.70676255527,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 1.6909116623583027,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 939579.2985570049,
+                "rank": 6,
+                "total area": 2049899.999999998,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Atlantique": {
+            "Abomey-Calavi": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 28,
+                "total area": 53723.89427484335,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Allada": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 29,
+                "total area": 38338.62655663058,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kpomassè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 30,
+                "total area": 27710.742562260464,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Ouidah": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 31,
+                "total area": 25262.425730003015,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Sô-Ava": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 32,
+                "total area": 20193.891911458333,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Toffo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 11184.100537633767,
+                "rank": 33,
+                "total area": 56744.12118301647,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Tori-Bossito": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 34,
+                "total area": 35160.062177479835,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Zè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 3371.8536253323387,
+                "rank": 35,
+                "total area": 66166.23560430767,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 14555.954162966105,
+                "rank": 7,
+                "total area": 323299.9999999997,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Borgou": {
+            "Bembéréké": {
+                "cashew tree cover": 1.2664962806851257,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 67319.80759460424,
+                "rank": 36,
+                "total area": 331923.33834599075,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kalalé": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 106363.8776808648,
+                "rank": 37,
+                "total area": 352203.94010891323,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "N'Dali": {
+                "cashew tree cover": 20661.358889882817,
+                "cashew tree cover within protected area": 849.5110358481254,
+                "number of trees": 0,
+                "protected area": 43711.09290017097,
+                "rank": 8,
+                "total area": 385058.1150667919,
+                "total cashew yield": 8471157.144851955,
+                "yield per hectare": 410,
+                "yield per tree": 0
+            },
+            "Nikki": {
+                "cashew tree cover": 0.7249814791092218,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 38,
+                "total area": 324629.2964752908,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Parakou": {
+                "cashew tree cover": 7612.9813583557625,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 12,
+                "total area": 46616.62824114486,
+                "total cashew yield": 3349711.7976765353,
+                "yield per hectare": 440,
+                "yield per tree": 0
+            },
+            "Pèrèrè": {
+                "cashew tree cover": 3.7655963301355704,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 39,
+                "total area": 211312.82489926365,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Sinendé": {
+                "cashew tree cover": 0.3775825861194087,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 40693.39258212607,
+                "rank": 40,
+                "total area": 210172.21062743707,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Tchaourou": {
+                "cashew tree cover": 77665.85064947745,
+                "cashew tree cover within protected area": 3627.23677275144,
+                "number of trees": 0,
+                "protected area": 183710.80794610418,
+                "rank": 1,
+                "total area": 723683.6462351689,
+                "total cashew yield": 31842998.766285755,
+                "yield per hectare": 410,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 105946.32555439208,
+                "cashew tree cover within protected area": 4476.747808599565,
+                "number of trees": 0,
+                "protected area": 441798.97870387026,
+                "rank": 2,
+                "total area": 2585600.000000001,
+                "total cashew yield": 43663867.70881425,
+                "yield per hectare": 420.0,
+                "yield per tree": 0
+            }
+        },
+        "Collines": {
+            "Bantè": {
+                "cashew tree cover": 68144.86807661323,
+                "cashew tree cover within protected area": 10835.479893361759,
+                "number of trees": 0,
+                "protected area": 75669.19047953782,
+                "rank": 2,
+                "total area": 258910.3829778694,
+                "total cashew yield": 25895049.869113028,
+                "yield per hectare": 380,
+                "yield per tree": 0
+            },
+            "Dassa-Zoumè": {
+                "cashew tree cover": 14784.792883584127,
+                "cashew tree cover within protected area": 170.131074691952,
+                "number of trees": 0,
+                "protected area": 2231.5041639690994,
+                "rank": 11,
+                "total area": 172565.28623894262,
+                "total cashew yield": 5322525.438090285,
+                "yield per hectare": 360,
+                "yield per tree": 0
+            },
+            "Glazoué": {
+                "cashew tree cover": 17913.683629536252,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 10,
+                "total area": 172295.6058280141,
+                "total cashew yield": 6807199.7792237755,
+                "yield per hectare": 380,
+                "yield per tree": 0
+            },
+            "Ouèssè": {
+                "cashew tree cover": 36113.25837819801,
+                "cashew tree cover within protected area": 3568.6847652506717,
+                "number of trees": 0,
+                "protected area": 26426.430135602244,
+                "rank": 3,
+                "total area": 301418.8370694559,
+                "total cashew yield": 14084170.767497223,
+                "yield per hectare": 390,
+                "yield per tree": 0
+            },
+            "Savalou": {
+                "cashew tree cover": 35846.171590077145,
+                "cashew tree cover within protected area": 29.78288115916532,
+                "number of trees": 0,
+                "protected area": 308.7989636435142,
+                "rank": 5,
+                "total area": 260735.9920581734,
+                "total cashew yield": 13263083.488328544,
+                "yield per hectare": 370,
+                "yield per tree": 0
+            },
+            "Savè": {
+                "cashew tree cover": 22211.888483049363,
+                "cashew tree cover within protected area": 1523.4210851559146,
+                "number of trees": 0,
+                "protected area": 22934.363296983072,
+                "rank": 7,
+                "total area": 227173.89582754613,
+                "total cashew yield": 8884755.393219745,
+                "yield per hectare": 400,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 195014.66304105808,
+                "cashew tree cover within protected area": 16127.499699619462,
+                "number of trees": 0,
+                "protected area": 127570.28703973575,
+                "rank": 1,
+                "total area": 1393100.0000000014,
+                "total cashew yield": 74256784.7354726,
+                "yield per hectare": 380.0,
+                "yield per tree": 0
+            }
+        },
+        "Donga": {
+            "Bassila": {
+                "cashew tree cover": 28757.039820417576,
+                "cashew tree cover within protected area": 2866.0870295051604,
+                "number of trees": 0,
+                "protected area": 191106.70813580972,
+                "rank": 6,
+                "total area": 535037.6095000991,
+                "total cashew yield": 12365527.122779557,
+                "yield per hectare": 430,
+                "yield per tree": 0
+            },
+            "Copargo": {
+                "cashew tree cover": 8.245165255533854,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 41,
+                "total area": 89284.53762050177,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Djougou": {
+                "cashew tree cover": 33693.11081156193,
+                "cashew tree cover within protected area": 1962.1733752703242,
+                "number of trees": 0,
+                "protected area": 28937.937699059246,
+                "rank": 4,
+                "total area": 427885.1448121065,
+                "total cashew yield": 13477244.324624771,
+                "yield per hectare": 400,
+                "yield per tree": 0
+            },
+            "Ouaké": {
+                "cashew tree cover": 6.465647010713464,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 42,
+                "total area": 60392.70806729334,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 62464.861444245755,
+                "cashew tree cover within protected area": 4828.260404775485,
+                "number of trees": 0,
+                "protected area": 220044.64583486898,
+                "rank": 3,
+                "total area": 1112600.0000000005,
+                "total cashew yield": 25842771.44740433,
+                "yield per hectare": 415.0,
+                "yield per tree": 0
+            }
+        },
+        "Kouffo": {
+            "Aplahoué": {
+                "cashew tree cover": 3.070212251383464,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 43,
+                "total area": 93147.14595741163,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Djakotomey": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 44,
+                "total area": 20474.79347603737,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Dogbo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 45,
+                "total area": 28988.811957114798,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Klouékanmè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 46,
+                "total area": 40939.43888306961,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Lalo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 84.95218474664267,
+                "rank": 47,
+                "total area": 43941.26176545387,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Toviklin": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 48,
+                "total area": 12908.54796091298,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 3.070212251383464,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 84.95218474664267,
+                "rank": 8,
+                "total area": 240400.00000000026,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Littoral": {
+            "Cotonou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 49,
+                "total area": 7900.0,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 9,
+                "total area": 7900.0,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Mono": {
+            "Athiémé": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 50,
+                "total area": 49802.91909192755,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Bopa": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 51,
+                "total area": 40691.425095644234,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Comè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 52,
+                "total area": 18880.280826050795,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Grand-Popo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 53,
+                "total area": 22771.143785476845,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Houéyogbé": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 54,
+                "total area": 28354.231200900398,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 10,
+                "total area": 160499.99999999983,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Ouémé": {
+            "Adjarra": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 55,
+                "total area": 6222.626179053071,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Adjohoun": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 56,
+                "total area": 28768.093958822537,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Aguégués": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 57,
+                "total area": 13880.41038619696,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Akpro-Missérété": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 58,
+                "total area": 9170.67177833673,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Avrankou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 59,
+                "total area": 8402.228319297634,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Bonou": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 60,
+                "total area": 29742.304668992478,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Dangbo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 61,
+                "total area": 13893.73644563048,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Porto-Novo": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 62,
+                "total area": 4800.169272892735,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Sèmè-Kpodji": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 63,
+                "total area": 13219.75899077741,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 11,
+                "total area": 128100.00000000003,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Plateau": {
+            "Adja-Ouèrè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 64,
+                "total area": 44712.260096421465,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Ifangni": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 65,
+                "total area": 18480.88398622181,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Kétou": {
+                "cashew tree cover": 1.9220243524768306,
+                "cashew tree cover within protected area": 0.465092010904948,
+                "number of trees": 0,
+                "protected area": 39177.05052421158,
+                "rank": 66,
+                "total area": 174541.30810044712,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Pobè": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 67,
+                "total area": 44239.60823410378,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Sakété": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 68,
+                "total area": 44425.93958280559,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 1.9220243524768306,
+                "cashew tree cover within protected area": 0.465092010904948,
+                "number of trees": 0,
+                "protected area": 39177.05052421158,
+                "rank": 12,
+                "total area": 326399.99999999977,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0.0,
+                "yield per tree": 0
+            }
+        },
+        "Zou": {
+            "Abomey": {
+                "cashew tree cover": 3.0781047096641387,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 69,
+                "total area": 15336.358210533694,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Agbangnizoun": {
+                "cashew tree cover": 1.041195727922028,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 70,
+                "total area": 20139.56727801995,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Bohicon": {
+                "cashew tree cover": 4.1436896890079264,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 71,
+                "total area": 16002.700665075934,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Covè": {
+                "cashew tree cover": 3.633752290781059,
+                "cashew tree cover within protected area": 0.7164336515299479,
+                "number of trees": 0,
+                "protected area": 10.940218582711749,
+                "rank": 72,
+                "total area": 52887.75903661477,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Djidja": {
+                "cashew tree cover": 19699.648623811947,
+                "cashew tree cover within protected area": 155.26895470296225,
+                "number of trees": 0,
+                "protected area": 1776.571945972863,
+                "rank": 9,
+                "total area": 215370.1955815969,
+                "total cashew yield": 8273852.422001017,
+                "yield per hectare": 420,
+                "yield per tree": 0
+            },
+            "Ouinhi": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 73,
+                "total area": 29973.631944596007,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Za-Kpota": {
+                "cashew tree cover": 6.649575383013556,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 0.0,
+                "rank": 74,
+                "total area": 37984.3817029769,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Zagnanado": {
+                "cashew tree cover": 0.06273775567746631,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 76.65077355827475,
+                "rank": 75,
+                "total area": 53390.31059683884,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "Zogbodomey": {
+                "cashew tree cover": 0.0,
+                "cashew tree cover within protected area": 0.0,
+                "number of trees": 0,
+                "protected area": 8709.093652287245,
+                "rank": 76,
+                "total area": 83215.09498374713,
+                "total cashew yield": 0.0,
+                "yield per hectare": 0,
+                "yield per tree": 0
+            },
+            "properties": {
+                "cashew tree cover": 19718.257679368013,
+                "cashew tree cover within protected area": 155.9853883544922,
+                "number of trees": 0,
+                "protected area": 10573.256590401095,
+                "rank": 4,
+                "total area": 524300.0000000001,
+                "total cashew yield": 8273852.422001017,
+                "yield per hectare": 420.0,
+                "yield per tree": 0
+            }
+        },
+        "properties": {
+            "cashew tree cover": 383150.79086733016,
+            "cashew tree cover within protected area": 25588.958393359913,
+            "number of trees": 0,
+            "protected area": 3485312.0425020666,
+            "total area": 11476300.000000002,
+            "total cashew yield": 152037276.31369218,
+            "yield per hectare": 408.75,
+            "yield per tree": 0
+        }
+    }
+}

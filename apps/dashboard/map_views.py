@@ -4,10 +4,10 @@ import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
-from django.conf import settings
 
 from apps.dashboard.scripts.build_cashew_map import full_map
 
@@ -19,13 +19,12 @@ if settings.DEBUG is True:
     else:
         pass
 
-# For prod env
-if settings.DEBUG is False:
-    cashew_map_html_en = full_map("en")
-    cashew_map_html_fr = full_map("fr")
+# # For prod env
+# if settings.DEBUG is False:
+cashew_map_html_en = full_map("en")
+cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
-
 
 # Prod env
 if settings.DEBUG is False:
@@ -35,6 +34,7 @@ if settings.DEBUG is False:
         cashew_map_html_en = full_map("en")
         global cashew_map_html_fr
         cashew_map_html_fr = full_map("fr")
+
 
     scheduler.start()
 

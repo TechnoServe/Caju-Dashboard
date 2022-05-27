@@ -52,7 +52,7 @@ def __task3_func__(cashew_map):
 def __task4_func__(cashew_map):
     qars = current_qars
     # Adding the qar layer from the class QarLayer
-    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"), show=False)
+    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"), show=True)
     qar_layer = QarLayer(marker_cluster, qars).add_qar()
     qar_layer.add_to(cashew_map)
 
@@ -130,7 +130,7 @@ def get_base_map(path_link):
             force_separate_button=False
         ).add_to(cashew_map)
 
-        marker_cluster = MarkerCluster(name=gettext("Nursery Information"), show=False)
+        marker_cluster = MarkerCluster(name=gettext("Nursery Information"), show=True)
         nursery_layer = NurseryLayer(marker_cluster).add_nursery()
         nursery_layer.add_to(cashew_map)
 

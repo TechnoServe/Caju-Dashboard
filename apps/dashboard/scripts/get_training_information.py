@@ -5,10 +5,7 @@ import paramiko
 import pymysql
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-from django.db.models import F
 from shapely.geometry import shape, Point
-
-from apps.dashboard import models
 
 with open("staticfiles/json/ben_adm1.json", encoding="utf8", errors="ignore") as f:
     departments_geojson = geojson.load(f)
@@ -21,11 +18,11 @@ Add your path to your pkey perm file
 """
 mypkey = paramiko.RSAKey.from_private_key_file(os.path.join(os.getenv("PKEY")))
 
-sql_hostname = os.path.join(os.getenv("HOST"))
-sql_username = os.path.join(os.getenv("USER"))
-sql_password = os.path.join(os.getenv("PASSWORD"))
-sql_main_database = os.path.join(os.getenv("NAME"))
-sql_port = int(os.path.join(os.getenv("PORT")))
+sql_hostname = os.path.join(os.getenv("TRAINING_DB_HOSTNAME"))
+sql_username = os.path.join(os.getenv("TRAINING_DB_USERNAME"))
+sql_password = os.path.join(os.getenv("TRAINING_DB_PASSWORD"))
+sql_main_database = os.path.join(os.getenv("TRAINING_DB_NAME"))
+sql_port = int(os.path.join(os.getenv("TRAINING_DB_PORT")))
 
 
 class TrainingObject:
