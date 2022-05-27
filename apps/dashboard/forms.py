@@ -2,7 +2,6 @@
 """
 Copyright (c) 2019 - present AppSeed.us
 """
-import collections
 import datetime
 from datetime import date, time
 
@@ -10,10 +9,9 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, TimeInput
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _
 
 from apps.authentication.models import RemUser, RemOrganization
-from . import models
 from .db_conn_string import __mysql_disconnect__, __close_ssh_tunnel__, __open_ssh_tunnel__, __mysql_connect__
 
 ACTIVE = 1
@@ -200,18 +198,19 @@ DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in nam
 select0 = ('select department', _('Select Department'))
 DEPARTMENT_CHOICES.insert(0, select0)
 
+
 # DEPARTMENT_CHOICES = models.Training.objects.values_list('department', flat=True)
 # DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
 # DEPARTMENT_CHOICES = set(DEPARTMENT_CHOICES)
 # DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
-COMMUNE_CHOICE = models.Training.objects.values_list('commune', flat=True)
-COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
-COMMUNE_CHOICE = set(COMMUNE_CHOICE)
-COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
+# COMMUNE_CHOICE = models.Training.objects.values_list('commune', flat=True)
+# COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
+# COMMUNE_CHOICE = set(COMMUNE_CHOICE)
+# COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
 
-COMMUNE_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in COMMUNE_CHOICE]
-select1 = ('select commune', _('Select Commune'))
-COMMUNE_CHOICES.insert(0, select1)
+# COMMUNE_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in COMMUNE_CHOICE]
+# select1 = ('select commune', _('Select Commune'))
+# COMMUNE_CHOICES.insert(0, select1)
 
 
 class DepartmentChoice(forms.Form):
@@ -226,17 +225,18 @@ class DepartmentChoice(forms.Form):
     )
 
 
-class CommuneChoice(forms.Form):
-    commune = forms.ChoiceField(
-        choices=COMMUNE_CHOICES,
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-                'style': 'border-color: none;',
-            }
-        )
-    )
-
+#
+# class CommuneChoice(forms.Form):
+#     commune = forms.ChoiceField(
+#         choices=COMMUNE_CHOICES,
+#         widget=forms.Select(
+#             attrs={
+#                 'class': 'form-control',
+#                 'style': 'border-color: none;',
+#             }
+#         )
+#     )
+#
 
 nursery_column_search = (
     ('all', _('All')),

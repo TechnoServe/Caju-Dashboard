@@ -12,15 +12,19 @@ from django.template import loader
 from django.utils.translation import gettext
 
 # Google service account for the GEE geotiff
-from .scripts.alteia_trees_data import download_trees_data
+from apps.dashboard.scripts.alteia_trees_data import download_trees_data
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-alteia_sdk = alteia.SDK(
-    url="https://app.alteia.com/",
-    user=os.getenv("ALTEIA_USER"),
-    password=os.getenv("ALTEIA_PASSWORD")
-)
+try:
+    alteia_sdk = alteia.SDK(
+        url="https://app.alteia.com/",
+        user=os.getenv("ALTEIA_USER"),
+        password=os.getenv("ALTEIA_PASSWORD")
+    )
+except Exception as e:
+    print(e)
+    pass
 
 
 @login_required(login_url="/")
@@ -41,7 +45,7 @@ def drone(request, plant_id, coordinate_xy):
             attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
             name=gettext('Drone Image'),
             overlay=True,
-            show=True,
+            show=False,
             control=True,
             max_zoom=100
         ).add_to(cashew_map)
@@ -70,7 +74,7 @@ def drone(request, plant_id, coordinate_xy):
         folium.GeoJson(
             data=feature,
             name=gettext('Plantation Shape'),
-            show=True,
+            show=False,
             zoom_on_click=True
         ).add_to(cashew_map)
 
@@ -131,7 +135,11 @@ def drone(request, plant_id, coordinate_xy):
         path = os.path.join(parent_dir, plant_id)
         if os.path.exists(path.__str__()) is False:
             print("download_trees_data")
-            download_trees_data(plant_id)
+            try:
+                download_trees_data(plant_id)
+            except Exception as e:
+                print(e)
+                pass
         add_alteia_tree_crows()
         add_alteia_tree_tops_density()
         add_plantation_shape()

@@ -1,4 +1,5 @@
-from math import log10, floor
+import json
+import time
 
 import folium
 import geojson
@@ -8,15 +9,26 @@ from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
 from django.utils.translation import gettext
+from math import log10, floor
 
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.scripts.get_qar_information import QarObject, current_qars
-import time
+from apps.dashboard.scripts.get_qar_information import current_qars
 
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
+statellite_prediction_computed_data_json = open('staticfiles/statellite_prediction_computed_data.json')
+data_dictionary = json.load(statellite_prediction_computed_data_json)
+
+
+def __human_format__(num):
+    num = float('{:.3g}'.format(num))
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num /= 1000.0
+    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
 
 
 def __highlight_function__(feature):
@@ -83,13 +95,15 @@ def __build_html_view__(data: object) -> any:
     cashew_trees_status = gettext("Cashew Trees Status in")
     is_ranked = gettext("is ranked")
     globally_in_terms = gettext("globally in terms of total cashew yield")
-    satellite_est = gettext("Satellite Est")
+    satellite_est = gettext("Satellite Estimation")
     tns_survey = gettext("TNS Survey")
 
     # All 3 shapefiles share these variables
     total_cashew_yield = gettext("Total Cashew Yield (kg)")
     total_area = gettext("Total Area (ha)")
     cashew_tree_cover = gettext("Cashew Tree Cover (ha)")
+    protected_area = gettext("Protected Area (ha)")
+    cashew_tree_cover_within_protected_area = gettext("Cashew Tree Cover Within Protected Area (ha)")
     yield_hectare = gettext("Yield/Hectare (kg/ha)")
     yield_per_tree = gettext("Yield per Tree (kg/tree)")
     number_of_trees = gettext("Number of Trees")
@@ -184,36 +198,49 @@ def __build_html_view__(data: object) -> any:
                         </tr>
                         <tr>
                             <td>{total_cashew_yield}</td>
-                            <td>{data.r_yield_pred / 1000000:n}M</td>
+                            <td>{__human_format__(data.predictions["total cashew yield"])}</td>
                             <td>{data.r_total_yield / 1000000:n}M</td>
                             
                         </tr>
                         <tr>
                             <td>{total_area}</td>
-                            <td>{data.r_region_size / 1000000:n}M</td>
+                            <td>{__human_format__(data.predictions["total area"])}</td>
                             <td>{data.r_surface_area / 1000:n}K</td>
                         </tr>
                         <tr>
+                            <td>{protected_area}</td>
+                            <td>{__human_format__(data.predictions["protected area"])}</td>
+                            <td>NA</td>                            
+                        </tr>
+                        <tr>
                             <td>{cashew_tree_cover}</td>
-                            <td>{data.r_tree_ha_pred / 1000:n}K</td>
+                            <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
                             <td>NA</td>
-                            
+                        </tr>
+                        <tr>
+                            <td>{cashew_tree_cover_within_protected_area}</td>
+                            <td>{__human_format__(data.predictions["cashew tree cover within protected area"])}</td>
+                            <td>NA</td>                            
                         </tr>
                         <tr>
                             <td>{yield_hectare}</td>
-                            <td>390</td>
+                            <td>{__human_format__(data.predictions["yield per hectare"])}</td>
                             <td>{data.r_yield_ha}</td>
                             
                         </tr>
                         <tr>
                             <td>{yield_per_tree}</td>
-                            <td>NA</td>
+                            <td>
+                            {__human_format__(data.predictions["yield per tree"]) if data.predictions["yield per tree"] != 0 else "N/A"}
+                            </td>
                             <td>{data.r_yield_tree}</td>
                             
                         </tr>
                         <tr>
                             <td>{number_of_trees}</td>
-                            <td>NA</td>
+                            <td>
+                            {__human_format__(data.predictions["number of trees"]) if data.predictions["number of trees"] != 0 else "N/A"}
+                            </td>
                             <td>{data.r_num_tree / 1000:n}K</td>
                             
                         </tr>
@@ -242,7 +269,7 @@ def __build_caj_q_html_view__(data: object) -> any:
     popup's table for Caju Quality Information
     """
 
-    satellite_est = gettext("Satellite Est")
+    satellite_est = gettext("Satellite Estimation")
     tns_survey = gettext("TNS Survey")
     nut_count_average = gettext("Nut Count Average")
     defective_rate_average = gettext("Defective Rate Average")
@@ -276,7 +303,9 @@ def __build_data__(feature, qars):
     Return all the data needed to build the Benin republic Layer
     """
 
-    data = {'qars': qars}
+    data = {'qars': qars,
+            "predictions": data_dictionary[feature["properties"]["NAME_0"]]["properties"],
+            }
 
     pred_ben_data = []
     pred_ground_ben_data = [['Departments', 'Satellite Prediction', 'Ground Data Estimate']]
@@ -320,9 +349,6 @@ def __build_data__(feature, qars):
     tree_ha_pred = int(round(tree_ha_pred['cashew_tree_cover__sum'] / 10000, 2))
     data["tree_ha_pred"] = tree_ha_pred
 
-    yield_pred = 390 * tree_ha_pred
-    data["yield_pred"] = yield_pred
-
     region_size = area(feature['geometry']) / 10000
     data["region_size"] = region_size
 
@@ -343,6 +369,9 @@ def __build_data__(feature, qars):
         if yield_ha < 90000 \
         else round(yield_ha, 2 - int(floor(log10(abs(yield_ha)))))
     data["r_yield_ha"] = r_yield_ha
+
+    yield_pred = r_yield_ha * tree_ha_pred
+    data["yield_pred"] = yield_pred
 
     r_tree_ha_pred = round(tree_ha_pred, 1 - int(floor(log10(abs(tree_ha_pred))))) \
         if tree_ha_pred < 90000 \
@@ -393,9 +422,9 @@ def add_benin_republic(self, qars):
 
         data = __build_data__(feature, qars)
 
-        html4 = __build_html_view__(DataObject(**data))
+        html_view = __build_html_view__(DataObject(**data))
 
-        iframe = folium.IFrame(html=html4, width=450, height=380)
+        iframe = folium.IFrame(html=html_view, width=600, height=400)
 
         folium.Popup(iframe, max_width=2000).add_to(temp_layer0)
         temp_layer0.add_to(benin_layer)

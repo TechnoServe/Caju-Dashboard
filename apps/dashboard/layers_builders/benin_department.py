@@ -1,5 +1,5 @@
-import asyncio
-from math import log10, floor
+import json
+import time
 
 import folium
 import geojson
@@ -9,18 +9,29 @@ from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
 from django.utils.translation import gettext
+from math import log10, floor
 
 from apps.dashboard.models import BeninYield
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.models import DeptSatellite
-from apps.dashboard.scripts.get_qar_information import QarObject, current_qars
-import time
+from apps.dashboard.scripts.get_qar_information import current_qars
 
 heroku = False
 
 # Load the Benin Departments shapefile
 with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
     benin_adm1_json = geojson.load(f)
+statellite_prediction_computed_data_json = open('staticfiles/statellite_prediction_computed_data.json')
+data_dictionary = json.load(statellite_prediction_computed_data_json)
+
+
+def __human_format__(num):
+    num = float('{:.3g}'.format(num))
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num /= 1000.0
+    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
 
 
 def __highlight_function__(feature):
@@ -83,7 +94,7 @@ def __build_caj_q_html_view__(data: object) -> any:
     popup's table for Caju Quality Information
     """
 
-    satellite_est = gettext("Satellite Est")
+    satellite_est = gettext("Satellite Estimation")
     tns_survey = gettext("TNS Survey")
     nut_count_average = gettext("Nut Count Average")
     defective_rate_average = gettext("Defective Rate Average")
@@ -123,15 +134,18 @@ def __build_html_view__(data: object) -> any:
     dead_trees = gettext("Dead Trees")
     out_of_production = gettext("Out of Production Trees")
     cashew_trees_status = gettext("Cashew Trees Status in")
-    is_ranked = gettext("is ranked")
+    is_ranked = gettext(" is ranked")
+    year = gettext("In 2020, ")
 
-    satellite_est = gettext("Satellite Est")
+    satellite_est = gettext("Satellite Estimation")
     tns_survey = gettext("TNS Survey")
 
     # All 3 shapefiles share these variables
     total_cashew_yield = gettext("Total Cashew Yield (kg)")
     total_area = gettext("Total Area (ha)")
     cashew_tree_cover = gettext("Cashew Tree Cover (ha)")
+    protected_area = gettext("Protected Area (ha)")
+    cashew_tree_cover_within_protected_area = gettext("Cashew Tree Cover Within Protected Area (ha)")
     yield_hectare = gettext("Yield/Hectare (kg/ha)")
     yield_per_tree = gettext("Yield per Tree (kg/tree)")
     number_of_trees = gettext("Number of Trees")
@@ -139,6 +153,8 @@ def __build_html_view__(data: object) -> any:
     predicted_cashew_tree_d = gettext("Predicted Cashew Tree Cover Communes Statistics In")
     among_benin_departments = gettext(
         "among Benin departments in terms of total cashew yield according to the TNS Yield Survey")
+    among_benin_departments_prediction = gettext(
+        "among Benin departments in terms of total cashew yield according to the TNS Prediction Algorithm")
 
     return f'''
                 <html>
@@ -215,48 +231,62 @@ def __build_html_view__(data: object) -> any:
                     </head>
                     <body>
                         <h2>{data.department}</h2>
-                        <h4>In 2020, {data.department} {is_ranked} <b>{data.my_dict[str(data.position)]}</b> {among_benin_departments}.</h4>
+                        <h4>
+                        {year}{data.department}{is_ranked}
+                        {data.my_dict[str(data.predictions["rank"] - 1)]}
+                        {among_benin_departments}.
+                        </h4>
+
                         <table>
-                        <tr>
-                            <th></th>
-                            <th>{satellite_est}</th>
-                            <th>{tns_survey}</th>
-                            
-                        </tr>
-                        <tr>
-                            <td>{total_cashew_yield}</td>
-                            <td>{data.r_yield_pred_dept / 1000000:n}M</td>
-                            <td>{data.r_total_yield_d / 1000000:n}M</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>{total_area}</td>
-                            <td>{data.r_region_size_d / 1000000:n}M</td>
-                            <td>{data.r_surface_area_d / 1000:n}K</td>
-                        </tr>
-                        <tr>
-                            <td>{cashew_tree_cover}</td>
-                            <td>{data.r_tree_ha_pred_dept / 1000:n}K</td>
-                            <td>NA</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>{yield_hectare}</td>
-                            <td>390</td>
-                            <td>{data.r_yield_ha_d}</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>{yield_per_tree}</td>
-                            <td>NA</td>
-                            <td>{data.r_yield_tree_d}</td>
-                            
-                        </tr>
-                        <tr>
-                            <td>{number_of_trees}</td>
-                            <td>NA</td>
-                            <td>{data.r_num_tree_d / 1000:n}K</td>
-                        </tr>
+                            <tr>
+                                <th></th>
+                                <th>{satellite_est}</th>
+                                <th>{tns_survey}</th>
+                            </tr>
+                            <tr>
+                                <td>{total_cashew_yield}</td>
+                                <td>{__human_format__(data.predictions["total cashew yield"])}</td>
+                                <td>{data.r_total_yield_d / 1000000:n}M</td>
+                            </tr>
+                            <tr>
+                                <td>{total_area}</td>
+                                <td>{__human_format__(data.predictions["total area"])}</td>
+                                <td>{data.r_surface_area_d / 1000:n}K</td>
+                            </tr>
+                            <tr>
+                                <td>{protected_area}</td>
+                                <td>{__human_format__(data.predictions["protected area"])}</td>
+                                <td>NA</td>                            
+                            </tr>
+                            <tr>
+                                <td>{cashew_tree_cover}</td>
+                                <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
+                                <td>NA</td>                            
+                            </tr>
+                            <tr>
+                                <td>{cashew_tree_cover_within_protected_area}</td>
+                                <td>{__human_format__(data.predictions["cashew tree cover within protected area"])}</td>
+                                <td>NA</td>                            
+                            </tr>
+                            <tr>
+                                <td>{yield_hectare}</td>
+                                <td>{__human_format__(data.predictions["yield per hectare"])}</td>
+                                <td>{data.r_yield_ha_d}</td>
+                            </tr>
+                            <tr>
+                                <td>{yield_per_tree}</td>
+                                <td>
+                                {__human_format__(data.predictions["yield per tree"]) if data.predictions["yield per tree"] != 0 else "N/A"}
+                                </td>
+                                <td>{data.r_yield_tree_d}</td>
+                            </tr>
+                            <tr>
+                                <td>{number_of_trees}</td>
+                                <td>
+                                {__human_format__(data.predictions["number of trees"]) if data.predictions["number of trees"] != 0 else "N/A"}
+                                </td>
+                                <td>{data.r_num_tree_d / 1000:n}K</td>
+                            </tr>
                         </table>
                         
                         &nbsp;&nbsp; 
@@ -282,10 +312,15 @@ def __build_data__(feature, qars):
     Return all the data needed to build the Benin republic departments Layer
     """
 
-    data = {'qars': qars}
+    data = {
+        'qars': qars,
+    }
+
     # GEOJSON layer consisting of a single feature
-    department = feature["properties"]["NAME_1"]
-    data["department"] = department
+    department_name = feature["properties"]["NAME_1"]
+    data["department"] = department_name
+    data["predictions"] = data_dictionary[feature["properties"]["NAME_0"]][feature["properties"]["NAME_1"]][
+        "properties"]
 
     z_list = []
     # looping through all departments in Benin Repubic to get the ranking
@@ -301,7 +336,7 @@ def __build_data__(feature, qars):
 
     # A small logic to solve the French symbols department error when viewed on local host
     if heroku:
-        position = list1.index(department)
+        position = list1.index(department_name)
     else:
         position = 1
     data["position"] = position
@@ -311,7 +346,7 @@ def __build_data__(feature, qars):
 
     pred_dept_data = []
     pred_ground_dept_data = [['Communes', 'Satellite Prediction', 'Ground Data Estimate']]
-    for c in CommuneSatellite.objects.filter(department=department):
+    for c in CommuneSatellite.objects.filter(department=department_name):
         y = c.commune
         x = round(c.cashew_tree_cover / 10000, 2)
         pred_dept_data.append([y, x])
@@ -323,34 +358,28 @@ def __build_data__(feature, qars):
     # load statistics from the database and formating them for displaying on popups.
     # The try catch is to avoid error that arise when we round null values
 
-    tree_ha_pred_dept = CommuneSatellite.objects.filter(department=department).aggregate(Sum('cashew_tree_cover'))
+    tree_ha_pred_dept = CommuneSatellite.objects.filter(department=department_name).aggregate(Sum('cashew_tree_cover'))
     try:
         tree_ha_pred_dept = int(round(tree_ha_pred_dept['cashew_tree_cover__sum'] / 10000, 2))
     except Exception as e:
         tree_ha_pred_dept = 0
     data["tree_ha_pred_dept"] = tree_ha_pred_dept
 
-    try:
-        yield_pred_dept = int(390 * tree_ha_pred_dept)
-    except Exception as e:
-        yield_pred_dept = 0
-    data["yield_pred_dept"] = yield_pred_dept
-
-    surface_area_d = BeninYield.objects.filter(department=department).aggregate(Sum('surface_area'))
+    surface_area_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('surface_area'))
     try:
         surface_area_d = int(round(surface_area_d['surface_area__sum'], 2))
     except Exception as e:
         surface_area_d = 0
     data["surface_area_d"] = surface_area_d
 
-    total_yield_d = BeninYield.objects.filter(department=department).aggregate(Sum('total_yield_kg'))
+    total_yield_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('total_yield_kg'))
     try:
         total_yield_d = int(round(total_yield_d['total_yield_kg__sum'], 2))
     except Exception as e:
         total_yield_d = 0
     data["total_yield_d"] = total_yield_d
 
-    yield_ha_d = BeninYield.objects.filter(department=department).aggregate(Avg('total_yield_per_ha_kg'))
+    yield_ha_d = BeninYield.objects.filter(department=department_name).aggregate(Avg('total_yield_per_ha_kg'))
     try:
         yield_ha_d = int(round(yield_ha_d['total_yield_per_ha_kg__avg'], 2))
     except Exception as e:
@@ -358,35 +387,35 @@ def __build_data__(feature, qars):
     data["yield_ha_d"] = yield_ha_d
 
     # Used only in case of error in the try and except catch
-    yield_tree_d = BeninYield.objects.filter(department=department).aggregate(Avg('total_yield_per_tree_kg'))
+    yield_tree_d = BeninYield.objects.filter(department=department_name).aggregate(Avg('total_yield_per_tree_kg'))
     try:
         yield_tree_d = int(round(yield_tree_d['total_yield_per_tree_kg__avg'], 2))
     except Exception as e:
         yield_tree_d = 0
     data["yield_tree_d"] = yield_tree_d
 
-    num_tree_d = BeninYield.objects.filter(department=department).aggregate(Sum('total_number_trees'))
+    num_tree_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('total_number_trees'))
     try:
         num_tree_d = int(num_tree_d['total_number_trees__sum'])
     except Exception as e:
         num_tree_d = 0
     data["num_tree_d"] = num_tree_d
 
-    sick_tree_d = BeninYield.objects.filter(department=department).aggregate(Sum('total_sick_trees'))
+    sick_tree_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('total_sick_trees'))
     try:
         sick_tree_d = int(sick_tree_d['total_sick_trees__sum'])
     except Exception as e:
         sick_tree_d = 0
     data["sick_tree_d"] = sick_tree_d
 
-    out_prod_tree_d = BeninYield.objects.filter(department=department).aggregate(Sum('total_trees_out_of_prod'))
+    out_prod_tree_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('total_trees_out_of_prod'))
     try:
         out_prod_tree_d = int(out_prod_tree_d['total_trees_out_of_prod__sum'])
     except Exception as e:
         out_prod_tree_d = 0
     data["out_prod_tree_d"] = out_prod_tree_d
 
-    dead_tree_d = BeninYield.objects.filter(department=department).aggregate(Sum('total_dead_trees'))
+    dead_tree_d = BeninYield.objects.filter(department=department_name).aggregate(Sum('total_dead_trees'))
     try:
         dead_tree_d = int(round(dead_tree_d['total_dead_trees__sum'], 2))
     except Exception as e:
@@ -410,14 +439,6 @@ def __build_data__(feature, qars):
     data["r_tree_ha_pred_dept"] = r_tree_ha_pred_dept
 
     try:
-        r_yield_pred_dept = round(yield_pred_dept, 1 - int(
-            floor(log10(abs(yield_pred_dept))))) if yield_pred_dept < 90000 else round(yield_pred_dept, 2 - int(
-            floor(log10(abs(yield_pred_dept)))))
-    except Exception as e:
-        r_yield_pred_dept = yield_pred_dept
-    data["r_yield_pred_dept"] = r_yield_pred_dept
-
-    try:
         r_surface_area_d = round(surface_area_d,
                                  1 - int(floor(log10(abs(surface_area_d))))) if surface_area_d < 90000 else round(
             surface_area_d, 2 - int(floor(log10(abs(surface_area_d)))))
@@ -439,6 +460,20 @@ def __build_data__(feature, qars):
     except Exception as e:
         r_yield_ha_d = yield_ha_d
     data["r_yield_ha_d"] = r_yield_ha_d
+
+    try:
+        yield_pred_dept = int(r_yield_ha_d * tree_ha_pred_dept)
+    except Exception as e:
+        yield_pred_dept = 0
+    data["yield_pred_dept"] = yield_pred_dept
+
+    try:
+        r_yield_pred_dept = round(yield_pred_dept, 1 - int(
+            floor(log10(abs(yield_pred_dept))))) if yield_pred_dept < 90000 else round(yield_pred_dept, 2 - int(
+            floor(log10(abs(yield_pred_dept)))))
+    except Exception as e:
+        r_yield_pred_dept = yield_pred_dept
+    data["r_yield_pred_dept"] = r_yield_pred_dept
 
     try:
         r_yield_tree_d = round(r_total_yield_d / active_trees_d)
@@ -476,25 +511,31 @@ def add_benin_department(self, qars):
         def __init__(self, **entries):
             self.__dict__.update(entries)
 
-    benin_dept_layer = folium.FeatureGroup(name=gettext('Benin Departments'), show=False, overlay=False)
-    temp_geojson = folium.GeoJson(data=benin_adm1_json,
-                                  name='Benin-Adm1 Department',
-                                  highlight_function=__highlight_function__)
+    # alldept = ee.Image('users/cajusupport/allDepartments_v1')
+    # zones = alldept.eq(1)
+    # zones = zones.updateMask(zones.neq(0))
+
+    benin_departments_layer = folium.FeatureGroup(name=gettext('Benin Departments'), show=False, overlay=False)
+    departments_geojson = folium.GeoJson(data=benin_adm1_json,
+                                         name='Benin-Adm1 Department',
+                                         highlight_function=__highlight_function__)
 
     dept_yield_ha = {}
 
-    for feature in temp_geojson.data['features']:
-        temp_layer1 = folium.GeoJson(feature, zoom_on_click=False, highlight_function=__highlight_function__)
-
+    for feature in departments_geojson.data['features']:
+        department_partial_layer = folium.GeoJson(feature, zoom_on_click=False,
+                                                  highlight_function=__highlight_function__,
+                                                  )
         data = __build_data__(feature, qars)
         dept_yield_ha[data["department"]] = data["yield_ha_d"]
 
+        obj = DataObject(**data)
         # html template for the popups
-        html3 = __build_html_view__(DataObject(**data))
+        html_view = __build_html_view__(obj)
         # Popup size and frame declaration
-        iframe = folium.IFrame(html=html3, width=450, height=380)
+        iframe = folium.IFrame(html=html_view, width=600, height=400)
 
-        folium.Popup(iframe, max_width=2000).add_to(temp_layer1)
+        folium.Popup(iframe, max_width=2000).add_to(department_partial_layer)
 
         # consolidate individual features back into the main layer
         folium.GeoJsonTooltip(fields=["NAME_1"],
@@ -502,12 +543,13 @@ def add_benin_department(self, qars):
                               labels=True,
                               sticky=False,
                               style=(
-                                  "background-color: white; color: black; font-family: sans-serif; font-size: 12px; padding: 4px;")
-                              ).add_to(temp_layer1)
+                                  "background-color: white; color: black; font-family: sans-serif; font-size: 12px; "
+                                  "padding: 4px;")
+                              ).add_to(department_partial_layer)
 
-        temp_layer1.add_to(benin_dept_layer)
+        department_partial_layer.add_to(benin_departments_layer)
 
-    return benin_dept_layer, dept_yield_ha
+    return benin_departments_layer, dept_yield_ha
 
 
 current_benin_department_layer = add_benin_department(current_qars)
