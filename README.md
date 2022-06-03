@@ -2,6 +2,9 @@
 > The Satellite Dashboard is a remote sensing dashboard created to map satellite growing areas in Benin, using satellite imagery and machine learning algorithms. The dashboard will help field teams improve operations and policy makers make better decisions
 
 ![GitHub](https://img.shields.io/github/license/Technoserve/Caju-Dashboard-v2)
+![PyPI - Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)
+![Maintenance](https://img.shields.io/maintenance/yes/2022)
+![Website](https://img.shields.io/website?down_color=red&down_message=offline&up_message=online&url=https%3A%2F%2Fcajuboard.tnslabs.org)
 
 ![](https://i.ibb.co/zmSTb1N/Capture-d-cran-2022-06-02-120227.png)
 
