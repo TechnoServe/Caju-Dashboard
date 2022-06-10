@@ -10,8 +10,9 @@ from django.utils.translation import gettext
 from folium import plugins
 from folium.plugins import MarkerCluster
 
-from apps.dashboard.custom_layer_control import CustomLayerControl
 from apps.dashboard.layer_control_modifier import macro_toggler
+from apps.dashboard.layers_builders.benin_colored_communes import current_benin_colored_commune_layer
+from apps.dashboard.layers_builders.benin_colored_departments import current_benin_colored_department_layer
 from apps.dashboard.layers_builders.benin_commune import current_benin_commune_layer
 from apps.dashboard.layers_builders.benin_department import current_benin_department_layer
 from apps.dashboard.layers_builders.benin_plantations import add_benin_plantation
@@ -25,7 +26,7 @@ from apps.dashboard.map_legend import macro_en, macro_fr
 from apps.dashboard.scripts.get_qar_information import current_qars
 from apps.dashboard.scripts.get_training_information import current_trainings
 
-service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
+service_account = os.getenv("EE_SERVICE_ACCOUNT")
 credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 # Use '' for auto, or force e.g. to 'en_US.UTF-8'
@@ -33,20 +34,34 @@ locale.setlocale(locale.LC_ALL, '')
 
 
 def __task1_func__(cashew_map):
-    benin_layer = current_benin_republic_layer
+    benin_layer, benin_border_layer = current_benin_republic_layer
     benin_layer.add_to(cashew_map)
+    benin_border_layer.add_to(cashew_map)
 
 
 def __task2_func__(cashew_map, path_link):
     benin_dept_layer, dept_yield_ha = current_benin_department_layer
     benin_dept_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_dept_layer)
+
+    benin_colored_dept_layer = current_benin_colored_department_layer
+    benin_colored_dept_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_colored_dept_layer)
+
     benin_plantation_layer = add_benin_plantation(path_link, dept_yield_ha)
     benin_plantation_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_plantation_layer)
 
 
 def __task3_func__(cashew_map):
-    benin_commune_layer = current_benin_commune_layer
+    benin_commune_layer = current_benin_commune_layer    cashew_map.keep_in_front(benin_colored_commune_layer)
+
     benin_commune_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_commune_layer)
+
+    benin_colored_commune_layer = current_benin_colored_commune_layer
+    benin_colored_commune_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_colored_commune_layer)
 
 
 def __task4_func__(cashew_map):
@@ -55,6 +70,7 @@ def __task4_func__(cashew_map):
     marker_cluster = MarkerCluster(name=gettext("Warehouse Location"), show=True)
     qar_layer = QarLayer(marker_cluster, qars).add_qar()
     qar_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(qar_layer)
 
 
 def __task5_func__(cashew_map):
@@ -63,11 +79,13 @@ def __task5_func__(cashew_map):
     marker_cluster = MarkerCluster(name=gettext("Training Information"), show=False)
     training_layer = TrainingLayer(marker_cluster, trainings).add_training()
     training_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(training_layer)
 
 
 def __task6_func__(cashew_map):
     benin_protected_layer = current_benin_protected_area_layer
     benin_protected_layer.add_to(cashew_map)
+    cashew_map.keep_in_front(benin_protected_layer)
 
 
 def get_base_map(path_link):
@@ -78,17 +96,18 @@ def get_base_map(path_link):
             'Google Maps': folium.TileLayer(
                 tiles='https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
                 attr=gettext('Google'),
-                name='Maps',
+                name='Google Maps',
                 max_zoom=25,
-                overlay=True,
-                control=False
+                overlay=False,
+                control=True,
+                show=True,
             ),
             'Google Satellite': folium.TileLayer(
                 tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                 attr='Google',
                 name=gettext('Google Satellite'),
                 max_zoom=25,
-                overlay=True,
+                overlay=False,
                 show=False,
                 control=True
             ),
@@ -99,7 +118,7 @@ def get_base_map(path_link):
                 attr='Mapbox',
                 name=gettext('Mapbox Satellite'),
                 max_zoom=25,
-                overlay=True,
+                overlay=False,
                 show=False,
                 control=True
             )
@@ -142,7 +161,7 @@ def get_base_map(path_link):
                 name=name,
                 overlay=True,
                 control=True,
-                show=False
+                show=True
             ).add_to(self)
 
         folium.Map.add_ee_layer = add_ee_layer
@@ -153,10 +172,6 @@ def get_base_map(path_link):
         zones = zones.updateMask(zones.neq(0))
         cashew_map.add_ee_layer(
             zones, {'palette': "red"}, gettext('Satellite Prediction'))
-
-        no_boundary_layer = folium.FeatureGroup(
-            name=gettext('No Boundary'), show=True, overlay=False)
-        no_boundary_layer.add_to(cashew_map)
 
     except Exception as e:
         print({e})
@@ -210,7 +225,7 @@ def full_map(lang):
         loop.run_until_complete(__get_context_data__())
         loop.close()
 
-        cashew_map.add_child(CustomLayerControl(collapsed=False))
+        cashew_map.add_child(folium.LayerControl(collapsed=False, sortLayers=True))
         cashew_map.get_root().add_child(macro_toggler)
         cashew_map = cashew_map._repr_html_()
         with open(("staticfiles/cashew_map_" + lang + ".html"), 'w') as f:

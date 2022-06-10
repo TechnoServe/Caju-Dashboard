@@ -21,8 +21,30 @@ heroku = False
 # Load the Benin Communes shapefile
 with open("staticfiles/json/ben_adm2.json", errors="ignore") as f:
     benin_adm2_json = geojson.load(f)
-statellite_prediction_computed_data_json = open('staticfiles/statellite_prediction_computed_data.json')
-data_dictionary = json.load(statellite_prediction_computed_data_json)
+satellite_prediction_computed_data_json = open('staticfiles/satellite_prediction_computed_data.json')
+data_dictionary = json.load(satellite_prediction_computed_data_json)
+with open("staticfiles/plantation_recommendation.json") as plantation_recommendation_json:
+    plantation_recommendations = json.load(plantation_recommendation_json)
+
+
+# def __highlight_function__(feature):
+#     """
+#     Function to define the layer highlight style
+#     """
+#     commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()
+#     RGBint = plantation_recommendations["properties"]["training"]["commune"][commune]
+#     Red = RGBint & 255
+#     Green = (RGBint >> 8) & 255
+#     Blue = (RGBint >> 16) & 255
+#     color = '#%02x%02x%02x' % (Red, Green, Blue)
+#     return {
+#         "fillColor": color,
+#         "color": "black",
+#         "weight": 3,
+#         "dashArray": "1, 1",
+#         "opacity": 0.35,
+#         "fillOpacity": 0.8,
+#     }
 
 
 class DataObject:
@@ -241,7 +263,7 @@ def __build_html_view__(data: object) -> any:
                         <tr>
                             <td>{total_area}</td>
                             <td>{__human_format__(data.predictions["total area"])}</td>
-                            <td>{data.r_surface_areaC / 1000:n}K</td>
+                            <td>{__human_format__(data.predictions["total area"])}</td>
                         </tr>
                         <tr>
                             <td>{protected_area}</td>
@@ -251,7 +273,7 @@ def __build_html_view__(data: object) -> any:
                         <tr>
                             <td>{cashew_tree_cover}</td>
                             <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
-                            <td>NA</td>
+                            <td>{__human_format__(data.r_surface_areaC)}</td>
                         </tr>
                         <tr>
                             <td>{cashew_tree_cover_within_protected_area}</td>
@@ -525,7 +547,7 @@ def add_benin_commune(self, qars):
     """
     __start_time = time.time()
 
-    benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=False)
+    benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=True)
     temp_geojson2 = folium.GeoJson(data=benin_adm2_json,
                                    name='Benin-Adm2 Communes',
                                    highlight_function=__highlight_function__)

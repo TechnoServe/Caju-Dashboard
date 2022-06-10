@@ -18,8 +18,8 @@ from apps.dashboard.scripts.get_qar_information import current_qars
 
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
-statellite_prediction_computed_data_json = open('staticfiles/statellite_prediction_computed_data.json')
-data_dictionary = json.load(statellite_prediction_computed_data_json)
+satellite_prediction_computed_data_json = open('staticfiles/satellite_prediction_computed_data.json')
+data_dictionary = json.load(satellite_prediction_computed_data_json)
 
 
 def __human_format__(num):
@@ -37,6 +37,14 @@ def __highlight_function__(feature):
     """
 
     return {"fillColor": "#ffaf00", "color": "green", "weight": 3, "dashArray": "1, 1"}
+
+
+def __highlight_function2__(feature):
+    """
+    Function to define the layer highlight style
+    """
+
+    return {"fillColor": "transparent", "color": "#B4B4B4", "weight": 3, "dashArray": "1, 1"}
 
 
 def __get_average_nut_count__(qars: list):
@@ -205,7 +213,7 @@ def __build_html_view__(data: object) -> any:
                         <tr>
                             <td>{total_area}</td>
                             <td>{__human_format__(data.predictions["total area"])}</td>
-                            <td>{data.r_surface_area / 1000:n}K</td>
+                            <td>{__human_format__(data.predictions["total area"])}</td>
                         </tr>
                         <tr>
                             <td>{protected_area}</td>
@@ -215,7 +223,7 @@ def __build_html_view__(data: object) -> any:
                         <tr>
                             <td>{cashew_tree_cover}</td>
                             <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
-                            <td>NA</td>
+                            <td>{__human_format__(data.r_surface_area)}</td>
                         </tr>
                         <tr>
                             <td>{cashew_tree_cover_within_protected_area}</td>
@@ -412,13 +420,21 @@ def add_benin_republic(self, qars):
         def __init__(self, **entries):
             self.__dict__.update(entries)
 
-    benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=False)
+    benin_border_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=True, overlay=False, control=False)
+
+    benin_layer = folium.FeatureGroup(name=gettext('Benin Republic'), show=False, overlay=True)
     temp_geojson0 = folium.GeoJson(data=benin_adm0_json,
                                    name='Benin-Adm0 Department',
                                    highlight_function=__highlight_function__)
 
     for feature in temp_geojson0.data['features']:
         temp_layer0 = folium.GeoJson(feature, zoom_on_click=False, highlight_function=__highlight_function__)
+        temp_border_layer = folium.GeoJson(feature,
+                                           zoom_on_click=False,
+                                           style_function=__highlight_function2__,
+                                           highlight_function=__highlight_function2__,
+                                           control=False,
+                                           )
 
         data = __build_data__(feature, qars)
 
@@ -428,8 +444,9 @@ def add_benin_republic(self, qars):
 
         folium.Popup(iframe, max_width=2000).add_to(temp_layer0)
         temp_layer0.add_to(benin_layer)
+        temp_border_layer.add_to(benin_border_layer)
 
-    return benin_layer
+    return benin_layer, benin_border_layer
 
 
 current_benin_republic_layer = add_benin_republic(current_qars)

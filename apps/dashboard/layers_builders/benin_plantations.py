@@ -22,7 +22,7 @@ with open('staticfiles/liste_code_in_both_with_rgb_file.txt') as myfile:
 with open("staticfiles/json/ben_adm1.json", errors="ignore") as dep_file:
     departments_geojson = geojson.load(dep_file)
 
-service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
+service_account = os.getenv("EE_SERVICE_ACCOUNT")
 credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 

@@ -66,14 +66,28 @@ def __style_function__(feature):
     """
     Function to define the layer highlight style
     """
-    return {"color": "#1167B1", "fillColor": "#476930", "weight": 2, "dashArray": "1, 1"}
+    return {
+        "color": "black",
+        "fillColor": "#476930",
+        "weight": 2,
+        "dashArray": "1, 1",
+        "opacity": 0.35,
+        "fillOpacity": 1.0,
+    }
 
 
 def __highlight_function__(feature):
     """
     Function to define the layer highlight style
     """
-    return {"color": "#476930", "fillColor": "#1167B1", "weight": 2, "dashArray": "1, 1"}
+    return {
+        "color": "black",
+        "fillColor": "#1167B1",
+        "weight": 2,
+        "dashArray": "1, 1",
+        "opacity": 0.35,
+        "fillOpacity": 0.75,
+    }
 
 
 def __build_html_view__(data: object) -> any:

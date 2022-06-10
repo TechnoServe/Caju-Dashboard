@@ -21,8 +21,37 @@ heroku = False
 # Load the Benin Departments shapefile
 with open("staticfiles/json/ben_adm1.json", errors="ignore") as f:
     benin_adm1_json = geojson.load(f)
-statellite_prediction_computed_data_json = open('staticfiles/statellite_prediction_computed_data.json')
-data_dictionary = json.load(statellite_prediction_computed_data_json)
+satellite_prediction_computed_data_json = open('staticfiles/satellite_prediction_computed_data.json')
+data_dictionary = json.load(satellite_prediction_computed_data_json)
+with open("staticfiles/plantation_recommendation.json") as plantation_recommendation_json:
+    plantation_recommendations = json.load(plantation_recommendation_json)
+
+
+# def __highlight_function__(feature):
+#     """
+#     Function to define the layer highlight style
+#     """
+#     # country = feature["properties"]["NAME_0"]
+#     department = unidecode.unidecode(feature["properties"]["NAME_1"]).lower()
+#     # rank = data_dictionary[country][department]["properties"]["rank"]
+#     colors = ["#2e2317", "#5c462e", "#8b6a44", "#b98d5b", "#e7b072", "#6a6c3e", "#767a46",
+#               "#83874d", "#909455", "#9da15c", "#a9ae64", "#b6bb6b"]
+#
+#     RGBint = math.floor(plantation_recommendations["properties"]["training"]["department"][department] / 4)
+#     Red = RGBint & 255
+#     Green = (RGBint >> 8) & 255
+#     Blue = (RGBint >> 16) & 255
+#     color = '#%02x%02x%02x' % (Red, Green, Blue)
+#
+#     return {
+#         "fillColor": color,
+#         "color": "black",
+#         "weight": 3,
+#         "dashArray": "1, 1",
+#         "opacity": 0.35,
+#         "fillOpacity": 0.8,
+#         # 'interactive': False
+#     }
 
 
 def __human_format__(num):
@@ -251,7 +280,7 @@ def __build_html_view__(data: object) -> any:
                             <tr>
                                 <td>{total_area}</td>
                                 <td>{__human_format__(data.predictions["total area"])}</td>
-                                <td>{data.r_surface_area_d / 1000:n}K</td>
+                                <td>{__human_format__(data.predictions["total area"])}</td>
                             </tr>
                             <tr>
                                 <td>{protected_area}</td>
@@ -261,7 +290,7 @@ def __build_html_view__(data: object) -> any:
                             <tr>
                                 <td>{cashew_tree_cover}</td>
                                 <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
-                                <td>NA</td>                            
+                                <td>{__human_format__(data.r_surface_area_d)}</td>
                             </tr>
                             <tr>
                                 <td>{cashew_tree_cover_within_protected_area}</td>
@@ -515,9 +544,10 @@ def add_benin_department(self, qars):
     # zones = alldept.eq(1)
     # zones = zones.updateMask(zones.neq(0))
 
-    benin_departments_layer = folium.FeatureGroup(name=gettext('Benin Departments'), show=False, overlay=False)
+    benin_departments_layer = folium.FeatureGroup(name=gettext('Benin Departments'), show=False, overlay=True)
     departments_geojson = folium.GeoJson(data=benin_adm1_json,
                                          name='Benin-Adm1 Department',
+                                         overlay=True,
                                          highlight_function=__highlight_function__)
 
     dept_yield_ha = {}

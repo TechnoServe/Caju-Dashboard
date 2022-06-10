@@ -140,6 +140,8 @@ def drone(request, plant_id, coordinate_xy):
             except Exception as e:
                 print(e)
                 pass
+        # tree_crowns_path = os.path.join(path, "Tree Crowns.geojson")
+        # tree_tops_path = os.path.join(path, "Tree Tops Density.geojson")
         add_alteia_tree_crows()
         add_alteia_tree_tops_density()
         add_plantation_shape()

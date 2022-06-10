@@ -39,7 +39,7 @@ with open("staticfiles/WDPA_WDOECM_May2022_Public_BEN_shp-po/WDPA_WDOECM_May2022
           errors="ignore") as f:
     protected_area_3 = geojson.load(f)
 
-service_account = 'tnslabs@solar-fuze-338810.iam.gserviceaccount.com'
+service_account = os.getenv("EE_SERVICE_ACCOUNT")
 credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 
@@ -47,14 +47,6 @@ nl2012 = ee.Image('users/cajusupport/allDepartments_v1')
 zones = nl2012.eq(1)
 zones = zones.updateMask(zones.neq(0))
 
-# Convert the zones of the thresholded predictions to vectors.
-prediction_vectors = zones.reduceToVectors(**{
-    'scale': 25,
-    'geometryType': 'polygon',
-    'reducer': ee.Reducer.countEvery(),
-    'bestEffort': True,
-})
-prediction_polygon = shape(prediction_vectors.geometry().getInfo())
 benin_adm2 = ee.FeatureCollection(benin_adm2_json)
 
 dist_stats = zones.multiply(ee.Image.pixelArea()).reduceRegions(
@@ -210,8 +202,6 @@ def __get_protected_areas_within_zone__(zone_feature):
 
 def __get_cashew_tree_cover_within_zone__(zone_feature):
     zone_polygon = shape(zone_feature['geometry'])
-    intersection_area_pixel = 0.0
-    zone_total_area_km = 0.0
 
     area_dictionary = {
         "Banikoara": 26242,
@@ -301,11 +291,21 @@ def __get_cashew_tree_cover_within_zone__(zone_feature):
     commune_area_pixel = zone_polygon.area
     department_area_pixel = department_polygon.area
     department_area_km = area_dictionary[zone_feature["properties"]["NAME_2"]]
-    zone_total_area_km += (commune_area_pixel / department_area_pixel) * department_area_km
+    zone_total_area_km = (commune_area_pixel / department_area_pixel) * department_area_km
+
     for dist in dist_stats['features']:
         if dist["properties"]["Communes"] == zone_feature["properties"]["NAME_2"]:
             return dist["properties"]["Cashew Tree Cover"] / 10000, zone_total_area_km * 100
 
+    intersection_area_pixel = 0.0
+    # Convert the zones of the thresholded predictions to vectors.
+    prediction_vectors = zones.reduceToVectors(**{
+        'scale': 25,
+        'geometryType': 'polygon',
+        'reducer': ee.Reducer.countEvery(),
+        'bestEffort': True,
+    })
+    prediction_polygon = shape(prediction_vectors.geometry().getInfo())
     if zone_polygon.intersects(prediction_polygon):
         try:
             intersection_polygon = zone_polygon.intersection(prediction_polygon)
@@ -337,9 +337,36 @@ def __get_number_of_trees_within_zone__(feature):
     return round(number_of_trees * 12.308816780102923)
 
 
-def __get_yield_per_hectare_from_survey(feature):
+def __get_commune_yield_per_hectare_from_survey(feature):
     commune = feature["properties"]["NAME_2"]
     yield_haC = BeninYield.objects.filter(commune=commune).aggregate(Avg('total_yield_per_ha_kg'))
+    try:
+        yield_haC = int(round(yield_haC['total_yield_per_ha_kg__avg'], 2))
+    except Exception:
+        yield_haC = 0
+    try:
+        r_yield_haC = round(yield_haC, 1 - int(floor(log10(abs(yield_haC))))) \
+            if yield_haC < 90000 \
+            else round(yield_haC, 2 - int(floor(log10(abs(yield_haC)))))
+    except Exception:
+        r_yield_haC = yield_haC
+    yield_per_hectare = r_yield_haC
+    return yield_per_hectare
+
+
+def __get_department_yield_per_hectare_from_survey(department):
+    yield_per_hectare = BeninYield.objects.filter(department=department).aggregate(Avg('total_yield_per_ha_kg'))
+    print(department + ": " + str(yield_per_hectare))
+    try:
+        yield_per_hectare = int(round(yield_per_hectare['total_yield_per_ha_kg__avg'], 2))
+    except Exception as e:
+        print(e)
+        yield_per_hectare = 0
+    return yield_per_hectare
+
+
+def __get_benin_yield_per_hectare_from_survey():
+    yield_haC = BeninYield.objects.aggregate(Avg('total_yield_per_ha_kg'))
     try:
         yield_haC = int(round(yield_haC['total_yield_per_ha_kg__avg'], 2))
     except Exception:
@@ -363,7 +390,7 @@ def __add_communes_properties__():
         yield_per_tree = 0 if number_of_trees == 0 else 8
         try:
             # yield_per_hectare = (number_of_trees / cashew_tree_cover) * yield_per_tree
-            yield_per_hectare = __get_yield_per_hectare_from_survey(feature)
+            yield_per_hectare = __get_commune_yield_per_hectare_from_survey(feature)
         except Exception:
             yield_per_hectare = 0
         total_cashew_yield = cashew_tree_cover * yield_per_hectare
@@ -395,9 +422,9 @@ def __add_departments_properties__():
         protected_area = sum([data[commune]["protected area"] for commune in data])
         cashew_tree_cover_within_protected_area = sum(
             [data[commune]["cashew tree cover within protected area"] for commune in data])
-        yields = [data[commune]["yield per hectare"] for commune in data]
-        yields = list(filter(lambda c: c != 0, yields))
-        yield_per_hectare = sum(yields) / (len(yields) if len(yields) != 0 else 1)
+        yield_per_hectare = __get_department_yield_per_hectare_from_survey(department)
+        print(department, end=": ")
+        print(__get_department_yield_per_hectare_from_survey(department))
         number_of_trees = sum([data[commune]["number of trees"] for commune in data])
         yield_per_tree = 0 if number_of_trees == 0 else 8
         data.update({"properties": {
@@ -420,9 +447,7 @@ def __add_benin_republic_properties__():
     protected_area = sum([data[department]["properties"]["protected area"] for department in data])
     cashew_tree_cover_within_protected_area = sum(
         [data[department]["properties"]["cashew tree cover within protected area"] for department in data])
-    yields = [data[department]["properties"]["yield per hectare"] for department in data]
-    yields = list(filter(lambda c: c != 0, yields))
-    yield_per_hectare = sum(yields) / (len(yields) if len(yields) != 0 else 1)
+    yield_per_hectare = __get_benin_yield_per_hectare_from_survey()
 
     number_of_trees = sum([data[department]["properties"]["number of trees"] for department in data])
     yield_per_tree = 0 if number_of_trees == 0 else 8
@@ -445,9 +470,14 @@ def __rank_department_by_production_level():
             continue
         dictionary[department] = data_dictionary['Benin'][department]["properties"]["total cashew yield"]
     ranked = [s for s in sorted(dictionary.items(), key=lambda item: item[1], reverse=True)]
+    current_rank = 1
+    previous_value = ranked[0][1]
     for index in range(len(ranked)):
+        if previous_value > ranked[index][1]:
+            current_rank += 1
         item = ranked[index][0]
-        data_dictionary["Benin"][item]["properties"].update({"rank": index + 1})
+        data_dictionary["Benin"][item]["properties"].update({"rank": current_rank})
+        previous_value = ranked[index][1]
 
 
 def __rank_commune_by_production_level():
@@ -460,17 +490,21 @@ def __rank_commune_by_production_level():
                 continue
             dictionary[department + "|" + commune] = data_dictionary['Benin'][department][commune]["total cashew yield"]
     ranked = [s for s in sorted(dictionary.items(), key=lambda item: item[1], reverse=True)]
+    current_rank = 1
+    previous_value = ranked[0][1]
 
     for index in range(len(ranked)):
+        if previous_value > ranked[index][1]:
+            current_rank += 1
         item = ranked[index][0]
         department_name = item.split("|")[0]
         commune_name = item.split("|")[1]
-        data_dictionary["Benin"][department_name][commune_name].update({"rank": index + 1})
+        data_dictionary["Benin"][department_name][commune_name].update({"rank": current_rank})
+        previous_value = ranked[index][1]
 
 
-#
-# # f = open('staticfiles/statellite_prediction_computed_data.json')
-# # data_dictionary = json.load(f)
+# f = open('staticfiles/satellite_prediction_computed_data.json')
+# data_dictionary = json.load(f)
 start_time = time.time()
 __add_communes_properties__()
 print("TOTAL LOADING TIME __add_communes_properties__ --- %s seconds ---" % (time.time() - start_time))
@@ -490,12 +524,12 @@ start_time = time.time()
 __get_cashew_tree_cover_within_protected_areas__(protected_area_features)
 print("TOTAL LOADING TIME __get_cashew_tree_cover_within_protected_areas__ --- %s seconds ---" % (
         time.time() - start_time))
-# # print(json.dumps(data_dictionary, indent=4, sort_keys=True, ensure_ascii=False))
+# print(json.dumps(data_dictionary, indent=4, sort_keys=True, ensure_ascii=False))
 
 # Serializing json
 json_object = json.dumps(data_dictionary, indent=4, sort_keys=True, ensure_ascii=False)
 
 # Writing to sample.json
-with open("staticfiles/statellite_prediction_computed_data.json", "w") as outfile:
+with open("staticfiles/satellite_prediction_computed_data.json", "w") as outfile:
     outfile.write(json_object)
     print("New json file is created")
