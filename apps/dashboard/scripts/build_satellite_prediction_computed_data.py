@@ -356,9 +356,11 @@ def __get_commune_yield_per_hectare_from_survey(feature):
 
 def __get_department_yield_per_hectare_from_survey(department):
     yield_per_hectare = BeninYield.objects.filter(department=department).aggregate(Avg('total_yield_per_ha_kg'))
+    print(department + ": " + str(yield_per_hectare))
     try:
         yield_per_hectare = int(round(yield_per_hectare['total_yield_per_ha_kg__avg'], 2))
-    except Exception:
+    except Exception as e:
+        print(e)
         yield_per_hectare = 0
     return yield_per_hectare
 
@@ -420,7 +422,7 @@ def __add_departments_properties__():
         protected_area = sum([data[commune]["protected area"] for commune in data])
         cashew_tree_cover_within_protected_area = sum(
             [data[commune]["cashew tree cover within protected area"] for commune in data])
-        yield_per_hectare = __get_department_yield_per_hectare_from_survey(feature)
+        yield_per_hectare = __get_department_yield_per_hectare_from_survey(department)
         print(department, end=": ")
         print(__get_department_yield_per_hectare_from_survey(department))
         number_of_trees = sum([data[commune]["number of trees"] for commune in data])
