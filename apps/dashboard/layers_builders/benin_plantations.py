@@ -464,7 +464,7 @@ def __get_good_shapfiles_codes(temp_geojson_a):
 
 
 @shared_task(bind=True)
-def add_benin_plantation(self, path_link, dept_yield_ha):
+def create_benin_plantation(self, path_link, dept_yield_ha):
     benin_plantation_layer = folium.FeatureGroup(
         name=gettext('Plantation Locations'), show=True, overlay=True)
 

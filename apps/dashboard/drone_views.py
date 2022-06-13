@@ -37,7 +37,7 @@ def drone(request, plant_id, coordinate_xy):
     #     html_template = loader.get_template('dashboard/page-403.html')
     #     return HttpResponseBadRequest(html_template.render({"result": 'Invalid request'}, request))
 
-    def add_ee_layer_drone():
+    def add_drone_image_layer():
         ee_image_object = ee.Image(f'users/cajusupport/drones_geotiff/{plant_id}')
         map_id_dict = ee.Image(ee_image_object).getMapId({})
         folium.raster_layers.TileLayer(
@@ -45,12 +45,12 @@ def drone(request, plant_id, coordinate_xy):
             attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
             name=gettext('Drone Image'),
             overlay=True,
-            show=False,
+            show=True,
             control=True,
             max_zoom=100
         ).add_to(cashew_map)
 
-    def add_ee_layer():
+    def add_predictions_layer():
         alldept = ee.Image('users/cajusupport/allDepartments_v1')
         ee_image_object = alldept.eq(1)
         ee_image_object = ee_image_object.updateMask(ee_image_object.neq(0))
@@ -74,7 +74,7 @@ def drone(request, plant_id, coordinate_xy):
         folium.GeoJson(
             data=feature,
             name=gettext('Plantation Shape'),
-            show=False,
+            show=True,
             zoom_on_click=True
         ).add_to(cashew_map)
 
@@ -83,25 +83,49 @@ def drone(request, plant_id, coordinate_xy):
         with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
         tree_crows = folium.GeoJson(feature_geojson, name=gettext(
-            'Tree Crowns'), zoom_on_click=True, embed=False)
+            'Tree Crowns'), zoom_on_click=True, embed=False, show=False)
         tree_crows.add_to(cashew_map)
 
     def add_alteia_tree_tops_density():
         directory = "media/plantation_data/" + plant_id
         with open(directory + "/Tree Tops Density.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
-        tree_tops_density = folium.GeoJson(
-            data=feature_geojson,
-            zoom_on_click=True, embed=False,
-            name=gettext('Tree Tops Density'),
-            show=False,
-            marker=folium.Circle(
-                color="#FFFFFF", opacity=0.9, weight=1,
-                fill=True, fill_color="#FF0000", fill_opacity=1,
-                radius=1.5
-            ),
-        )
-        tree_tops_density.add_to(cashew_map)
+
+        tree_tops_density_layer = folium.FeatureGroup(name=gettext('Tree Tops Density'),
+                                                      show=False,
+                                                      overlay=True)
+        for feature in feature_geojson['features']:
+            try:
+                radius = (1 / feature["properties"]["mean_tree_crown_distance"])
+                radius = 1.5
+            except Exception:
+                radius = 1
+            tree_tops_density_partial_layer = folium.GeoJson(
+                data=feature,
+                zoom_on_click=False, embed=False,
+                name=gettext('Tree Tops Density'),
+                show=False,
+                marker=folium.Circle(
+                    color="#FFFFFF", opacity=0.8, weight=1,
+                    fill=True, fill_color="#FF0000", fill_opacity=0.9,
+                    radius=radius
+                ),
+            )
+            tree_tops_density_partial_layer.add_to(tree_tops_density_layer)
+        tree_tops_density_layer.add_to(cashew_map)
+
+        # tree_tops_density = folium.GeoJson(
+        #     data=feature_geojson,
+        #     zoom_on_click=True, embed=False,
+        #     name=gettext('Tree Tops Density'),
+        #     show=False,
+        #     marker=folium.Circle(
+        #         color="#FFFFFF", opacity=0.9, weight=1,
+        #         fill=True, fill_color="#FF0000", fill_opacity=1,
+        #         radius=1.5
+        #     ),
+        # )
+        # tree_tops_density.add_to(cashew_map)
 
     basemaps = {
         'Google Satellite': folium.TileLayer(
@@ -129,25 +153,24 @@ def drone(request, plant_id, coordinate_xy):
     try:
 
         cashew_map.add_child(basemaps['Google Satellite'])
-        add_ee_layer_drone()
-        add_ee_layer()
+        add_drone_image_layer()
+        add_predictions_layer()
         parent_dir = BASE_DIR.__str__() + "/media/plantation_data/"
         path = os.path.join(parent_dir, plant_id)
-        if os.path.exists(path.__str__()) is False:
+        tree_crowns_path = os.path.join(path, "Tree Crowns.geojson")
+        tree_tops_path = os.path.join(path, "Tree Tops Density.geojson")
+        if os.path.exists(tree_crowns_path.__str__()) is False or os.path.exists(tree_tops_path.__str__()) is False:
             print("download_trees_data")
             try:
                 download_trees_data(plant_id)
             except Exception as e:
                 print(e)
-                pass
-        # tree_crowns_path = os.path.join(path, "Tree Crowns.geojson")
-        # tree_tops_path = os.path.join(path, "Tree Tops Density.geojson")
         add_alteia_tree_crows()
         add_alteia_tree_tops_density()
         add_plantation_shape()
 
     except Exception as e:
-        print(e)
+        print("Error: " + e.__str__())
         pass
 
     cashew_map.add_child(folium.LayerControl(collapsed=False))

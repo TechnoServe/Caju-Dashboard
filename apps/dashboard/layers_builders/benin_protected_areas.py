@@ -312,7 +312,7 @@ def __build_data__(feature):
 
 
 @shared_task(bind=True)
-def add_benin_protected_area(self):
+def create_benin_protected_area(self):
     """
     Adding the shapefiles with popups for the Benin Republic protected_areas
     Add benin republic protected_areas data to the parent layer
@@ -369,7 +369,7 @@ def add_benin_protected_area(self):
     return benin_dept_layer
 
 
-current_benin_protected_area_layer = add_benin_protected_area()
+current_benin_protected_area_layer = create_benin_protected_area()
 
 scheduler = BackgroundScheduler()
 
@@ -377,7 +377,7 @@ scheduler = BackgroundScheduler()
 @scheduler.scheduled_job(IntervalTrigger(days=1))
 def update_benin_protected_area_layer():
     global current_benin_protected_area_layer
-    current_benin_protected_area_layer = add_benin_protected_area()
+    current_benin_protected_area_layer = create_benin_protected_area()
 
 
 scheduler.start()

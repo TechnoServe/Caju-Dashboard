@@ -41,7 +41,7 @@ def __highlight_function__(feature):
     }
 
 
-def add_benin_colored_commune():
+def create_benin_colored_commune():
     """
     Adding the shapefiles with popups for the Benin Republic communes
     Add benin republic communes data to the parent layer
@@ -52,6 +52,10 @@ def add_benin_colored_commune():
                                                        overlay=True)
 
     for feature in benin_adm2_json['features']:
+        commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()
+        value = plantation_recommendations["properties"]["training"]["commune"][commune]
+        if value == 0:
+            continue
         commune_partial_layer = folium.GeoJson(feature, zoom_on_click=False,
                                                style_function=__highlight_function__,
                                                )
@@ -70,4 +74,4 @@ def add_benin_colored_commune():
     return benin_colored_communes_layer
 
 
-current_benin_colored_commune_layer = add_benin_colored_commune()
+current_benin_colored_commune_layer = create_benin_colored_commune()

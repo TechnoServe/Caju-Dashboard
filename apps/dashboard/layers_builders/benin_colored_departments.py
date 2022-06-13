@@ -45,7 +45,7 @@ def __highlight_function__(feature):
     }
 
 
-def add_benin_colored_department():
+def create_benin_colored_department():
     """
     Adding the shapefiles with popups for the Benin Republic departments
     Add benin republic departments data to the parent layer
@@ -57,6 +57,10 @@ def add_benin_colored_department():
                                                           overlay=True, z_index_offset=10)
 
     for feature in benin_adm1_json['features']:
+        department = unidecode.unidecode(feature["properties"]["NAME_1"]).lower()
+        value = math.floor(plantation_recommendations["properties"]["training"]["department"][department] / 4)
+        if value == 0:
+            continue
         department_partial_layer = folium.GeoJson(feature, zoom_on_click=False,
                                                   style_function=__highlight_function__,
                                                   )
@@ -74,4 +78,4 @@ def add_benin_colored_department():
     return benin_colored_departments_layer
 
 
-current_benin_colored_department_layer = add_benin_colored_department()
+current_benin_colored_department_layer = create_benin_colored_department()

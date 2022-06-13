@@ -540,7 +540,7 @@ def __task__(feature, benin_commune_layer, qars):
 
 
 @shared_task(bind=True)
-def add_benin_commune(self, qars):
+def create_benin_commune(self, qars):
     """
     Adding the shapefiles with popups for the Benin Republic communes
     Add benin republic communes data to the parent layer
@@ -570,7 +570,7 @@ def add_benin_commune(self, qars):
     return benin_commune_layer
 
 
-current_benin_commune_layer = add_benin_commune(current_qars)
+current_benin_commune_layer = create_benin_commune(current_qars)
 
 scheduler = BackgroundScheduler()
 
@@ -578,7 +578,7 @@ scheduler = BackgroundScheduler()
 @scheduler.scheduled_job(IntervalTrigger(days=1))
 def update_benin_commune_layer():
     global current_benin_commune_layer
-    current_benin_commune_layer = add_benin_commune(current_qars)
+    current_benin_commune_layer = create_benin_commune(current_qars)
 
 
 scheduler.start()

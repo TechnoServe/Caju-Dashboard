@@ -15,7 +15,7 @@ from apps.dashboard.layers_builders.benin_colored_communes import current_benin_
 from apps.dashboard.layers_builders.benin_colored_departments import current_benin_colored_department_layer
 from apps.dashboard.layers_builders.benin_commune import current_benin_commune_layer
 from apps.dashboard.layers_builders.benin_department import current_benin_department_layer
-from apps.dashboard.layers_builders.benin_plantations import add_benin_plantation
+from apps.dashboard.layers_builders.benin_plantations import create_benin_plantation
 from apps.dashboard.layers_builders.benin_protected_areas import current_benin_protected_area_layer
 from apps.dashboard.layers_builders.benin_republic import current_benin_republic_layer
 from apps.dashboard.layers_builders.nursery_information import NurseryLayer
@@ -33,59 +33,89 @@ ee.Initialize(credentials)
 locale.setlocale(locale.LC_ALL, '')
 
 
-def __task1_func__(cashew_map):
-    benin_layer, benin_border_layer = current_benin_republic_layer
-    benin_layer.add_to(cashew_map)
-    benin_border_layer.add_to(cashew_map)
-
-
-def __task2_func__(cashew_map, path_link):
+def __task2_func__(path_link):
     benin_dept_layer, dept_yield_ha = current_benin_department_layer
-    benin_dept_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_dept_layer)
-
-    benin_colored_dept_layer = current_benin_colored_department_layer
-    benin_colored_dept_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_colored_dept_layer)
-
-    benin_plantation_layer = add_benin_plantation(path_link, dept_yield_ha)
-    benin_plantation_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_plantation_layer)
+    benin_plantation_layer = create_benin_plantation(path_link, dept_yield_ha)
+    return benin_dept_layer, benin_plantation_layer
 
 
-def __task3_func__(cashew_map):
-    benin_commune_layer = current_benin_commune_layer    cashew_map.keep_in_front(benin_colored_commune_layer)
-
-    benin_commune_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_commune_layer)
-
-    benin_colored_commune_layer = current_benin_colored_commune_layer
-    benin_colored_commune_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_colored_commune_layer)
+def __task1_func__():
+    marker_cluster = MarkerCluster(name=gettext("Nursery Information"), show=True)
+    nursery_layer = NurseryLayer(marker_cluster).add_nursery()
+    return nursery_layer
 
 
-def __task4_func__(cashew_map):
+def __task3_func__():
+    def build_predictions_layer(ee_image_object, vis_params, name):
+        map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
+        return folium.raster_layers.TileLayer(
+            tiles=map_id_dict['tile_fetcher'].url_format,
+            attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
+            name=name,
+            overlay=True,
+            control=True,
+            show=True
+        )
+
+    alldept = ee.Image('users/cajusupport/allDepartments_v1')
+    zones = alldept.eq(1)
+    zones = zones.updateMask(zones.neq(0))
+    predictions_layer = build_predictions_layer(
+        zones, {'palette': "red"}, gettext('Satellite Prediction'))
+    return predictions_layer
+
+
+def __task4_func__():
     qars = current_qars
-    # Adding the qar layer from the class QarLayer
     marker_cluster = MarkerCluster(name=gettext("Warehouse Location"), show=True)
     qar_layer = QarLayer(marker_cluster, qars).add_qar()
-    qar_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(qar_layer)
+    return qar_layer
 
 
-def __task5_func__(cashew_map):
+def __task5_func__():
     trainings = current_trainings
-    # Adding the qar layer from the class QarLayer
     marker_cluster = MarkerCluster(name=gettext("Training Information"), show=False)
     training_layer = TrainingLayer(marker_cluster, trainings).add_training()
-    training_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(training_layer)
+    return training_layer
 
 
-def __task6_func__(cashew_map):
-    benin_protected_layer = current_benin_protected_area_layer
-    benin_protected_layer.add_to(cashew_map)
-    cashew_map.keep_in_front(benin_protected_layer)
+def ordering_layers(cashew_map, layers):
+    cashew_map.keep_in_front(layers["benin_border_layer"])
+    cashew_map.keep_in_front(layers["benin_layer"])
+    cashew_map.keep_in_front(layers["benin_dept_layer"])
+    cashew_map.keep_in_front(layers["benin_commune_layer"])
+
+    cashew_map.keep_in_front(layers["benin_colored_dept_layer"])
+    cashew_map.keep_in_front(layers["benin_colored_commune_layer"])
+
+    cashew_map.keep_in_front(layers["benin_protected_layer"])
+    cashew_map.keep_in_front(layers["benin_plantation_layer"])
+
+    cashew_map.keep_in_front(layers["training_layer"])
+    cashew_map.keep_in_front(layers["qar_layer"])
+    cashew_map.keep_in_front(layers["nursery_layer"])
+
+    cashew_map.keep_in_front(layers["predictions_layer"])
+    return cashew_map
+
+
+def add_layers_to_map(cashew_map, layers):
+    layers["benin_border_layer"].add_to(cashew_map)
+    layers["benin_layer"].add_to(cashew_map)
+    layers["benin_dept_layer"].add_to(cashew_map)
+    layers["benin_commune_layer"].add_to(cashew_map)
+
+    layers["benin_colored_dept_layer"].add_to(cashew_map)
+    layers["benin_colored_commune_layer"].add_to(cashew_map)
+
+    layers["benin_protected_layer"].add_to(cashew_map)
+    layers["benin_plantation_layer"].add_to(cashew_map)
+
+    layers["qar_layer"].add_to(cashew_map)
+    layers["training_layer"].add_to(cashew_map)
+    layers["nursery_layer"].add_to(cashew_map)
+    layers["predictions_layer"].add_to(cashew_map)
+    return cashew_map
 
 
 def get_base_map(path_link):
@@ -149,30 +179,6 @@ def get_base_map(path_link):
             force_separate_button=False
         ).add_to(cashew_map)
 
-        marker_cluster = MarkerCluster(name=gettext("Nursery Information"), show=True)
-        nursery_layer = NurseryLayer(marker_cluster).add_nursery()
-        nursery_layer.add_to(cashew_map)
-
-        def add_ee_layer(self, ee_image_object, vis_params, name):
-            map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
-            folium.raster_layers.TileLayer(
-                tiles=map_id_dict['tile_fetcher'].url_format,
-                attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
-                name=name,
-                overlay=True,
-                control=True,
-                show=True
-            ).add_to(self)
-
-        folium.Map.add_ee_layer = add_ee_layer
-        folium.map.FeatureGroup.add_ee_layer = add_ee_layer
-
-        alldept = ee.Image('users/cajusupport/allDepartments_v1')
-        zones = alldept.eq(1)
-        zones = zones.updateMask(zones.neq(0))
-        cashew_map.add_ee_layer(
-            zones, {'palette': "red"}, gettext('Satellite Prediction'))
-
     except Exception as e:
         print({e})
         pass
@@ -189,31 +195,39 @@ def full_map(lang):
             server_url += "/"
         path_link = server_url + lang + "/dashboard/"
         cashew_map = get_base_map(path_link=path_link)
+        layers = {}
 
         async def __get_context_data__():
             try:
                 __loop = asyncio.get_event_loop()
 
-                executor = ThreadPoolExecutor(max_workers=5)
+                executor = ThreadPoolExecutor(max_workers=2)
                 future1 = __loop.run_in_executor(
-                    executor, __task1_func__, cashew_map)
+                    executor, __task1_func__)
                 future2 = __loop.run_in_executor(
-                    executor, __task2_func__, cashew_map, path_link)
+                    executor, __task2_func__, path_link)
                 future3 = __loop.run_in_executor(
-                    executor, __task3_func__, cashew_map)
+                    executor, __task3_func__)
                 future4 = __loop.run_in_executor(
-                    executor, __task4_func__, cashew_map)
+                    executor, __task4_func__)
                 future5 = __loop.run_in_executor(
-                    executor, __task5_func__, cashew_map)
-                future6 = __loop.run_in_executor(
-                    executor, __task6_func__, cashew_map)
+                    executor, __task5_func__)
 
-                await future1
-                await future2
-                await future3
-                await future4
-                await future5
-                await future6
+                layers["benin_layer"], layers["benin_border_layer"] = current_benin_republic_layer
+
+                layers["benin_dept_layer"], layers["benin_plantation_layer"] = await future2
+                layers["benin_colored_dept_layer"] = current_benin_colored_department_layer
+
+                layers["benin_commune_layer"] = current_benin_commune_layer
+                layers["benin_colored_commune_layer"] = current_benin_colored_commune_layer
+
+                layers["benin_protected_layer"] = current_benin_protected_area_layer
+
+                layers["nursery_layer"] = await future1
+                layers["qar_layer"] = await future4
+                layers["training_layer"] = await future5
+
+                layers["predictions_layer"] = await future3
 
             except Exception as e:
                 print(e)
@@ -225,14 +239,19 @@ def full_map(lang):
         loop.run_until_complete(__get_context_data__())
         loop.close()
 
-        cashew_map.add_child(folium.LayerControl(collapsed=False, sortLayers=True))
+        cashew_map = add_layers_to_map(cashew_map, layers)
+        cashew_map = ordering_layers(cashew_map, layers)
+
+        cashew_map.add_child(folium.LayerControl(collapsed=False))
+
         cashew_map.get_root().add_child(macro_toggler)
         cashew_map = cashew_map._repr_html_()
         with open(("staticfiles/cashew_map_" + lang + ".html"), 'w') as f:
+            print(f.name)
             f.write(cashew_map)
         print("TOTAL LOADING TIME--- %s seconds ---" %
               (time.time() - start_time))
         return cashew_map
-    except Exception:
+    except Exception as e:
+        print(e)
         return None
-        pass

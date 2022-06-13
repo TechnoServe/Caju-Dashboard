@@ -408,7 +408,7 @@ def __build_data__(feature, qars):
 
 
 @shared_task(bind=True)
-def add_benin_republic(self, qars):
+def create_benin_republic(self, qars):
     """
     Adding the shapefiles with popups for the Benin Republic region
     Add benin republic data to the parent layer
@@ -449,7 +449,7 @@ def add_benin_republic(self, qars):
     return benin_layer, benin_border_layer
 
 
-current_benin_republic_layer = add_benin_republic(current_qars)
+current_benin_republic_layer = create_benin_republic(current_qars)
 
 scheduler = BackgroundScheduler()
 
@@ -457,7 +457,7 @@ scheduler = BackgroundScheduler()
 @scheduler.scheduled_job(IntervalTrigger(days=1))
 def update_benin_republic_layer():
     global current_benin_republic_layer
-    current_benin_republic_layer = add_benin_republic(current_qars)
+    current_benin_republic_layer = create_benin_republic(current_qars)
 
 
 scheduler.start()
