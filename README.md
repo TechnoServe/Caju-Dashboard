@@ -12,7 +12,8 @@
 Tools and packages required to successfully install this project.
 For example:
 * Linux, Windows or MacOS
-* Python 3.9
+* [Python 3.9](https://www.python.org/downloads/release/python-3913/)
+* [MySQL database](https://dev.mysql.com/doc/)
 
 ## Setup
 
@@ -38,10 +39,58 @@ Then install the dependencies:
 Note the `(env)` in front of the prompt. This indicates that this terminal
 session operates in a virtual environment set up previously.
 
-Once `pip` has finished downloading the dependencies:
+Once `pip` has finished downloading the dependencies, run migrations with following command:
+
 ```sh
-(env)$ cd apps/dashboard
+(env)$ python3 manage.py migrate --skip-checks
 ```
+
+
+
+Then, create a `.env` file in the root of the project with following content:
+
+```sh
+TIMES=2
+
+#Dashboard DB credentials
+NAME='YOUR DATABASE NAME HERE'
+USER='YOUR DATATBASE USERNAME HERE'
+PASSWORD='YOUR DATABASE USER PASSWORD HERE'
+HOST=YOUR DATABASE SERVER HOSTNAME HERE
+PORT='YOUR DATABASE SERVER PORT HERE'
+
+#CAJU-APP credentials
+SQL_HOSTNAME=''
+SQL_USERNAME=''
+SQL_PASSWORD=''
+SQL_DATABASE=''
+SSH_HOSTNAME=''
+SSH_USER=''
+
+#SMTP
+EMAIL_HOST='YOUR EMAIL SERVER HOSTNAME HERE'
+EMAIL_HOST_USER='YOUR EMAIL ADDRESS HERE'
+EMAIL_HOST_PASSWORD='YOUR EMAIL PASSWORD HERE'
+EMAIL_PORT=YOUR EMAIL SERVER PORT HERE
+
+#AWS
+PKEY=''
+
+#ALTEIA
+ALTEIA_USER=""
+ALTEIA_PASSWORD=""
+
+#GOOGLE EARTH ENGINE
+PRIVATE_KEY=""
+
+#PROJECT SECRET KEY
+SECRET_KEY="YOUR SECRET KEY HERE"
+
+SERVER_URL="YOUR SERVER URL HERE. ex:http://127.0.0.1:8000/"
+```
+
+Note: A request will have to be made to [support](mailto:cajusupport@tnslabs.org) to obtain the missing data in the `.env` file.
+
 ```sh
 (env)$ python manage.py runserver
 ```
