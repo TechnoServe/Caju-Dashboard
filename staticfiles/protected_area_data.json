@@ -1,0 +1,152 @@
+{
+    "Agoua": {
+        "area_ha": 75300,
+        "cashew_tree_cover": 10834.21699719666,
+        "name": "Agoua"
+    },
+    "Agrimey": {
+        "area_ha": 2800,
+        "cashew_tree_cover": 0.0,
+        "name": "Agrimey"
+    },
+    "Atakora": {
+        "area_ha": 122000,
+        "cashew_tree_cover": 0.0,
+        "name": "Atakora"
+    },
+    "Atchérigbé": {
+        "area_ha": 3150,
+        "cashew_tree_cover": 155.64475951569202,
+        "name": "Atchérigbé"
+    },
+    "Bellefoungou": {
+        "area_ha": 1300,
+        "cashew_tree_cover": 9.467021557617187,
+        "name": "Bellefoungou"
+    },
+    "Boucle de la Pendjari": {
+        "area_ha": 275500,
+        "cashew_tree_cover": 0.0,
+        "name": "Boucle de la Pendjari"
+    },
+    "Dan": {
+        "area_ha": 1237,
+        "cashew_tree_cover": 64.77878509236652,
+        "name": "Dan"
+    },
+    "Djigbé": {
+        "area_ha": 4300,
+        "cashew_tree_cover": 0.0,
+        "name": "Djigbé"
+    },
+    "Djona": {
+        "area_ha": 188000,
+        "cashew_tree_cover": 0.0,
+        "name": "Djona"
+    },
+    "Dogo": {
+        "area_ha": 31850,
+        "cashew_tree_cover": 69.7145623714432,
+        "name": "Dogo"
+    },
+    "Gougoun": {
+        "area_ha": 73200,
+        "cashew_tree_cover": 0.0,
+        "name": "Gougoun"
+    },
+    "Kétou": {
+        "area_ha": 11000,
+        "cashew_tree_cover": 0.027227278286803,
+        "name": "Kétou"
+    },
+    "L'Alibori Supérieur": {
+        "area_ha": 256000,
+        "cashew_tree_cover": 0.0,
+        "name": "L'Alibori Supérieur"
+    },
+    "La Lama Nord": {
+        "area_ha": 6500,
+        "cashew_tree_cover": 0.0,
+        "name": "La Lama Nord"
+    },
+    "La Lama-Sud": {
+        "area_ha": 9750,
+        "cashew_tree_cover": 0.0,
+        "name": "La Lama-Sud"
+    },
+    "La Sota": {
+        "area_ha": 53000,
+        "cashew_tree_cover": 0.0,
+        "name": "La Sota"
+    },
+    "Logozohé": {
+        "area_ha": 1200,
+        "cashew_tree_cover": 95.8539369135838,
+        "name": "Logozohé"
+    },
+    "Monts Kouffé": {
+        "area_ha": 180000,
+        "cashew_tree_cover": 2632.366327265553,
+        "name": "Monts Kouffé"
+    },
+    "Ouari Maro": {
+        "area_ha": 107500,
+        "cashew_tree_cover": 1249.491615516477,
+        "name": "Ouari Maro"
+    },
+    "Ouémé Boukou": {
+        "area_ha": 20500,
+        "cashew_tree_cover": 1493.354228034141,
+        "name": "Ouémé Boukou"
+    },
+    "Ouémé Superieur": {
+        "area_ha": 177542,
+        "cashew_tree_cover": 3682.164713498919,
+        "name": "Ouémé Superieur"
+    },
+    "Pendjari": {
+        "area_ha": 175000,
+        "cashew_tree_cover": 0.0,
+        "name": "Pendjari"
+    },
+    "Pénessoulou": {
+        "area_ha": 5470,
+        "cashew_tree_cover": 217.19474510117485,
+        "name": "Pénessoulou"
+    },
+    "Tchaourou": {
+        "area_ha": 1100,
+        "cashew_tree_cover": 329.54884580664543,
+        "name": "Tchaourou"
+    },
+    "Tchatchou Gokana": {
+        "area_ha": 2000,
+        "cashew_tree_cover": 831.8193549904258,
+        "name": "Tchatchou Gokana"
+    },
+    "Toui-Kilibo": {
+        "area_ha": 29030,
+        "cashew_tree_cover": 3929.340511091625,
+        "name": "Toui-Kilibo"
+    },
+    "Trois Rivières": {
+        "area_ha": 259500,
+        "cashew_tree_cover": 0.0,
+        "name": "Trois Rivières"
+    },
+    "W (Benin)": {
+        "area_ha": 502000,
+        "cashew_tree_cover": 0.0,
+        "name": "W (Benin)"
+    },
+    "W Parks Regional Complex": {
+        "area_ha": 113328,
+        "cashew_tree_cover": 0.0,
+        "name": "W Parks Regional Complex"
+    },
+    "W-Arly-Pendjari Complex": {
+        "area_ha": 1494831,
+        "cashew_tree_cover": 0.0,
+        "name": "W-Arly-Pendjari Complex"
+    }
+}

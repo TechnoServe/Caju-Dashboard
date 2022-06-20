@@ -1,8 +1,8 @@
-import pandas as pd
-import numpy as np
+import os
 import re
-import os, sys
+
 import django
+import pandas as pd
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'cajulab_remote_sensing_dashboard.settings'
 django.setup()
@@ -63,8 +63,8 @@ def commune_satellite_data_db(commune_list):
 
 
 def clean_satellite_data():
-    commune_df = pd.read_excel("./staticfiles/new_data/dtstats_df.xlsx", engine='openpyxl')
-    dept_df = pd.read_excel("./staticfiles/new_data/dtstats_df1.xlsx", engine='openpyxl')
+    commune_df = pd.read_excel("./staticfiles/new_data/dtstats_df_2.xlsx", engine='openpyxl')
+    dept_df = pd.read_excel("./staticfiles/new_data/dtstats_df1_2.xlsx", engine='openpyxl')
 
     commune_list = convert_to_dict_list(commune_df)
     dept_list = convert_to_dict_list(dept_df)

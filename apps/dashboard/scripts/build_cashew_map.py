@@ -15,6 +15,7 @@ from apps.dashboard.layer_control_modifier import macro_toggler
 from apps.dashboard.layers_builders.benin_commune import current_benin_commune_layer
 from apps.dashboard.layers_builders.benin_department import current_benin_department_layer
 from apps.dashboard.layers_builders.benin_plantations import add_benin_plantation
+from apps.dashboard.layers_builders.benin_protected_areas import current_benin_protected_area_layer
 from apps.dashboard.layers_builders.benin_republic import current_benin_republic_layer
 from apps.dashboard.layers_builders.nursery_information import NurseryLayer
 from apps.dashboard.layers_builders.qar_informations import QarLayer
@@ -51,7 +52,7 @@ def __task3_func__(cashew_map):
 def __task4_func__(cashew_map):
     qars = current_qars
     # Adding the qar layer from the class QarLayer
-    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"))
+    marker_cluster = MarkerCluster(name=gettext("Warehouse Location"), show=True)
     qar_layer = QarLayer(marker_cluster, qars).add_qar()
     qar_layer.add_to(cashew_map)
 
@@ -62,6 +63,11 @@ def __task5_func__(cashew_map):
     marker_cluster = MarkerCluster(name=gettext("Training Information"), show=False)
     training_layer = TrainingLayer(marker_cluster, trainings).add_training()
     training_layer.add_to(cashew_map)
+
+
+def __task6_func__(cashew_map):
+    benin_protected_layer = current_benin_protected_area_layer
+    benin_protected_layer.add_to(cashew_map)
 
 
 def get_base_map(path_link):
@@ -124,7 +130,7 @@ def get_base_map(path_link):
             force_separate_button=False
         ).add_to(cashew_map)
 
-        marker_cluster = MarkerCluster(name=gettext("Nursery Information"))
+        marker_cluster = MarkerCluster(name=gettext("Nursery Information"), show=True)
         nursery_layer = NurseryLayer(marker_cluster).add_nursery()
         nursery_layer.add_to(cashew_map)
 
@@ -135,7 +141,8 @@ def get_base_map(path_link):
                 attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
                 name=name,
                 overlay=True,
-                control=True
+                control=True,
+                show=False
             ).add_to(self)
 
         folium.Map.add_ee_layer = add_ee_layer
@@ -148,7 +155,7 @@ def get_base_map(path_link):
             zones, {'palette': "red"}, gettext('Satellite Prediction'))
 
         no_boundary_layer = folium.FeatureGroup(
-            name=gettext('No Boundary'), show=False, overlay=False)
+            name=gettext('No Boundary'), show=True, overlay=False)
         no_boundary_layer.add_to(cashew_map)
 
     except Exception as e:
@@ -183,12 +190,15 @@ def full_map(lang):
                     executor, __task4_func__, cashew_map)
                 future5 = __loop.run_in_executor(
                     executor, __task5_func__, cashew_map)
+                future6 = __loop.run_in_executor(
+                    executor, __task6_func__, cashew_map)
 
                 await future1
                 await future2
                 await future3
                 await future4
                 await future5
+                await future6
 
             except Exception as e:
                 print(e)

@@ -7,11 +7,15 @@ import geojson
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
-alteia_sdk = alteia.SDK(
-    url="https://app.alteia.com/",
-    user="ucodjia@contractor.tns.org",
-    password="LDUj:NJMn27UNGn"
-)
+try:
+    alteia_sdk = alteia.SDK(
+        url="https://app.alteia.com/",
+        user=os.getenv("ALTEIA_USER"),
+        password=os.getenv("ALTEIA_PASSWORD")
+    )
+except Exception as e:
+    print(e)
+    pass
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
