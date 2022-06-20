@@ -1,11 +1,12 @@
 import os
+import sqlite3
 
 import geojson
 import paramiko
 import pymysql
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-from django.db.models import F
+from django.core.exceptions import FieldDoesNotExist
 from shapely.geometry import shape, Point
 
 from apps.dashboard import models
@@ -65,6 +66,16 @@ def mysql_connect():
     return conn
 
 
+def sqlite_connect():
+    """
+    Connect to a MySQL server using the SSH tunnel connection.
+    Return the connection object.
+    """
+
+    conn = sqlite3.connect('my_db.db')
+    return conn
+
+
 def mysql_disconnect(conn):
     """
     Close the connection, passed in parameter, to the database
@@ -72,42 +83,60 @@ def mysql_disconnect(conn):
     conn.close()
 
 
+def sqlite_disconnect(conn):
+    """
+    Close the connection, passed in parameter, to the database
+    """
+    conn.close()
+
+
 # Delete the data outside of Benin and add department and commune to models
-connection = mysql_connect()
-cur = connection.cursor()
-cur.execute("SELECT latitude, longitude, id FROM dashboard_training;")
+try:
+    models.Training._meta.get_field('department')
+    # first_element = models.Training.objects.filter(id=1)[0]
+    if models.Training.objects.filter(id=1)[0].department != '' and models.Training.objects.filter(id=1)[
+        0].commune != '':
+        pass
+    else:
+        connection = sqlite_connect()
+        cur = connection.cursor()
+        cur.execute("SELECT latitude, longitude, id FROM dashboard_training;")
 
-# Get all the rows for that query
-training0_items = cur.fetchall()
-# Convert the result into a list of dictionaries (useful later)
-items = [
-    {
-        'latitude': item[0],
-        'longitude': item[1],
-        'training_id': item[2]
-    }
-    for item in training0_items
-]
+        # Get all the rows for that query
+        training0_items = cur.fetchall()
+        # Convert the result into a list of dictionaries (useful later)
+        items = [
+            {
+                'latitude': item[0],
+                'longitude': item[1],
+                'training_id': item[2]
+            }
+            for item in training0_items
+        ]
 
-good_datas = []
-for item in items:
-    item_id = item['training_id']
-    for feature in departments_geojson['features'] and communes_geojson['features']:
-        polygon = shape(feature['geometry'])
-        if polygon.contains(Point(item['longitude'], item['latitude'])):
-            good_datas.append({"id": item_id, "department": feature["properties"]["NAME_1"],
-                               "commune": feature["properties"]["NAME_2"]})
+        good_datas = []
+        for item in items:
+            item_id = item['training_id']
+            for feature in departments_geojson['features'] and communes_geojson['features']:
+                polygon = shape(feature['geometry'])
+                if polygon.contains(Point(item['longitude'], item['latitude'])):
+                    good_datas.append({"id": item_id, "department": feature["properties"]["NAME_1"],
+                                       "commune": feature["properties"]["NAME_2"]})
 
-for item in good_datas:
-    models.Training.objects.filter(id=item['id']).update(department=item['department'], commune=item['commune'])
+        for item in good_datas:
+            models.Training.objects.filter(id=item['id']).update(department=item['department'], commune=item['commune'])
 
-good_datas_id = [item['id'] for item in good_datas]
-bad_datas = [item['training_id'] for item in items if item['training_id'] not in good_datas_id]
+        good_datas_id = [item['id'] for item in good_datas]
+        bad_datas = [item['training_id'] for item in items if item['training_id'] not in good_datas_id]
 
-for item in bad_datas:
-    models.Training.objects.filter(id=item).delete()
+        for item in bad_datas:
+            models.Training.objects.filter(id=item).delete()
 
-mysql_disconnect(connection)
+        sqlite_disconnect(connection)
+
+except FieldDoesNotExist:
+    print("Skip adding of communes and departments for trainings")
+    pass
 
 
 def __get_department_from_coord__(latitude, longitude):
@@ -149,9 +178,15 @@ def __get_commune_from_coord__(latitude, longitude):
 
 
 def __get_module__(cursor, module_id):
+    # MySQL query
+    # cursor.execute("SELECT"
+    #                " module_name, category"
+    #                " FROM dashboard_trainingmodule WHERE id = %s;", module_id)
+
+    # Sqlite query
     cursor.execute("SELECT"
                    " module_name, category"
-                   " FROM dashboard_trainingmodule WHERE id = %s;", module_id)
+                   " FROM dashboard_trainingmodule WHERE id=?;", (module_id,))
 
     # Get all the rows for that query
     modules_items = cursor.fetchall()
@@ -171,9 +206,15 @@ def __get_module__(cursor, module_id):
 
 
 def __get_trainer__(cursor, trainer_id):
+    # MySQL query
+    # cursor.execute("SELECT"
+    #                " firstname, lastname, institution"
+    #                " FROM dashboard_trainer WHERE id = %s;", trainer_id)
+
+    # Sqlite query
     cursor.execute("SELECT"
                    " firstname, lastname, institution"
-                   " FROM dashboard_trainer WHERE id = %s;", trainer_id)
+                   " FROM dashboard_trainer WHERE id=?;", (trainer_id,))
 
     # Get all the rows for that query
     trainers_items = cursor.fetchall()
@@ -245,11 +286,11 @@ def get_training_data_from_db():
     """
     try:
 
-        connection = mysql_connect()
+        connection = sqlite_connect()
 
         trainings = __get_items__(connection.cursor())
 
-        mysql_disconnect(connection)
+        sqlite_disconnect(connection)
     except Exception as e:
         print({e})
         trainings = []

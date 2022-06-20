@@ -4,22 +4,27 @@ from math import log10, floor
 
 import folium
 import geojson
+import jellyfish
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from area import area
 from celery import shared_task
 from django.db.models import Sum, Avg
 from django.utils.translation import gettext
+from unidecode import unidecode
 
-from apps.dashboard.models import BeninYield
+from apps.dashboard.layers_builders.nursery_location_recommandation import nursery_number, plantations_details
+from apps.dashboard.models import BeninYield, Nursery
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.scripts.get_qar_information import current_qars
 
 heroku = False
 
 # Load the Benin Communes shapefile
-with open("staticfiles/json/ben_adm2.json", errors="ignore") as f:
+with open("staticfiles/json/ben_adm2.json", encoding="utf8", errors="ignore") as f:
     benin_adm2_json = geojson.load(f)
+
+other_nursery_number = []
 
 
 class DataObject:
@@ -80,6 +85,40 @@ def __get_average_kor__(qars: list, commune):
         total += x.kor
     result = total / count
     return "{:.2f}".format(result) if result != 0 else "NA"
+
+
+def __build_nur_recom_num_html_view__(data: object) -> any:
+    """
+    popup's table for nurseries number recommandation
+    """
+    nurseries_recommandation_informations = gettext('Nurseries recommandation informations')
+    plants_per_nursery = gettext('Plants per nursery')
+    plants_per_nursery_number = 1000
+    total_recommended_plants = gettext('Total number of recommended plants')
+    existing_plants = gettext('Existing plants')
+    missing_nurseries = gettext('Missing nurseries')
+
+    return f'''
+                 <h4>{nurseries_recommandation_informations}</h4>
+                 <table>
+                    <tr>
+                        <td>{plants_per_nursery}</td>
+                        <td>{plants_per_nursery_number}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{total_recommended_plants}</td>
+                        <td>{data.needed_plants}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{existing_plants}</td>
+                        <td>{data.existing_plants}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{missing_nurseries}</td>
+                        <td>{data.nurseries_number}</td>                        
+                    </tr>                    
+                </table>
+            '''
 
 
 def __build_caj_q_html_view__(data: object) -> any:
@@ -252,6 +291,10 @@ def __build_html_view__(data: object) -> any:
                         &nbsp;&nbsp; 
                         {__build_caj_q_html_view__(data)}
                         &nbsp;&nbsp; 
+                        
+                        &nbsp;&nbsp; 
+                        {__build_nur_recom_num_html_view__(data)}
+                        &nbsp;&nbsp; 
                         <table>
                             <td><div id="donutchart" style="width: 400; height: 350;"></div></td>
                         </table>
@@ -309,7 +352,7 @@ def __build_data__(feature, qars):
                         '71': '71st', '72': '72nd', '73': '73rd', '74': '74th', '75': '75th', '76': 'lowest'}
     data["my_dict_communes"] = my_dict_communes
 
-    # load statistics from the database and formating them for displaying on popups
+    # load statistics from the database and formatting them for displaying on popups
 
     tree_ha_pred_comm = CommuneSatellite.objects.filter(commune=commune).aggregate(Sum('cashew_tree_cover'))
     try:
@@ -455,6 +498,45 @@ def __build_data__(feature, qars):
     except Exception:
         r_num_treeC = num_treeC
     data["r_num_treeC"] = r_num_treeC
+
+    current_commune_nurseries_number = None
+    current_commune_all_needed_plants = None
+    current_commune_existing_plants = None
+    similarity_percentage1 = [
+        jellyfish.jaro_similarity((unidecode(commune.capitalize())), unidecode(comm.capitalize())) for comm in
+        plantations_details['all_communes']]
+    plantations_size = []
+    for item in plantations_details['all_plantations_size']:
+        if jellyfish.jaro_similarity(unidecode(commune.capitalize()),
+                                     unidecode(item['commune'].capitalize())) == max(
+            similarity_percentage1) and jellyfish.jaro_similarity(unidecode(commune.capitalize()),
+                                                                  unidecode(
+                                                                      item['commune'].capitalize())) >= 0.8:
+            plantations_size.append(int(item['plantation_size']))
+
+    try:
+        current_commune_all_needed_plants = round(sum(plantations_size)) * 177
+        current_commune_existing_plants = round(
+            sum([int(item.number_of_plants) for item in Nursery.objects.filter(commune=commune)])) if len(
+            Nursery.objects.filter(commune=commune)) != 0 else 0
+        current_commune_nurseries_number = round(
+            (current_commune_all_needed_plants - current_commune_existing_plants) / 1000)
+    except Exception as e:
+        print(e)
+
+    similarity_percentage = [jellyfish.jaro_similarity(unidecode(commune), unidecode(item['commune'])) for item in
+                             nursery_number]
+    for item in nursery_number:
+        if jellyfish.jaro_similarity(unidecode(commune), unidecode(item['commune'])) == max(
+                similarity_percentage) and jellyfish.jaro_similarity(unidecode(commune),
+                                                                     unidecode(item['commune'])) >= 0.8:
+            current_commune_nurseries_number = item['number_of_nurseries']
+            current_commune_all_needed_plants = item['sum_of_all_needed_plants']
+            current_commune_existing_plants = item['sum_of_existing_plants']
+
+    data["nurseries_number"] = current_commune_nurseries_number
+    data["needed_plants"] = current_commune_all_needed_plants
+    data["existing_plants"] = current_commune_existing_plants
 
     return data
 

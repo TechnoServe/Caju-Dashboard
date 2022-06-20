@@ -254,8 +254,8 @@ class AlteiaData(models.Model):
     plantation_code = models.CharField(max_length=200, unique=True)
     cashew_tree_cover = models.FloatField(null=True)
 
-    def __str__(self):
-        return str(self.plantation_code)
+    # def __str__(self):
+    #     return str(self.plantation_code)
 
 
 class DeptSatellite(models.Model):

@@ -4,15 +4,15 @@ import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
-from django.conf import settings
 
 from apps.dashboard.scripts.build_cashew_map import full_map
 
 # For dev env
-if settings.DEBUG is True:
+if settings.DEBUG is False:
     if not os.path.exists("staticfiles/cashew_map_en.html") and not os.path.exists("staticfiles/cashew_map_fr.html"):
         cashew_map_html_en = full_map("en")
         cashew_map_html_fr = full_map("fr")
@@ -20,21 +20,21 @@ if settings.DEBUG is True:
         pass
 
 # For prod env
-if settings.DEBUG is False:
+if settings.DEBUG is True:
     cashew_map_html_en = full_map("en")
     cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
 
-
 # Prod env
-if settings.DEBUG is False:
+if settings.DEBUG is True:
     @scheduler.scheduled_job(IntervalTrigger(days=1))
     def update_cashew_map():
         global cashew_map_html_en
         cashew_map_html_en = full_map("en")
         global cashew_map_html_fr
         cashew_map_html_fr = full_map("fr")
+
 
     scheduler.start()
 
@@ -49,12 +49,12 @@ def index(request):
     if "/fr/" in path_link.__str__():
         filename = "staticfiles/cashew_map_fr.html"
         # For prod env
-        if settings.DEBUG is False:
+        if settings.DEBUG is True:
             cashew_map = cashew_map_html_fr
     elif "/en/" in path_link.__str__():
         filename = "staticfiles/cashew_map_en.html"
         # For prod env
-        if settings.DEBUG is False:
+        if settings.DEBUG is True:
             cashew_map = cashew_map_html_en
 
     if cashew_map is None:

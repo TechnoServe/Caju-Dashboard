@@ -1,13 +1,15 @@
+# import sqlite3 module
 import sqlite3
 
 
 def import_dummy_data():
-    # create the database in RAM
-    connection = sqlite3.connect(":memory:")
-
+    # create con object to connect 
+    # the database
+    connection = sqlite3.connect("./my_db.db")
+    # create the cursor object
     cursor = connection.cursor()
-
-    sql_file = open("training_dummy_data.sql")
+    # execute the script
+    sql_file = open("../../test.sql")
     sql_as_string = sql_file.read()
     cursor.executescript(sql_as_string)
 
