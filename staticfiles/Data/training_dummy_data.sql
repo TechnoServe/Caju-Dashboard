@@ -1,15 +1,7 @@
 
-DROP TABLE IF EXISTS `dashboard_trainer`;
-
-CREATE TABLE `dashboard_trainer` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `firstname` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `lastname` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `institution` varchar(9) COLLATE utf8_unicode_ci NOT NULL,
-  `phone` varchar(17) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(254) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+#
+# TABLE STRUCTURE FOR: dashboard_trainer
+#
 
 INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `phone`, `email`) VALUES ('1', 'Amiya', 'Miller', 'BeninCàju', '1-216-022-2850', 'dickens.chaz@example.org');
 INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `phone`, `email`) VALUES ('2', 'Shanelle', 'Schimmel', 'ATDA4', '514-550-3067x9913', 'vtorp@example.org');
@@ -47,15 +39,6 @@ INSERT INTO `dashboard_trainer` (`id`, `firstname`, `lastname`, `institution`, `
 # TABLE STRUCTURE FOR: dashboard_trainingmodule
 #
 
-DROP TABLE IF EXISTS `dashboard_trainingmodule`;
-
-CREATE TABLE `dashboard_trainingmodule` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `module_name` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  `category` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 INSERT INTO `dashboard_trainingmodule` (`id`, `module_name`, `category`) VALUES ('1', 'excepturi', 'harmony');
 INSERT INTO `dashboard_trainingmodule` (`id`, `module_name`, `category`) VALUES ('2', 'maxime', 'room');
 INSERT INTO `dashboard_trainingmodule` (`id`, `module_name`, `category`) VALUES ('3', 'aperiam', 'visitor');
@@ -86,23 +69,6 @@ INSERT INTO `dashboard_trainingmodule` (`id`, `module_name`, `category`) VALUES 
 #
 # TABLE STRUCTURE FOR: dashboard_training
 #
-
-DROP TABLE IF EXISTS `dashboard_training`;
-
-CREATE TABLE `dashboard_training` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `DateTime` datetime(6) NOT NULL,
-  `longitude` double DEFAULT NULL,
-  `latitude` double DEFAULT NULL,
-  `number_of_participant` int(11) NOT NULL,
-  `module_id_id` bigint(20) DEFAULT NULL,
-  `trainer_id_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-    KEY `module_id_id` (`module_id_id`),
-  KEY `trainer_id_id` (`trainer_id_id`),
-  CONSTRAINT `dashboard_training_ibfk_1` FOREIGN KEY (`trainer_id_id`) REFERENCES `dashboard_trainer` (`id`),
-  CONSTRAINT `dashboard_training_ibfk_2` FOREIGN KEY (`module_id_id`) REFERENCES `dashboard_trainingmodule` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=376 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `dashboard_training` (`id`, `DateTime`, `longitude`, `latitude`, `number_of_participant`, `module_id_id`, `trainer_id_id`) VALUES ('1', '1975-07-16 18:21:15.000000', '2.244', '9.1739658247', 31, '1', '1');
 INSERT INTO `dashboard_training` (`id`, `DateTime`, `longitude`, `latitude`, `number_of_participant`, `module_id_id`, `trainer_id_id`) VALUES ('2', '1970-12-10 18:33:23.000000', '2.404', '6.85481209016', 32, '2', '2');

@@ -1,10 +1,13 @@
 import os
 import re
+import sys
 
 import django
 import pandas as pd
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'cajulab_remote_sensing_dashboard.settings'
+BASE_DIR = os.path.dirname(os.path.realpath(__name__))
+sys.path.append(BASE_DIR)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cajulab_remote_sensing_dashboard.settings")
 django.setup()
 
 from apps.dashboard import models

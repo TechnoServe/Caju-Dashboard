@@ -200,8 +200,8 @@ class Migration(migrations.Migration):
                 ('number_of_participant', models.IntegerField()),
                 ('module_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='dashboard.trainingmodule')),
                 ('trainer_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='dashboard.trainer')),
-                ('commune', models.CharField(default='', max_length=200)),
-                ('department', models.CharField(default='', max_length=200)),
+                ('commune', models.CharField(null=True, default='', max_length=200)),
+                ('department', models.CharField(null=True, default='', max_length=200)),
             ],
         ),
     ]

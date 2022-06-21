@@ -19,3 +19,5 @@ tns-wiredin-cqna.pem
 staticfile
 solar-fuze-338810-33e9115b25da.json
 .vscode/launch.json
+*.db-shm
+*.db-wal

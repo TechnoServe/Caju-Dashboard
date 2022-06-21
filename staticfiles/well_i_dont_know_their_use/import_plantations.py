@@ -1,14 +1,15 @@
-import pandas as pd
-import numpy as np
+import os
 import re
 import sys
-import django
-import os
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'cajulab_remote_sensing_dashboard.settings'
+import django
+import pandas as pd
+
+BASE_DIR = os.path.dirname(os.path.realpath(__name__))
+sys.path.append(BASE_DIR)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cajulab_remote_sensing_dashboard.settings")
 django.setup()
 from apps.dashboard import models
-
 
 with open('staticfiles/liste_code_in_both_with_rgb_file.txt') as myfile:
     my_codes = myfile.read().splitlines()
@@ -215,7 +216,4 @@ def clean_yield_data():
 
 
 if __name__ == '__main__':
-    # sys.path.append('/mnt/c/Users/Dami Olawoyin-Yussuf/Documents/Technoserve_Projects/NewRemSensing/Benin-Caju-Web-Dashboard')
-    # os.environ['DJANGO_SETTINGS_MODULE'] = 'gettingstarted.settings'
-    # django.setup()
     clean_yield_data()
