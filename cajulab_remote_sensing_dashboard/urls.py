@@ -18,7 +18,6 @@ from django.conf.urls import include
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from apps.dashboard import views
 
@@ -29,7 +28,6 @@ urlpatterns = i18n_patterns(
 )
 
 urlpatterns += static(settings.STATIC_URL)
-# urlpatterns += staticfiles_urlpatterns()
 
 handler400 = views.error_400
 handler403 = views.error_403

@@ -254,8 +254,8 @@ class AlteiaData(models.Model):
     plantation_code = models.CharField(max_length=200, unique=True)
     cashew_tree_cover = models.FloatField(null=True)
 
-    def __str__(self):
-        return str(self.plantation_code)
+    # def __str__(self):
+    #     return str(self.plantation_code)
 
 
 class DeptSatellite(models.Model):
@@ -320,8 +320,8 @@ class Training(models.Model):
     longitude = models.FloatField(null=True)
     latitude = models.FloatField(null=True)
     number_of_participant = models.IntegerField()
-    department = models.CharField(max_length=200, default='')
-    commune = models.CharField(max_length=200, default='')
+    department = models.CharField(null=True, max_length=200, default='')
+    commune = models.CharField(null=True, max_length=200, default='')
 
     def __str__(self):
         return str(self.id)

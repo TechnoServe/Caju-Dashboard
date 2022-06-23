@@ -11,15 +11,14 @@ from django.template import loader
 from apps.dashboard.scripts.build_cashew_map import full_map
 
 cashew_map_html_en = None
+# cashew_map_html_en = full_map("en")
 cashew_map_html_fr = None
-
-cashew_map_html_en = full_map("en")
-cashew_map_html_fr = full_map("fr")
+# cashew_map_html_fr = full_map("fr")
 
 scheduler = BackgroundScheduler()
 
 # Prod env
-if settings.DEBUG is False:
+if settings.DEBUG is True:
     @scheduler.scheduled_job(IntervalTrigger(days=1))
     def update_cashew_map():
         global cashew_map_html_en

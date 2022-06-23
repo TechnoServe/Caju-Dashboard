@@ -1,9 +1,9 @@
 import asyncio
-import json
 import time
 
 import folium
 import geojson
+import jellyfish
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from area import area
@@ -11,54 +11,25 @@ from celery import shared_task
 from django.db.models import Sum, Avg
 from django.utils.translation import gettext
 from math import log10, floor
+from unidecode import unidecode
 
-from apps.dashboard.models import BeninYield
+from apps.dashboard.layers_builders.nursery_location_recommandation import nursery_number, plantations_details
+from apps.dashboard.models import BeninYield, Nursery
 from apps.dashboard.models import CommuneSatellite
 from apps.dashboard.scripts.get_qar_information import current_qars
 
 heroku = False
 
 # Load the Benin Communes shapefile
-with open("staticfiles/json/ben_adm2.json", errors="ignore") as f:
+with open("staticfiles/json/ben_adm2.json", encoding="utf8", errors="ignore") as f:
     benin_adm2_json = geojson.load(f)
-satellite_prediction_computed_data_json = open('staticfiles/satellite_prediction_computed_data.json')
-data_dictionary = json.load(satellite_prediction_computed_data_json)
-with open("staticfiles/plantation_recommendation.json") as plantation_recommendation_json:
-    plantation_recommendations = json.load(plantation_recommendation_json)
 
-
-# def __highlight_function__(feature):
-#     """
-#     Function to define the layer highlight style
-#     """
-#     commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()
-#     RGBint = plantation_recommendations["properties"]["training"]["commune"][commune]
-#     Red = RGBint & 255
-#     Green = (RGBint >> 8) & 255
-#     Blue = (RGBint >> 16) & 255
-#     color = '#%02x%02x%02x' % (Red, Green, Blue)
-#     return {
-#         "fillColor": color,
-#         "color": "black",
-#         "weight": 3,
-#         "dashArray": "1, 1",
-#         "opacity": 0.35,
-#         "fillOpacity": 0.8,
-#     }
+other_nursery_number = []
 
 
 class DataObject:
     def __init__(self, **entries):
         self.__dict__.update(entries)
-
-
-def __human_format__(num):
-    num = float('{:.3g}'.format(num))
-    magnitude = 0
-    while abs(num) >= 1000:
-        magnitude += 1
-        num /= 1000.0
-    return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
 
 
 def __highlight_function__(feature):
@@ -116,6 +87,40 @@ def __get_average_kor__(qars: list, commune):
     return "{:.2f}".format(result) if result != 0 else "NA"
 
 
+def __build_nur_recom_num_html_view__(data: object) -> any:
+    """
+    popup's table for nurseries number recommandation
+    """
+    nurseries_recommandation_informations = gettext('Nurseries recommandation informations')
+    plants_per_nursery = gettext('Plants per nursery')
+    plants_per_nursery_number = 1000
+    total_recommended_plants = gettext('Total number of recommended plants')
+    existing_plants = gettext('Existing plants')
+    missing_nurseries = gettext('Missing nurseries')
+
+    return f'''
+                 <h4>{nurseries_recommandation_informations}</h4>
+                 <table>
+                    <tr>
+                        <td>{plants_per_nursery}</td>
+                        <td>{plants_per_nursery_number}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{total_recommended_plants}</td>
+                        <td>{data.needed_plants}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{existing_plants}</td>
+                        <td>{data.existing_plants}</td>                        
+                    </tr>
+                    <tr>
+                        <td>{missing_nurseries}</td>
+                        <td>{data.nurseries_number}</td>                        
+                    </tr>                    
+                </table>
+            '''
+
+
 def __build_caj_q_html_view__(data: object) -> any:
     """
     popup's table for Caju Quality Information
@@ -161,16 +166,13 @@ def __build_html_view__(data: object) -> any:
     out_of_production = gettext("Out of Production Trees")
     cashew_trees_status = gettext("Cashew Trees Status in")
     is_ranked = gettext("is ranked")
-    satellite_est = gettext("Satellite Estimation")
+    satellite_est = gettext("Satellite Est")
     tns_survey = gettext("TNS Survey")
-    year = gettext("In 2020, ")
 
     # All 3 shapefiles share these variables
     total_cashew_yield = gettext("Total Cashew Yield (kg)")
     total_area = gettext("Total Area (ha)")
     cashew_tree_cover = gettext("Cashew Tree Cover (ha)")
-    protected_area = gettext("Protected Area (ha)")
-    cashew_tree_cover_within_protected_area = gettext("Cashew Tree Cover Within Protected Area (ha)")
     yield_hectare = gettext("Yield/Hectare (kg/ha)")
     yield_per_tree = gettext("Yield per Tree (kg/tree)")
     number_of_trees = gettext("Number of Trees")
@@ -241,12 +243,8 @@ def __build_html_view__(data: object) -> any:
                     <body>
 
                         <h2>{data.commune}</h2>
-                        <h4>
-                        {year}{data.commune}{is_ranked}
-                        {data.my_dict_communes[str(data.predictions["rank"])]}
-                        {among_benin_communes}.
-                        </h4>
-
+                        <h4>In 2020, {data.commune} {is_ranked} <b>{data.my_dict_communes[str(data.position2 + 1)]}</b>
+                         {among_benin_communes}.</h4> 
                         <table>
                         <tr>
                             <th></th>
@@ -256,54 +254,46 @@ def __build_html_view__(data: object) -> any:
                         </tr>
                         <tr>
                             <td>{total_cashew_yield}</td>
-                            <td>{__human_format__(data.predictions["total cashew yield"])}</td>
+                            <td>{data.r_yield_pred_comm / 1000000:n}M</td>
                             <td>{data.r_total_yieldC / 1000000:n}M</td>
                             
                         </tr>
                         <tr>
                             <td>{total_area}</td>
-                            <td>{__human_format__(data.predictions["total area"])}</td>
-                            <td>{__human_format__(data.predictions["total area"])}</td>
-                        </tr>
-                        <tr>
-                            <td>{protected_area}</td>
-                            <td>{__human_format__(data.predictions["protected area"])}</td>
-                            <td>NA</td>                            
+                            <td>{data.r_region_sizeC / 1000:n}K</td>
+                            <td>{data.r_surface_areaC / 1000:n}K</td>
                         </tr>
                         <tr>
                             <td>{cashew_tree_cover}</td>
-                            <td>{__human_format__(data.predictions["cashew tree cover"])}</td>
-                            <td>{__human_format__(data.r_surface_areaC)}</td>
+                            <td>{data.r_tree_ha_pred_comm / 1000:n}K</td>
+                            <td>NA</td>
+                            
                         </tr>
-                        <tr>
-                            <td>{cashew_tree_cover_within_protected_area}</td>
-                            <td>{__human_format__(data.predictions["cashew tree cover within protected area"])}</td>
-                            <td>NA</td>                            
-                        </tr>
-
                         <tr>
                             <td>{yield_hectare}</td>
-                            <td>{__human_format__(data.predictions["yield per hectare"])}</td>
-                            <td>{data.r_yield_haC}</td>                        
+                            <td>390</td>
+                            <td>{data.r_yield_haC}</td>
+                        
                         </tr>
                         <tr>
                             <td>{yield_per_tree}</td>
-                            <td>
-                            {__human_format__(data.predictions["yield per tree"]) if data.predictions["yield per tree"] != 0 else "N/A"}
-                            </td>
+                            <td>NA</td>
                             <td>{data.r_yield_treeC}</td>
+                        
                         </tr>
                         <tr>
                             <td>{number_of_trees}</td>
-                            <td>
-                            {__human_format__(data.predictions["number of trees"]) if data.predictions["number of trees"] != 0 else "N/A"}
-                            </td>
+                            <td>NA</td>
                             <td>{data.r_num_treeC / 1000:n}K</td>                            
                         </tr>
                         </table>
                                                 
                         &nbsp;&nbsp; 
                         {__build_caj_q_html_view__(data)}
+                        &nbsp;&nbsp; 
+                        
+                        &nbsp;&nbsp; 
+                        {__build_nur_recom_num_html_view__(data)}
                         &nbsp;&nbsp; 
                         <table>
                             <td><div id="donutchart" style="width: 400; height: 350;"></div></td>
@@ -320,9 +310,7 @@ def __build_data__(feature, qars):
     """
     Return all the data needed to build the Benin republic communes Layer
     """
-    data = {'qars': qars, 'protected_area': 0,
-            "predictions": data_dictionary[feature["properties"]["NAME_0"]][feature["properties"]["NAME_1"]][
-                feature["properties"]["NAME_2"]]}
+    data = {"qars": qars}
 
     # GEOJSON layer consisting of a single feature
     commune = feature["properties"]["NAME_2"]
@@ -364,7 +352,7 @@ def __build_data__(feature, qars):
                         '71': '71st', '72': '72nd', '73': '73rd', '74': '74th', '75': '75th', '76': 'lowest'}
     data["my_dict_communes"] = my_dict_communes
 
-    # load statistics from the database and formating them for displaying on popups
+    # load statistics from the database and formatting them for displaying on popups
 
     tree_ha_pred_comm = CommuneSatellite.objects.filter(commune=commune).aggregate(Sum('cashew_tree_cover'))
     try:
@@ -372,6 +360,12 @@ def __build_data__(feature, qars):
     except Exception:
         tree_ha_pred_comm = 0
     data["tree_ha_pred_comm"] = tree_ha_pred_comm
+
+    try:
+        yield_pred_comm = int(390 * tree_ha_pred_comm)
+    except Exception:
+        yield_pred_comm = 0
+    data["yield_pred_comm"] = yield_pred_comm
 
     surface_areaC = BeninYield.objects.filter(commune=commune).aggregate(Sum('surface_area'))
     try:
@@ -456,6 +450,15 @@ def __build_data__(feature, qars):
     data["r_tree_ha_pred_comm"] = r_tree_ha_pred_comm
 
     try:
+        r_yield_pred_comm = round(yield_pred_comm, 1 - int(
+            floor(log10(abs(yield_pred_comm))))) \
+            if yield_pred_comm < 90000 \
+            else round(yield_pred_comm, 2 - int(floor(log10(abs(yield_pred_comm)))))
+    except Exception:
+        r_yield_pred_comm = yield_pred_comm
+    data["r_yield_pred_comm"] = r_yield_pred_comm
+
+    try:
         r_surface_areaC = round(surface_areaC, 1 - int(floor(log10(abs(surface_areaC))))) \
             if surface_areaC < 90000 \
             else round(surface_areaC, 2 - int(floor(log10(abs(surface_areaC)))))
@@ -479,21 +482,6 @@ def __build_data__(feature, qars):
         r_yield_haC = yield_haC
     data["r_yield_haC"] = r_yield_haC
 
-    try:
-        yield_pred_comm = int(r_yield_haC * tree_ha_pred_comm)
-    except Exception:
-        yield_pred_comm = 0
-    data["yield_pred_comm"] = yield_pred_comm
-
-    try:
-        r_yield_pred_comm = round(yield_pred_comm, 1 - int(
-            floor(log10(abs(yield_pred_comm))))) \
-            if yield_pred_comm < 90000 \
-            else round(yield_pred_comm, 2 - int(floor(log10(abs(yield_pred_comm)))))
-    except Exception:
-        r_yield_pred_comm = yield_pred_comm
-    data["r_yield_pred_comm"] = r_yield_pred_comm
-
     # try: r_yield_treeC = round(yield_treeC, 1-int(floor(log10(abs(yield_treeC))))) if yield_treeC < 90000 else
     # round(yield_treeC, 2-int(floor(log10(abs(yield_treeC))))) except Exception: r_yield_treeC = yield_treeC
 
@@ -511,6 +499,45 @@ def __build_data__(feature, qars):
         r_num_treeC = num_treeC
     data["r_num_treeC"] = r_num_treeC
 
+    current_commune_nurseries_number = None
+    current_commune_all_needed_plants = None
+    current_commune_existing_plants = None
+    similarity_percentage1 = [
+        jellyfish.jaro_similarity((unidecode(commune.capitalize())), unidecode(comm.capitalize())) for comm in
+        plantations_details['all_communes']]
+    plantations_size = []
+    for item in plantations_details['all_plantations_size']:
+        if jellyfish.jaro_similarity(unidecode(commune.capitalize()),
+                                     unidecode(item['commune'].capitalize())) == max(
+            similarity_percentage1) and jellyfish.jaro_similarity(unidecode(commune.capitalize()),
+                                                                  unidecode(
+                                                                      item['commune'].capitalize())) >= 0.8:
+            plantations_size.append(int(item['plantation_size']))
+
+    try:
+        current_commune_all_needed_plants = round(sum(plantations_size)) * 177
+        current_commune_existing_plants = round(
+            sum([int(item.number_of_plants) for item in Nursery.objects.filter(commune=commune)])) if len(
+            Nursery.objects.filter(commune=commune)) != 0 else 0
+        current_commune_nurseries_number = round(
+            (current_commune_all_needed_plants - current_commune_existing_plants) / 1000)
+    except Exception as e:
+        print(e)
+
+    similarity_percentage = [jellyfish.jaro_similarity(unidecode(commune), unidecode(item['commune'])) for item in
+                             nursery_number]
+    for item in nursery_number:
+        if jellyfish.jaro_similarity(unidecode(commune), unidecode(item['commune'])) == max(
+                similarity_percentage) and jellyfish.jaro_similarity(unidecode(commune),
+                                                                     unidecode(item['commune'])) >= 0.8:
+            current_commune_nurseries_number = item['number_of_nurseries']
+            current_commune_all_needed_plants = item['sum_of_all_needed_plants']
+            current_commune_existing_plants = item['sum_of_existing_plants']
+
+    data["nurseries_number"] = current_commune_nurseries_number
+    data["needed_plants"] = current_commune_all_needed_plants
+    data["existing_plants"] = current_commune_existing_plants
+
     return data
 
 
@@ -520,9 +547,9 @@ def __task__(feature, benin_commune_layer, qars):
     data = __build_data__(feature, qars)
 
     # html template for the popups
-    html_view = __build_html_view__(DataObject(**data))
+    html3 = __build_html_view__(DataObject(**data))
 
-    iframe = folium.IFrame(html=html_view, width=600, height=400)
+    iframe = folium.IFrame(html=html3, width=450, height=380)
 
     folium.Popup(iframe, max_width=2000).add_to(temp_layer2)
 
@@ -540,14 +567,14 @@ def __task__(feature, benin_commune_layer, qars):
 
 
 @shared_task(bind=True)
-def create_benin_commune(self, qars):
+def add_benin_commune(self, qars):
     """
     Adding the shapefiles with popups for the Benin Republic communes
     Add benin republic communes data to the parent layer
     """
     __start_time = time.time()
 
-    benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=True)
+    benin_commune_layer = folium.FeatureGroup(name=gettext('Benin Communes'), show=False, overlay=False)
     temp_geojson2 = folium.GeoJson(data=benin_adm2_json,
                                    name='Benin-Adm2 Communes',
                                    highlight_function=__highlight_function__)
@@ -570,7 +597,7 @@ def create_benin_commune(self, qars):
     return benin_commune_layer
 
 
-current_benin_commune_layer = create_benin_commune(current_qars)
+current_benin_commune_layer = add_benin_commune(current_qars)
 
 scheduler = BackgroundScheduler()
 
@@ -578,7 +605,7 @@ scheduler = BackgroundScheduler()
 @scheduler.scheduled_job(IntervalTrigger(days=1))
 def update_benin_commune_layer():
     global current_benin_commune_layer
-    current_benin_commune_layer = create_benin_commune(current_qars)
+    current_benin_commune_layer = add_benin_commune(current_qars)
 
 
 scheduler.start()

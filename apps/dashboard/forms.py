@@ -1,7 +1,4 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
 import datetime
 from datetime import date, time
 
@@ -199,11 +196,10 @@ DEPARTMENT_CHOICES = [tuple([x[0].lower() + x[1:], x.capitalize()]) for x in nam
 select0 = ('select department', _('Select Department'))
 DEPARTMENT_CHOICES.insert(0, select0)
 
-DEPARTMENT_CHOICES = models.Training.objects.values_list('department', flat=True)
-DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
-DEPARTMENT_CHOICES = set(DEPARTMENT_CHOICES)
-DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
-
+# DEPARTMENT_CHOICES = models.Training.objects.values_list('department', flat=True)
+# DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
+# DEPARTMENT_CHOICES = set(DEPARTMENT_CHOICES)
+# DEPARTMENT_CHOICES = sorted(DEPARTMENT_CHOICES)
 COMMUNE_CHOICE = models.Training.objects.values_list('commune', flat=True)
 COMMUNE_CHOICE = sorted(COMMUNE_CHOICE)
 COMMUNE_CHOICE = set(COMMUNE_CHOICE)

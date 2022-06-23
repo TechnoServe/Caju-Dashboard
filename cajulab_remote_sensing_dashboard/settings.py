@@ -11,9 +11,10 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-from dotenv import load_dotenv, find_dotenv
 from pathlib import Path
+
 from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
@@ -100,22 +101,22 @@ WSGI_APPLICATION = 'cajulab_remote_sensing_dashboard.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'my_db.db',
-    }
-}
-"""
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'my_db.db',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('NAME'),
-        'USER': os.getenv('USER'),
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': os.getenv('HOST'),
-        'PORT': os.getenv('PORT'),
+        'NAME': os.getenv('DASHBOARD_DB_NAME'),
+        'USER': os.getenv('DASHBOARD_DB_USERNAME'),
+        'PASSWORD': os.getenv('DASHBOARD_DB_PASSWORD'),
+        'HOST': os.getenv('DASHBOARD_DB_HOSTNAME'),
+        'PORT': os.getenv('DASHBOARD_DB_PORT'),
     }
 }
 
