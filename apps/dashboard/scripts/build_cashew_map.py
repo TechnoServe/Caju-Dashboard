@@ -54,7 +54,8 @@ def __task3_func__():
             name=name,
             overlay=True,
             control=True,
-            show=True
+            show=True,
+            zIndex=-10,
         )
 
     alldept = ee.Image('users/cajusupport/allDepartments_v1')

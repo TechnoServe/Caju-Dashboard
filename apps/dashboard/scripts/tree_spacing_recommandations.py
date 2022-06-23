@@ -48,7 +48,8 @@ except Exception as e:
     exit(84)
     pass
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
+
 with open("staticfiles/json/ben_adm0.json", errors="ignore") as f:
     benin_adm0_json = geojson.load(f)
     benin_shape = shape(benin_adm0_json["features"][0]["geometry"])
@@ -232,9 +233,14 @@ def is_training_needed(plantation):
     total_cashew_trees = plantation["total_number_of_trees"]
     max_trees = plantation["max_recommended_number_of_cashew_trees"]
     min_trees = plantation["min_recommended_number_of_cashew_trees"]
-    plantation["training_needed"] = total_cashew_trees > max_trees or total_cashew_trees < min_trees
-    plantation["training_needed_increase"] = total_cashew_trees < min_trees
-    plantation["training_needed_decrease"] = total_cashew_trees > max_trees
+    plantation["training_needed"] = plantation['tree_spacing'] > 10 or plantation['tree_spacing'] < 7
+    plantation["number_of_trees_to_plant"] = [
+        0 if (total_cashew_trees > min_trees) else int(min_trees - total_cashew_trees),
+        0 if (total_cashew_trees > max_trees) else int(max_trees - total_cashew_trees),
+    ]
+    plantation["number_of_trees_to_remove"] = 0 if (total_cashew_trees < max_trees) else int(
+        total_cashew_trees - max_trees)
+    print(plantation["number_of_trees_to_plant"])
     if plantation["training_needed"]:
         training_need_communes[plantation["commune"]] += 1
         training_need_departments[plantation["department"]] += 1
@@ -242,11 +248,32 @@ def is_training_needed(plantation):
     return plantation
 
 
-def calculate_tree_spacing(plantation):
+def calculate_tree_spacing(plantation, tree_tops_density_json):
+    total = sum([feature["properties"]["mean_tree_top_distance"] for feature in tree_tops_density_json["features"]])
+    average = total / len(tree_tops_density_json["features"])
     total_trees = plantation["total_number_of_trees"]
     total_trees_cover = plantation["total_trees_cover"]
     total_trees = (total_trees if total_trees != 0 else 1)
     plantation['tree_spacing'] = round(math.sqrt(total_trees_cover / total_trees), 0)
+    plantation['tree_spacing2'] = average
+    return plantation
+
+
+def calculate_pruning_needs(plantation, tree_tops_density_json):
+    count = 0
+    for feature in tree_tops_density_json["features"]:
+        if feature["properties"]["mean_tree_crown_distance"] < 2:
+            count += 1
+    plantation['pruning_needs'] = count
+    return plantation
+
+
+def calculate_opposite_of_pruning_needs(plantation, tree_tops_density_json):
+    count = 0
+    for feature in tree_tops_density_json["features"]:
+        if feature["properties"]["mean_tree_crown_distance"] > 4:
+            count += 1
+    plantation['opposite_of_pruning_needs'] = count
     return plantation
 
 
@@ -266,27 +293,27 @@ def generate_recommendations(plantation):
     return plantation
 
 
-codes = ["04-03-03-03-ALL-JAC", "04-03-03-03-ALL-JAC",
-         "04-03-03-03-BIO-MAI",
-         "04-03-03-03-BON-YO",
-         "04-03-03-03-CHA-GOU",
-         "04-03-03-03-DAM-SOG",
-         "04-03-03-03-ORO-DAM-01",
-         "04-03-03-03-ORO-DAM-02",
-         "04-03-03-03-ORO-MOU",
-         "04-03-03-03-ORO-YER",
-         "04-03-03-03-WAN-BAK",
-         "04-03-04-03-DOU-SAO",
-         "04-03-04-03-ASS-ALI",
-         "04-03-04-03-KOT-ZIM",
-         "04-03-04-03-ASS-ALI-02",
-         "04-03-04-03-KOT-ISS",
-         "04-03-04-03-MAN-DAM",
-         "04-03-04-03-OUR-ABD",
-         "04-03-04-03-SAB-GOM",
-         "04-03-04-03-SAB-GOM-03",
-         ]
-plantation_recommendation = {}
+# codes = ["04-03-03-03-ALL-JAC", "04-03-03-03-ALL-JAC",
+#          "04-03-03-03-BIO-MAI",
+#          "04-03-03-03-BON-YO",
+#          "04-03-03-03-CHA-GOU",
+#          "04-03-03-03-DAM-SOG",
+#          "04-03-03-03-ORO-DAM-01",
+#          "04-03-03-03-ORO-DAM-02",
+#          "04-03-03-03-ORO-MOU",
+#          "04-03-03-03-ORO-YER",
+#          "04-03-03-03-WAN-BAK",
+#          "04-03-04-03-DOU-SAO",
+#          "04-03-04-03-ASS-ALI",
+#          "04-03-04-03-KOT-ZIM",
+#          "04-03-04-03-ASS-ALI-02",
+#          "04-03-04-03-KOT-ISS",
+#          "04-03-04-03-MAN-DAM",
+#          "04-03-04-03-OUR-ABD",
+#          "04-03-04-03-SAB-GOM",
+#          "04-03-04-03-SAB-GOM-03",
+#          ]
+# plantation_recommendation = {}
 f = open('staticfiles/plantation_recommendation.json')
 plantation_recommendation = json.load(f)
 
@@ -302,13 +329,13 @@ for feature in plantations_json['features']:
     # if code not in codes:
     #     continue
 
-    # if not download_tree_tops_density_data(code, tree_tops_density_path):
+    # if download_tree_tops_density_data(code, tree_tops_density_path) is False:
     #     continue
-    # if not download_tree_crowns_data(code, tree_crowns_path):
+    # if download_tree_crowns_data(code, tree_crowns_path) is False:
     #     continue
     #
-    # with open(tree_tops_density_path.__str__()) as file:
-    #     tree_tops_density_json = geojson.load(file)
+    with open(tree_tops_density_path.__str__()) as file:
+        tree_tops_density_json = geojson.load(file)
     #
     # with open(tree_crowns_path.__str__()) as file:
     #     tree_crowns_json = geojson.load(file)
@@ -318,21 +345,24 @@ for feature in plantations_json['features']:
     # intersection_polygon: shapely.geometry.geo = plantation_polygon.intersection(prediction_polygon)
     #
     # plantation_recommendation[code] = find_location(plantation_recommendation[code], feature, plantation_polygon)
-    #
+
     # plantation_recommendation[code] = calculate_cashew_tree_surface_ha(plantation_recommendation[code])
     # plantation_recommendation[code] = calculate_cashew_trees_cover(plantation_recommendation[code], tree_crowns_json,
     #                                                                intersection_polygon)
     # plantation_recommendation[code] = calculate_total_number_of_cashew_trees(plantation_recommendation[code],
     #                                                                          tree_tops_density_json)
-    #
+
     # plantation_recommendation[code] = calculate_plantation_surface_ha(plantation_recommendation[code], feature)
     # plantation_recommendation[code] = calculate_min_and_max(plantation_recommendation[code])
     # plantation_recommendation[code] = calculate_trees_cover(plantation_recommendation[code], tree_crowns_json)
     # plantation_recommendation[code] = calculate_total_number_of_trees(plantation_recommendation[code],
     #                                                                   tree_tops_density_json)
-    plantation_recommendation[code] = is_training_needed(plantation_recommendation[code])
-    plantation_recommendation[code] = calculate_tree_spacing(plantation_recommendation[code])
-    plantation_recommendation[code] = generate_recommendations(plantation_recommendation[code])
+    plantation_recommendation[code] = calculate_tree_spacing(plantation_recommendation[code], tree_tops_density_json)
+    # plantation_recommendation[code] = calculate_pruning_needs(plantation_recommendation[code], tree_tops_density_json)
+    # plantation_recommendation[code] = calculate_opposite_of_pruning_needs(plantation_recommendation[code],
+    #                                                                       tree_tops_density_json)
+    # plantation_recommendation[code] = is_training_needed(plantation_recommendation[code])
+    # plantation_recommendation[code] = generate_recommendations(plantation_recommendation[code])
 
 plantation_recommendation["properties"] = {"training": {
     "department": training_need_departments,
