@@ -1,8 +1,10 @@
 import json
+import operator
 import time
 
 import folium
 import geojson
+import math
 import unidecode
 from django.utils.translation import gettext
 
@@ -17,12 +19,36 @@ with open("staticfiles/plantation_recommendation.json") as plantation_recommenda
     plantation_recommendations = json.load(plantation_recommendation_json)
 
 
+def __define_rgb_ints__():
+    communes = plantation_recommendations["properties"]["training"]["commune"]
+    communes = dict(sorted(communes.items(), key=operator.itemgetter(1), reverse=True))
+    count = 0
+    for key, value in communes.items():
+        if value != 0:
+            count += 1
+    try:
+        step = 255 / count
+    except Exception:
+        step = 255
+    max_int = 255
+    for key in communes.keys():
+        communes[key] = max_int
+        max_int = math.ceil(max_int - step)
+        count = count - 1
+        if count <= 0:
+            break
+    return communes
+
+
+color_values = __define_rgb_ints__()
+
+
 def __highlight_function__(feature):
     """
     Function to define the layer highlight style
     """
     commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()
-    RGBint = plantation_recommendations["properties"]["training"]["commune"][commune]
+    RGBint = color_values[commune]
     color = "transparent"
     border = "transparent"
     if RGBint != 0:
@@ -50,10 +76,9 @@ def create_benin_colored_commune():
 
     benin_colored_communes_layer = folium.FeatureGroup(name=gettext('Communes Training Recommandations'), show=False,
                                                        overlay=True)
-
     for feature in benin_adm2_json['features']:
         commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()
-        value = plantation_recommendations["properties"]["training"]["commune"][commune]
+        value = color_values[commune]
         if value == 0:
             continue
         commune_partial_layer = folium.GeoJson(feature, zoom_on_click=False,

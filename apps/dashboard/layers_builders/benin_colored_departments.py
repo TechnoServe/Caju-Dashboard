@@ -1,4 +1,5 @@
 import json
+import operator
 import time
 
 import folium
@@ -18,13 +19,37 @@ with open("staticfiles/plantation_recommendation.json") as plantation_recommenda
     plantation_recommendations = json.load(plantation_recommendation_json)
 
 
+def __define_rgb_ints__():
+    departments = plantation_recommendations["properties"]["training"]["department"]
+    departments = dict(sorted(departments.items(), key=operator.itemgetter(1), reverse=True))
+    count = 0
+    for key, value in departments.items():
+        if value != 0:
+            count += 1
+    try:
+        step = 255 / count
+    except Exception:
+        step = 255
+    max_int = 255
+    for key in departments.keys():
+        departments[key] = max_int
+        max_int = math.ceil(max_int - step)
+        count = count - 1
+        if count <= 0:
+            break
+    return departments
+
+
+color_values = __define_rgb_ints__()
+
+
 def __highlight_function__(feature):
     """
     Function to define the layer highlight style
     """
 
     department = unidecode.unidecode(feature["properties"]["NAME_1"]).lower()
-    RGBint = math.floor(plantation_recommendations["properties"]["training"]["department"][department] / 4)
+    RGBint = color_values[department]
     color = "transparent"
     border = "transparent"
     if RGBint != 0:
@@ -58,7 +83,7 @@ def create_benin_colored_department():
 
     for feature in benin_adm1_json['features']:
         department = unidecode.unidecode(feature["properties"]["NAME_1"]).lower()
-        value = math.floor(plantation_recommendations["properties"]["training"]["department"][department] / 4)
+        value = color_values[department]
         if value == 0:
             continue
         department_partial_layer = folium.GeoJson(feature, zoom_on_click=False,

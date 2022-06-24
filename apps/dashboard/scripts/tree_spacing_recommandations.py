@@ -240,7 +240,6 @@ def is_training_needed(plantation):
     ]
     plantation["number_of_trees_to_remove"] = 0 if (total_cashew_trees < max_trees) else int(
         total_cashew_trees - max_trees)
-    print(plantation["number_of_trees_to_plant"])
     if plantation["training_needed"]:
         training_need_communes[plantation["commune"]] += 1
         training_need_departments[plantation["department"]] += 1
@@ -361,7 +360,7 @@ for feature in plantations_json['features']:
     # plantation_recommendation[code] = calculate_pruning_needs(plantation_recommendation[code], tree_tops_density_json)
     # plantation_recommendation[code] = calculate_opposite_of_pruning_needs(plantation_recommendation[code],
     #                                                                       tree_tops_density_json)
-    # plantation_recommendation[code] = is_training_needed(plantation_recommendation[code])
+    plantation_recommendation[code] = is_training_needed(plantation_recommendation[code])
     # plantation_recommendation[code] = generate_recommendations(plantation_recommendation[code])
 
 plantation_recommendation["properties"] = {"training": {

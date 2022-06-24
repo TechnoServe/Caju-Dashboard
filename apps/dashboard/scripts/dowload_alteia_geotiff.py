@@ -6,8 +6,8 @@ import geojson
 
 alteia_sdk = alteia.SDK(
     url="https://app.alteia.com/",
-    user="ucodjia@contractor.tns.org",
-    password="LDUj:NJMn27UNGn"
+    user="sdahissiho@contractor.tns.org",
+    password="9tMNaztVkL4MqQ$"
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent.parent
