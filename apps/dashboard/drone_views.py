@@ -237,10 +237,10 @@ def drone(request, plant_id, coordinate_xy):
             add_alteia_tree_crows()
             add_alteia_tree_tops_density()
             add_plantation_shape()
+            break
         except Exception as e:
             print("Error: " + e.__str__())
-
-        break
+            continue
 
     cashew_map.add_child(folium.LayerControl(collapsed=False))
     cashew_map = cashew_map._repr_html_()
