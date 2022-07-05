@@ -161,7 +161,8 @@ def get_base_map(path_link):
             location=[9.0, 2.4],
             zoom_start=8,
             prefer_canvas=True,
-            tiles=None
+            tiles=None,
+            max_zoom=200,
         )
 
         if "/en/" in path_link.__str__():

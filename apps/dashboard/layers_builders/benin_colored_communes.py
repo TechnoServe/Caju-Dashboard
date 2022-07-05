@@ -74,7 +74,7 @@ def create_benin_colored_commune():
     """
     __start_time = time.time()
 
-    benin_colored_communes_layer = folium.FeatureGroup(name=gettext('Communes Training Recommandations'), show=False,
+    benin_colored_communes_layer = folium.FeatureGroup(name=gettext('Communes Training Recommendations'), show=False,
                                                        overlay=True)
     for feature in benin_adm2_json['features']:
         commune = unidecode.unidecode(feature["properties"]["NAME_2"]).lower()

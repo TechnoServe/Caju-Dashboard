@@ -77,7 +77,7 @@ def create_benin_colored_department():
     """
     __start_time = time.time()
 
-    benin_colored_departments_layer = folium.FeatureGroup(name=gettext('Departments Training Recommandations'),
+    benin_colored_departments_layer = folium.FeatureGroup(name=gettext('Departments Training Recommendations'),
                                                           show=False,
                                                           overlay=True, z_index_offset=10)
 

@@ -1,3 +1,4 @@
+import json
 import os
 
 import ee
@@ -31,6 +32,8 @@ drones_images_ids = [
     (asset['id'].replace("projects/earthengine-legacy/assets/users/cajusupport/drones_geotiff/", ""))
     for asset in assets_list
 ]
+with open("staticfiles/plantation_recommendation.json") as plantation_recommendation_json:
+    plantation_recommendations = json.load(plantation_recommendation_json)
 
 
 class BeninPlantationStatsObject:
@@ -180,6 +183,11 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
     source_tns = gettext("Source: TNS/BeninCaju Yield Surveys 2020")
     view_drone_image = gettext("View Drone Image")
     unknown = gettext("Unknown")
+    plantation_recommendation = gettext("Plantation Recommendations")
+    recommendedGAP = gettext("Recommended GAP")
+    pruning = gettext("Pruning")
+    thinning = gettext("Thinning")
+    planting_more = gettext("Planting More")
     has_survey_data = True
     survey_data = {}
     code_2 = ""
@@ -347,9 +355,33 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
                 </tr>
 
                 </table>
+
+                &nbsp;&nbsp; 
+                <h6>
+                {plantation_recommendation}
+                </h6>
+                <table>
+                <tr>
+                    <th>{recommendedGAP}</th>
+                </tr>
+                <tr>
+                    <td>{pruning}</td>
+                    <td>{"Yes" if plantation_recommendations[code]["pruning_needs"] > 0 else "No"}</td>
+                </tr>
+                <tr>
+                    <td>{thinning}</td>
+                    <td>{"Yes" if plantation_recommendations[code]["opposite_of_pruning_needs"] > 0 else "No"}</td>
+                </tr>
+                <tr>
+                    <td>{planting_more}</td>
+                    <td>{"Yes" if plantation_recommendations[code]["number_of_trees_to_plant"][1] > 0 else "No"}</td>
+                </tr>
+                </table>
+                &nbsp;&nbsp; 
                 <table>
                     <td> {drone_image_button_bottom if has_drone_image else ""} </td>
                 </table>
+                &nbsp;&nbsp; 
                 <table>
                     <div style= "text-align: center"><h6>{source_tns}</h6></div>
                 </table>

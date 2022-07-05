@@ -41,10 +41,10 @@ def __highlight_function__(feature):
         Red = 255 & 255
         Green = (255 >> 8) & 255
         Blue = (255 >> 16) & 255
-    elif 1.5 <= RGBint < 5:
-        Blue = 255 & 255
-        Red = (255 >> 8) & 255
-        Green = (255 >> 16) & 255
+    # elif 1.5 <= RGBint < 5:
+    #     Blue = 255 & 255
+    #     Red = (255 >> 8) & 255
+    #     Green = (255 >> 16) & 255
     else:
         Green = 255 & 255
         Blue = (255 >> 8) & 255
@@ -130,7 +130,7 @@ def drone(request, plant_id, coordinate_xy):
         with open(directory + "/Tree Tops Density.geojson", errors="ignore") as file:
             tree_tops_density_feature_geojson = geojson.load(file)
 
-        tree_crows_layer = folium.FeatureGroup(name=gettext('Tree Crows'),
+        tree_crows_layer = folium.FeatureGroup(name=gettext('Pruning recommendations'),
                                                show=True,
                                                overlay=True)
 
