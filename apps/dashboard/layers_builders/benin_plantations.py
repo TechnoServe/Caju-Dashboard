@@ -366,15 +366,17 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
                 </tr>
                 <tr>
                     <td>{pruning}</td>
-                    <td>{"Yes" if plantation_recommendations[code]["pruning_needs"] > 0 else "No"}</td>
+                    <td>{"Required" if plantation_recommendations[code]["pruning_needs"] > 0 else "Not Required"}</td>
                 </tr>
                 <tr>
                     <td>{thinning}</td>
-                    <td>{"Yes" if plantation_recommendations[code]["opposite_of_pruning_needs"] > 0 else "No"}</td>
+                    <td>
+                    {"Required" if plantation_recommendations[code]["opposite_of_pruning_needs"] > 0 else "Not Required"}</td>
                 </tr>
                 <tr>
                     <td>{planting_more}</td>
-                    <td>{"Yes" if plantation_recommendations[code]["number_of_trees_to_plant"][1] > 0 else "No"}</td>
+                    <td>
+                    {"Required" if plantation_recommendations[code]["number_of_trees_to_plant"][1] > 0 else "Not Required"}</td>
                 </tr>
                 </table>
                 &nbsp;&nbsp; 
