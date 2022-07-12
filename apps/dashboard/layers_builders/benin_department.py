@@ -540,7 +540,7 @@ def create_benin_department(self, qars):
         def __init__(self, **entries):
             self.__dict__.update(entries)
 
-    # alldept = ee.Image('users/cajusupport/allDepartments_v1')
+    # alldept = ee.Image('users/cajusupport/V3_2021_onlyCashew')
     # zones = alldept.eq(1)
     # zones = zones.updateMask(zones.neq(0))
 

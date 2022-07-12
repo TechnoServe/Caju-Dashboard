@@ -1,5 +1,6 @@
 import json
 import os
+import time
 from pathlib import Path
 
 import alteia
@@ -20,7 +21,7 @@ service_account = os.getenv("EE_SERVICE_ACCOUNT")
 credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 
-nl2012 = ee.Image('users/cajusupport/allDepartments_v1')
+nl2012 = ee.Image('users/cajusupport/V3_2021_onlyCashew')
 zones = nl2012.eq(1)
 zones = zones.updateMask(zones.neq(0))
 
@@ -261,18 +262,18 @@ def calculate_tree_spacing(plantation, tree_tops_density_json):
 def calculate_pruning_needs(plantation, tree_tops_density_json):
     count = 0
     for feature in tree_tops_density_json["features"]:
-        if feature["properties"]["mean_tree_crown_distance"] < 2:
+        if 2 < feature["properties"]["mean_tree_crown_distance"] < 4:
             count += 1
     plantation['pruning_needs'] = count
     return plantation
 
 
-def calculate_opposite_of_pruning_needs(plantation, tree_tops_density_json):
+def calculate_thinning_needs(plantation, tree_tops_density_json):
     count = 0
     for feature in tree_tops_density_json["features"]:
-        if feature["properties"]["mean_tree_crown_distance"] > 4:
+        if feature["properties"]["mean_tree_crown_distance"] < 2:
             count += 1
-    plantation['opposite_of_pruning_needs'] = count
+    plantation['thinning'] = count
     return plantation
 
 
@@ -317,51 +318,54 @@ f = open('staticfiles/plantation_recommendation.json')
 plantation_recommendation = json.load(f)
 
 for feature in plantations_json['features']:
+    start_time = time.time()
     code = feature["properties"]["Plantation code"]
+    print(f"""START {code} ---""", end="\t\t")
     parent_dir = BASE_DIR.__str__() + "/media/plantation_data/"
     path = os.path.join(parent_dir, code)
     tree_tops_density_path = os.path.join(path, "Tree Tops Density.geojson")
     tree_crowns_path = os.path.join(path, "Tree Crowns.geojson")
     if os.path.exists(tree_crowns_path.__str__()) is False:
+        print(f"""FAILED {code} --- {(time.time() - start_time)} seconds ---""")
+        print()
         continue
-
-    # if code not in codes:
-    #     continue
 
     # if download_tree_tops_density_data(code, tree_tops_density_path) is False:
     #     continue
     # if download_tree_crowns_data(code, tree_crowns_path) is False:
     #     continue
-    #
+
     with open(tree_tops_density_path.__str__()) as file:
         tree_tops_density_json = geojson.load(file)
-    #
-    # with open(tree_crowns_path.__str__()) as file:
-    #     tree_crowns_json = geojson.load(file)
-    #
-    # plantation_recommendation[code] = {}
-    # plantation_polygon = shape(feature['geometry'])
-    # intersection_polygon: shapely.geometry.geo = plantation_polygon.intersection(prediction_polygon)
-    #
-    # plantation_recommendation[code] = find_location(plantation_recommendation[code], feature, plantation_polygon)
 
-    # plantation_recommendation[code] = calculate_cashew_tree_surface_ha(plantation_recommendation[code])
-    # plantation_recommendation[code] = calculate_cashew_trees_cover(plantation_recommendation[code], tree_crowns_json,
-    #                                                                intersection_polygon)
-    # plantation_recommendation[code] = calculate_total_number_of_cashew_trees(plantation_recommendation[code],
-    #                                                                          tree_tops_density_json)
+    with open(tree_crowns_path.__str__()) as file:
+        tree_crowns_json = geojson.load(file)
 
-    # plantation_recommendation[code] = calculate_plantation_surface_ha(plantation_recommendation[code], feature)
-    # plantation_recommendation[code] = calculate_min_and_max(plantation_recommendation[code])
-    # plantation_recommendation[code] = calculate_trees_cover(plantation_recommendation[code], tree_crowns_json)
-    # plantation_recommendation[code] = calculate_total_number_of_trees(plantation_recommendation[code],
-    #                                                                   tree_tops_density_json)
+    plantation_recommendation[code] = {}
+    plantation_polygon = shape(feature['geometry'])
+    intersection_polygon: shapely.geometry.geo = plantation_polygon.intersection(prediction_polygon)
+
+    plantation_recommendation[code] = find_location(plantation_recommendation[code], feature, plantation_polygon)
+
+    plantation_recommendation[code] = calculate_cashew_tree_surface_ha(plantation_recommendation[code])
+    plantation_recommendation[code] = calculate_cashew_trees_cover(plantation_recommendation[code], tree_crowns_json,
+                                                                   intersection_polygon)
+    plantation_recommendation[code] = calculate_total_number_of_cashew_trees(plantation_recommendation[code],
+                                                                             tree_tops_density_json)
+
+    plantation_recommendation[code] = calculate_plantation_surface_ha(plantation_recommendation[code], feature)
+    plantation_recommendation[code] = calculate_min_and_max(plantation_recommendation[code])
+    plantation_recommendation[code] = calculate_trees_cover(plantation_recommendation[code], tree_crowns_json)
+    plantation_recommendation[code] = calculate_total_number_of_trees(plantation_recommendation[code],
+                                                                      tree_tops_density_json)
     plantation_recommendation[code] = calculate_tree_spacing(plantation_recommendation[code], tree_tops_density_json)
-    # plantation_recommendation[code] = calculate_pruning_needs(plantation_recommendation[code], tree_tops_density_json)
-    # plantation_recommendation[code] = calculate_opposite_of_pruning_needs(plantation_recommendation[code],
-    #                                                                       tree_tops_density_json)
+    plantation_recommendation[code] = calculate_pruning_needs(plantation_recommendation[code], tree_tops_density_json)
+    plantation_recommendation[code] = calculate_thinning_needs(plantation_recommendation[code],
+                                                               tree_tops_density_json)
     plantation_recommendation[code] = is_training_needed(plantation_recommendation[code])
-    # plantation_recommendation[code] = generate_recommendations(plantation_recommendation[code])
+    plantation_recommendation[code] = generate_recommendations(plantation_recommendation[code])
+    print(f"""TOTAL LOADING TIME {code} --- {(time.time() - start_time)} seconds ---""")
+    print()
 
 plantation_recommendation["properties"] = {"training": {
     "department": training_need_departments,

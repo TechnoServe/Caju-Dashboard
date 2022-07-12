@@ -183,7 +183,7 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
     source_tns = gettext("Source: TNS/BeninCaju Yield Surveys 2020")
     view_drone_image = gettext("View Drone Image")
     unknown = gettext("Unknown")
-    plantation_recommendation = gettext("Plantation Recommendations")
+    plantation_recommendation = gettext("Training Recommendations")
     recommendedGAP = gettext("Recommended GAP")
     pruning = gettext("Pruning")
     thinning = gettext("Thinning")
@@ -363,6 +363,7 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
                 <table>
                 <tr>
                     <th>{recommendedGAP}</th>
+                    <th></th>
                 </tr>
                 <tr>
                     <td>{pruning}</td>
@@ -371,12 +372,12 @@ def __build_popup(feature, temp_layer_a, dept_yield_ha, path_link, code, statist
                 <tr>
                     <td>{thinning}</td>
                     <td>
-                    {"Required" if plantation_recommendations[code]["opposite_of_pruning_needs"] > 0 else "Not Required"}</td>
+                    {"Required" if plantation_recommendations[code]["thinning"] > 0 else "Not Required"}</td>
                 </tr>
                 <tr>
                     <td>{planting_more}</td>
                     <td>
-                    {"Required" if plantation_recommendations[code]["number_of_trees_to_plant"][1] > 0 else "Not Required"}</td>
+                    {"Required" if plantation_recommendations[code]["number_of_trees_to_plant"][0] > 0 else "Not Required"}</td>
                 </tr>
                 </table>
                 &nbsp;&nbsp; 

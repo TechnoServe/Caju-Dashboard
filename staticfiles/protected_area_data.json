@@ -1,7 +1,7 @@
 {
     "Agoua": {
         "area_ha": 75300,
-        "cashew_tree_cover": 10834.21699719666,
+        "cashew_tree_cover": 13801.61996051615,
         "name": "Agoua"
     },
     "Agrimey": {
@@ -16,12 +16,12 @@
     },
     "Atchérigbé": {
         "area_ha": 3150,
-        "cashew_tree_cover": 155.64475951569202,
+        "cashew_tree_cover": 459.7805806092266,
         "name": "Atchérigbé"
     },
     "Bellefoungou": {
         "area_ha": 1300,
-        "cashew_tree_cover": 9.467021557617187,
+        "cashew_tree_cover": 10.161866882324219,
         "name": "Bellefoungou"
     },
     "Boucle de la Pendjari": {
@@ -31,7 +31,7 @@
     },
     "Dan": {
         "area_ha": 1237,
-        "cashew_tree_cover": 64.77878509236652,
+        "cashew_tree_cover": 126.52148937780046,
         "name": "Dan"
     },
     "Djigbé": {
@@ -46,7 +46,7 @@
     },
     "Dogo": {
         "area_ha": 31850,
-        "cashew_tree_cover": 69.7145623714432,
+        "cashew_tree_cover": 67.53113476682178,
         "name": "Dogo"
     },
     "Gougoun": {
@@ -56,7 +56,7 @@
     },
     "Kétou": {
         "area_ha": 11000,
-        "cashew_tree_cover": 0.027227278286803,
+        "cashew_tree_cover": 0.0,
         "name": "Kétou"
     },
     "L'Alibori Supérieur": {
@@ -81,27 +81,27 @@
     },
     "Logozohé": {
         "area_ha": 1200,
-        "cashew_tree_cover": 95.8539369135838,
+        "cashew_tree_cover": 63.48557990636489,
         "name": "Logozohé"
     },
     "Monts Kouffé": {
         "area_ha": 180000,
-        "cashew_tree_cover": 2632.366327265553,
+        "cashew_tree_cover": 3962.4744515958173,
         "name": "Monts Kouffé"
     },
     "Ouari Maro": {
         "area_ha": 107500,
-        "cashew_tree_cover": 1249.491615516477,
+        "cashew_tree_cover": 3999.1857657030537,
         "name": "Ouari Maro"
     },
     "Ouémé Boukou": {
         "area_ha": 20500,
-        "cashew_tree_cover": 1493.354228034141,
+        "cashew_tree_cover": 2257.8429214088133,
         "name": "Ouémé Boukou"
     },
     "Ouémé Superieur": {
         "area_ha": 177542,
-        "cashew_tree_cover": 3682.164713498919,
+        "cashew_tree_cover": 10763.393477964872,
         "name": "Ouémé Superieur"
     },
     "Pendjari": {
@@ -111,22 +111,22 @@
     },
     "Pénessoulou": {
         "area_ha": 5470,
-        "cashew_tree_cover": 217.19474510117485,
+        "cashew_tree_cover": 310.0248675697475,
         "name": "Pénessoulou"
     },
     "Tchaourou": {
         "area_ha": 1100,
-        "cashew_tree_cover": 329.54884580664543,
+        "cashew_tree_cover": 385.4970657813218,
         "name": "Tchaourou"
     },
     "Tchatchou Gokana": {
         "area_ha": 2000,
-        "cashew_tree_cover": 831.8193549904258,
+        "cashew_tree_cover": 900.1818934165331,
         "name": "Tchatchou Gokana"
     },
     "Toui-Kilibo": {
         "area_ha": 29030,
-        "cashew_tree_cover": 3929.340511091625,
+        "cashew_tree_cover": 4779.045530554799,
         "name": "Toui-Kilibo"
     },
     "Trois Rivières": {

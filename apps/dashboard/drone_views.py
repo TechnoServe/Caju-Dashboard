@@ -29,7 +29,7 @@ except Exception as e:
     pass
 
 
-def __highlight_function__(feature):
+def __pruning_highlight_function__(feature):
     """
     Function to define the layer highlight style
     """
@@ -37,20 +37,50 @@ def __highlight_function__(feature):
         RGBint = math.ceil(feature["extra"]["properties"]["mean_tree_crown_distance"])
     except Exception:
         RGBint = 0
-    if RGBint < 1.5:
+
+    if 2 < RGBint < 4:
         Red = 255 & 255
         Green = (255 >> 8) & 255
         Blue = (255 >> 16) & 255
-    # elif 1.5 <= RGBint < 5:
-    #     Blue = 255 & 255
-    #     Red = (255 >> 8) & 255
-    #     Green = (255 >> 16) & 255
     else:
         Green = 255 & 255
         Blue = (255 >> 8) & 255
         Red = (255 >> 16) & 255
+
     color = '#%02x%02x%02x' % (Red, Green, Blue)
     border = "black"
+
+    return {
+        "fillColor": color,
+        "color": border,
+        "weight": 1.25,
+        "dashArray": "1, 1",
+        "opacity": 0.35,
+        "fillOpacity": 1,
+    }
+
+
+def __thinning_highlight_function__(feature):
+    """
+    Function to define the layer highlight style
+    """
+    try:
+        RGBint = math.ceil(feature["extra"]["properties"]["mean_tree_crown_distance"])
+    except Exception:
+        RGBint = 0
+
+    if RGBint < 2:
+        Red = 255 & 255
+        Green = (255 >> 8) & 255
+        Blue = (255 >> 16) & 255
+    else:
+        Green = 255 & 255
+        Blue = (255 >> 8) & 255
+        Red = (255 >> 16) & 255
+
+    color = '#%02x%02x%02x' % (Red, Green, Blue)
+    border = "black"
+
     return {
         "fillColor": color,
         "color": border,
@@ -96,7 +126,7 @@ def drone(request, plant_id, coordinate_xy):
         ).add_to(cashew_map)
 
     def add_predictions_layer():
-        alldept = ee.Image('users/cajusupport/allDepartments_v1')
+        alldept = ee.Image('users/cajusupport/V3_2021_onlyCashew')
         ee_image_object = alldept.eq(1)
         ee_image_object = ee_image_object.updateMask(ee_image_object.neq(0))
         map_id_dict = ee.Image(ee_image_object).getMapId({'palette': "red"})
@@ -123,16 +153,16 @@ def drone(request, plant_id, coordinate_xy):
             zoom_on_click=True
         ).add_to(cashew_map)
 
-    def add_alteia_tree_crows():
+    def add_pruning_layer():
         directory = "media/plantation_data/" + plant_id
         with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
             feature_geojson = geojson.load(file)
         with open(directory + "/Tree Tops Density.geojson", errors="ignore") as file:
             tree_tops_density_feature_geojson = geojson.load(file)
 
-        tree_crows_layer = folium.FeatureGroup(name=gettext('Pruning recommendations'),
-                                               show=True,
-                                               overlay=True)
+        pruning_layer = folium.FeatureGroup(name=gettext('Pruning recommendations'),
+                                            show=False,
+                                            overlay=True)
 
         for feature in feature_geojson['features']:
             feature["extra"] = get_feature_of_point_cointained_in_geometry(
@@ -144,10 +174,41 @@ def drone(request, plant_id, coordinate_xy):
                 zoom_on_click=False, embed=False,
                 name=gettext('Tree Crow Colored'),
                 show=True,
-                style_function=__highlight_function__
+                style_function=__pruning_highlight_function__
             )
-            tree_crows_partial_layer.add_to(tree_crows_layer)
-        tree_crows_layer.add_to(cashew_map)
+            tree_crows_partial_layer.add_to(pruning_layer)
+        pruning_layer.add_to(cashew_map)
+
+    def add_thinning_layer():
+        directory = "media/plantation_data/" + plant_id
+        with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
+            feature_geojson = geojson.load(file)
+        with open(directory + "/Tree Tops Density.geojson", errors="ignore") as file:
+            tree_tops_density_feature_geojson = geojson.load(file)
+
+        thinning_layer = folium.FeatureGroup(name=gettext('Thinning recommendations'),
+                                             show=False,
+                                             overlay=True)
+
+        for feature in feature_geojson['features']:
+            feature["extra"] = get_feature_of_point_cointained_in_geometry(
+                feature["geometry"],
+                tree_tops_density_feature_geojson["features"]
+            )
+            tree_crows_partial_layer = folium.GeoJson(
+                data=feature,
+                zoom_on_click=False, embed=False,
+                name=gettext('Tree Crow Colored'),
+                show=True,
+                style_function=__thinning_highlight_function__
+            )
+            tree_crows_partial_layer.add_to(thinning_layer)
+        thinning_layer.add_to(cashew_map)
+
+    def add_alteia_tree_crows():
+        directory = "media/plantation_data/" + plant_id
+        with open(directory + "/Tree Crowns.geojson", errors="ignore") as file:
+            feature_geojson = geojson.load(file)
 
         tree_crows = folium.GeoJson(feature_geojson, name=gettext(
             'Tree Crowns'), zoom_on_click=True, embed=False, show=False)
@@ -236,6 +297,8 @@ def drone(request, plant_id, coordinate_xy):
                     print(e)
             add_alteia_tree_crows()
             add_alteia_tree_tops_density()
+            add_pruning_layer()
+            add_thinning_layer()
             add_plantation_shape()
             break
         except Exception as e:
