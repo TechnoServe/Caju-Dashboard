@@ -126,7 +126,7 @@ def drone(request, plant_id, coordinate_xy):
         ).add_to(cashew_map)
 
     def add_predictions_layer():
-        alldept = ee.Image('users/cajusupport/V3_2021_onlyCashew')
+        alldept = ee.Image(os.getenv("EE_CAJU_PREDICTION"))
         ee_image_object = alldept.eq(1)
         ee_image_object = ee_image_object.updateMask(ee_image_object.neq(0))
         map_id_dict = ee.Image(ee_image_object).getMapId({'palette': "red"})

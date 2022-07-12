@@ -45,7 +45,7 @@ service_account = os.getenv("EE_SERVICE_ACCOUNT")
 credentials = ee.ServiceAccountCredentials(service_account, os.getenv("PRIVATE_KEY"))
 ee.Initialize(credentials)
 
-nl2012 = ee.Image('users/cajusupport/V3_2021_onlyCashew')
+nl2012 = ee.Image(os.getenv("EE_CAJU_PREDICTION"))
 zones = nl2012.eq(1)
 zones = zones.updateMask(zones.neq(0))
 

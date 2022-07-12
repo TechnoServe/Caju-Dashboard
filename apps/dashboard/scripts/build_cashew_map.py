@@ -58,7 +58,7 @@ def __task3_func__():
             zIndex=-10,
         )
 
-    alldept = ee.Image('users/cajusupport/V3_2021_onlyCashew')
+    alldept = ee.Image(os.getenv("EE_CAJU_PREDICTION"))
     zones = alldept.eq(1)
     zones = zones.updateMask(zones.neq(0))
     predictions_layer = build_predictions_layer(
