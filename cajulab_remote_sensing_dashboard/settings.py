@@ -11,10 +11,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-from pathlib import Path
-
-from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv, find_dotenv
+from pathlib import Path
+from django.utils.translation import gettext_lazy as _
 
 load_dotenv(find_dotenv())
 
@@ -101,14 +100,14 @@ WSGI_APPLICATION = 'cajulab_remote_sensing_dashboard.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'my_db.db',
-#     }
-# }
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'my_db.db',
+    }
+}
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

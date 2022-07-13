@@ -77,7 +77,7 @@ def dep_comm_remover(cur):
     try:
         models.Training._meta.get_field('department')
         # first_element = models.Training.objects.filter(id=1)[0]
-        if None in training_dep_comm_objects:
+        if None in training_dep_comm_objects or "NULL" in training_dep_comm_objects:
             cur.execute("SELECT latitude, longitude, id FROM dashboard_training;")
 
             # Get all the rows for that query
